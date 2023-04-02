@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaynotPersistence", "MaynotPersistence\MaynotPersistence.csproj", "{8114FEB0-F661-4B7E-9404-CF18FCF78250}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaynotPersistence", "MaynotPersistence\MaynotPersistence.csproj", "{8114FEB0-F661-4B7E-9404-CF18FCF78250}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp1", "WpfApp1\WpfApp1.csproj", "{BCE4C046-E021-4B13-9756-699F8E4C50CE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8114FEB0-F661-4B7E-9404-CF18FCF78250} = {8114FEB0-F661-4B7E-9404-CF18FCF78250}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +20,10 @@ Global
 		{8114FEB0-F661-4B7E-9404-CF18FCF78250}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8114FEB0-F661-4B7E-9404-CF18FCF78250}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8114FEB0-F661-4B7E-9404-CF18FCF78250}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCE4C046-E021-4B13-9756-699F8E4C50CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCE4C046-E021-4B13-9756-699F8E4C50CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCE4C046-E021-4B13-9756-699F8E4C50CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCE4C046-E021-4B13-9756-699F8E4C50CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
