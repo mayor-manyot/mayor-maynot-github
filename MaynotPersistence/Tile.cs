@@ -2,6 +2,6 @@ using System;
 
 namespace MaynotPersistence
 {
-    public interface Tile
+    public interface Tile 
     {}
 }
