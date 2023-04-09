@@ -5,7 +5,7 @@ VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaynotPersistence", "MaynotPersistence\MaynotPersistence.csproj", "{8114FEB0-F661-4B7E-9404-CF18FCF78250}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp1", "WpfApp1\WpfApp1.csproj", "{BCE4C046-E021-4B13-9756-699F8E4C50CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maynot.WPF", "WpfApp1\Maynot.WPF.csproj", "{BCE4C046-E021-4B13-9756-699F8E4C50CE}"
 	ProjectSection(ProjectDependencies) = postProject
 		{8114FEB0-F661-4B7E-9404-CF18FCF78250} = {8114FEB0-F661-4B7E-9404-CF18FCF78250}
 	EndProjectSection
