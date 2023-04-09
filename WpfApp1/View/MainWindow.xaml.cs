@@ -24,7 +24,6 @@ namespace Maynot.WPF.View
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MaynotViewModel();
         }
     }
 }

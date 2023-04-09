@@ -22,13 +22,15 @@ namespace Maynot
 
         public App()
         {
-            Debug.WriteLine("App insta");
             this.Startup += App_Startup;
         }
 
         private void App_Startup(object sender, StartupEventArgs e)
         {
-            // Instantiate the MainWindow and set it as the main window for the application
+            //ViewModel példányosítás előszőr
+            _viewModel = new MaynotViewModel();
+
+            //View példányosítás
             _view = new MainWindow();
             _view.DataContext = _viewModel;
 
