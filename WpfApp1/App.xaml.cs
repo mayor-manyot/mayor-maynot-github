@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using MaynotModel;
 
 namespace Maynot
 {
@@ -19,6 +20,7 @@ namespace Maynot
     public partial class App : Application
     {
 
+        private MaynotModel.MaynotGameModel _model = null!;
         private MaynotViewModel _viewModel = null!;
         private MainWindow _view = null!;
 
@@ -29,6 +31,9 @@ namespace Maynot
 
         private void App_Startup(object sender, StartupEventArgs e)
         {
+            _model = new MaynotGameModel();
+            _model.newGame();
+
             //ViewModel példányosítás előszőr
             _viewModel = new MaynotViewModel();
             _viewModel.NewGame += new EventHandler(ViewModel_NewGame);
@@ -54,7 +59,7 @@ namespace Maynot
         /// </summary>
         private void ViewModel_NewGame(object? sender, EventArgs e)
         {
-            //_model.NewGame();
+            _model.newGame();
         }
 
         /// <summary>
