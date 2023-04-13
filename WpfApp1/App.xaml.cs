@@ -65,8 +65,8 @@ namespace Maynot
             try
             {
                 OpenFileDialog openFileDialog = new OpenFileDialog(); // dialógusablak
-                openFileDialog.Title = "Sudoku tábla betöltése";
-                openFileDialog.Filter = "Sudoku tábla|*.stl";
+                openFileDialog.Title = "Maynot tábla betöltése";
+                openFileDialog.Filter = "Maynot tábla|*.stl";
                 if (openFileDialog.ShowDialog() == true)
                 {
                     // játék betöltése
@@ -76,7 +76,7 @@ namespace Maynot
             }
             catch (Exception)
             {
-                MessageBox.Show("A fájl betöltése sikertelen!", "Sudoku", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("A fájl betöltése sikertelen!", "Maynot", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
         }
@@ -90,8 +90,8 @@ namespace Maynot
             try
             {
                 SaveFileDialog saveFileDialog = new SaveFileDialog(); // dialógablak
-                saveFileDialog.Title = "Sudoku tábla betöltése";
-                saveFileDialog.Filter = "Sudoku tábla|*.stl";
+                saveFileDialog.Title = "Maynot tábla betöltése";
+                saveFileDialog.Filter = "Maynot tábla|*.stl";
                 if (saveFileDialog.ShowDialog() == true)
                 {
                     try
@@ -107,7 +107,7 @@ namespace Maynot
             }
             catch
             {
-                MessageBox.Show("A fájl mentése sikertelen!", "Sudoku", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("A fájl mentése sikertelen!", "Maynot", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
         }
@@ -130,7 +130,7 @@ namespace Maynot
         private void View_Closing(object? sender, CancelEventArgs e)
         {
 
-            if (MessageBox.Show("Biztos, hogy ki akar lépni?", "Sudoku", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
+            if (MessageBox.Show("Biztos, hogy ki akar lépni?", "Maynot", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
             {
                 e.Cancel = true; // töröljük a bezárást
 
