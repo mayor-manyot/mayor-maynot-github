@@ -20,7 +20,7 @@ namespace Maynot.WPF.ViewModel
             NewGameCommand = new DelegateCommand(param => OnNewGame());
             LoadGameCommand = new DelegateCommand(param => OnLoadGame());
             SaveGameCommand = new DelegateCommand(param => OnSaveGame());
-            ExitCommand = new DelegateCommand(param => OnExitGame());
+            ExitGameCommand = new DelegateCommand(param => OnExitGame());
         }
 
         #region Properties
@@ -43,7 +43,7 @@ namespace Maynot.WPF.ViewModel
         /// <summary>
         /// Kilépés parancs lekérdezése.
         /// </summary>
-        public DelegateCommand ExitCommand { get; private set; }
+        public DelegateCommand ExitGameCommand { get; private set; }
 
         #endregion
 
