@@ -5,7 +5,7 @@ using MaynotPersistence;
 
 namespace MaynotModel
 {
-    public class Model
+    public class MaynotModel
     {
         private float money;
         private DateTime time;
@@ -30,7 +30,7 @@ namespace MaynotModel
         public Tile[,] GameBoard { get => gameBoard; set => gameBoard = value; }
         public List<Person> Citizens { get => citizens; set => citizens = value; }
 
-        Model()
+        public MaynotModel()
         {
             money = 0;
             gameSpeed = 0;
