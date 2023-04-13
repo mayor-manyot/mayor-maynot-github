@@ -20,7 +20,7 @@ namespace Maynot
     public partial class App : Application
     {
 
-        private MaynotModel.MaynotModel _model = null!;
+        private MaynotModel.MaynotGameModel _model = null!;
         private MaynotViewModel _viewModel = null!;
         private MainWindow _view = null!;
 
@@ -31,7 +31,8 @@ namespace Maynot
 
         private void App_Startup(object sender, StartupEventArgs e)
         {
-            _model = new MaynotModel.MaynotModel();
+            _model = new MaynotGameModel();
+            _model.newGame();
 
             //ViewModel példányosítás előszőr
             _viewModel = new MaynotViewModel();

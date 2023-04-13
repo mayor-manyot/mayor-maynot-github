@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows.Markup.Localizer;
 using MaynotPersistence;
 
 namespace MaynotModel
 {
-    public class MaynotModel
+    public class MaynotGameModel
     {
         private float money;
         private DateTime time;
@@ -30,7 +31,7 @@ namespace MaynotModel
         public Tile[,] GameBoard { get => gameBoard; set => gameBoard = value; }
         public List<Person> Citizens { get => citizens; set => citizens = value; }
 
-        public MaynotModel()
+        public MaynotGameModel()
         {
             money = 0;
             gameSpeed = 0;
@@ -47,6 +48,7 @@ namespace MaynotModel
             gameBoard = new Tile[50, 50];
             timer = new System.Timers.Timer(500);
             timer.Elapsed += Timer_Elapsed;
+            Debug.WriteLine("New game");
 
         }
 
