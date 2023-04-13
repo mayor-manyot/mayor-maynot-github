@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MaynotPersistence
 {
-    public interface Facility
+    public interface Facility : Tile
     {}
 
     public class PoliceStation: Facility
