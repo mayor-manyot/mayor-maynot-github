@@ -106,9 +106,39 @@
 
 
             <!-- | tábla rács-->
-            <Grid Grid.Column="1">
-                <TextBlock></TextBlock>
-            </Grid>
+            <ItemsControl Grid.Column="1" ItemsSource="{Binding Fields}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <!--a gombokat egy rácsba fűzzük fel-->
+                        <UniformGrid FlowDirection="LeftToRight"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                
+
+                    <ItemsControl.ItemTemplate>
+                        <!--az elemek gombok lesznek-->
+                        <DataTemplate>
+                            <Button Command="{Binding ClickCommand}" CommandParameter="{Binding}" Content="{Binding Name}" FontSize="24" FontWeight="Bold">
+                                <!-- gomb háttérszíne -->
+                                <Button.Style>
+
+                                    <Style TargetType="Button">
+                                        <Style.Triggers>
+
+                                            <DataTrigger Binding="{Binding Name}" Value="Road">
+                                                <Setter Property="Background" Value="Gray" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Name}" Value="Empty">
+                                                <Setter Property="Background" Value="Green" />
+                                            </DataTrigger>
+                                    </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+            </ItemsControl>
 
             </Grid>
 
