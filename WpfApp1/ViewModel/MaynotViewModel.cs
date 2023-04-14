@@ -110,7 +110,6 @@ namespace Maynot.WPF.ViewModel
                         Y = j,
                         ClickCommand = new DelegateCommand((param)=> {
                             
-                            Debug.WriteLine("about to place");
                             MaynotTile tile = param as MaynotTile;
                             Debug.WriteLine("Clicked on: " + tile.X + " " + tile.Y);
                             if (_selectedItemIndex == 0)
@@ -120,7 +119,6 @@ namespace Maynot.WPF.ViewModel
                             else if (_selectedItemIndex == 1)
                             {
                                 _model.placeResidentialZone(tile.X, tile.Y);
-                                Debug.WriteLine("Place residental!!");
                             }
                             else if (_selectedItemIndex == 2)
                             {
@@ -143,24 +141,10 @@ namespace Maynot.WPF.ViewModel
 
         private void UpdateTable()
         {
-            Int32[] voltak;
             foreach (MaynotTile tile in Fields) 
             {
-                if (_model.GameBoard[tile.X, tile.Y] != null)
-                {
-                    Type obj = _model.GameBoard[tile.X, tile.Y].GetType();
-                    Debug.WriteLine("Típusa: " + obj.ToString());
-                    if (obj == typeof(ResidentialZone))
-                    {
-                        Debug.WriteLine("Residental in ViewModel!: " + ModelTileToMaynotTile(_model.GameBoard[tile.X, tile.Y]).Name);
-                    }
-                    
-                }
                 string nam = ModelTileToMaynotTile(_model.GameBoard[tile.X, tile.Y]).Name;
                 tile.Name = nam;
-                Debug.WriteLine("Amit berak: " + nam);
-                Debug.WriteLine("Field mérete: " + Fields.Count());
-                int sorfolytonos = tile.X * 30 + tile.Y;
             }
 
             OnPropertyChanged(nameof(Money));
