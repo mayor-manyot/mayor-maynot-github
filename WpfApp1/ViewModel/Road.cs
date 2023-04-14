@@ -21,7 +21,7 @@ namespace Maynot.WPF.ViewModel
     {
         public Empty()
         { 
-            Name = "Ü";
+            Name = " ";
         }
     }
 }

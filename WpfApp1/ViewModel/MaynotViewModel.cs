@@ -27,7 +27,7 @@ namespace Maynot.WPF.ViewModel
             set
             {
                 _selectedItem = value;
-                OnPropertyChanged("SelectedItem");
+                OnPropertyChanged(nameof(SelectedItem));
             }
         }
 
@@ -109,7 +109,7 @@ namespace Maynot.WPF.ViewModel
                         X = i,
                         Y = j,
                         ClickCommand = new DelegateCommand((param)=> {
-                            UpdateTable();
+                            
                             Debug.WriteLine("about to place");
                             MaynotTile tile = param as MaynotTile;
                             Debug.WriteLine("Clicked on: " + tile.X + " " + tile.Y);
@@ -130,7 +130,9 @@ namespace Maynot.WPF.ViewModel
                             {
                                 _model.placeIndustrialZone(tile.X, tile.Y);
                             }
+                            
                             tile.Name = ModelTileToMaynotTile(_model.GameBoard[tile.X, tile.Y]).Name;
+                            //UpdateTable();
                         })
                     });
                 }
@@ -141,21 +143,24 @@ namespace Maynot.WPF.ViewModel
 
         private void UpdateTable()
         {
+            Int32[] voltak;
             foreach (MaynotTile tile in Fields) 
             {
                 if (_model.GameBoard[tile.X, tile.Y] != null)
                 {
                     Type obj = _model.GameBoard[tile.X, tile.Y].GetType();
-                    //Debug.WriteLine("Típusa: " + obj.ToString());
+                    Debug.WriteLine("Típusa: " + obj.ToString());
                     if (obj == typeof(ResidentialZone))
                     {
-                        Debug.WriteLine("Residental in ViewModel!");
+                        Debug.WriteLine("Residental in ViewModel!: " + ModelTileToMaynotTile(_model.GameBoard[tile.X, tile.Y]).Name);
                     }
                     
                 }
-                
-                tile.Name = ModelTileToMaynotTile(_model.GameBoard[tile.X, tile.Y]).Name;
-
+                string nam = ModelTileToMaynotTile(_model.GameBoard[tile.X, tile.Y]).Name;
+                tile.Name = nam;
+                Debug.WriteLine("Amit berak: " + nam);
+                Debug.WriteLine("Field mérete: " + Fields.Count());
+                int sorfolytonos = tile.X * 30 + tile.Y;
             }
 
             OnPropertyChanged(nameof(Money));
@@ -166,7 +171,11 @@ namespace Maynot.WPF.ViewModel
         {
             if (tile is MaynotPersistence.Empty) return new Empty();
             if (tile is MaynotPersistence.Road) return new Road(30);
-            if (tile is MaynotPersistence.ResidentialZone) return new Zone(30,30, ZoneType.RESIDENTIAL);
+            if (tile is MaynotPersistence.ResidentialZone)
+            {
+                Debug.WriteLine("Residental zóna felismerve a konverterben!");
+                return new Zone(30, 30, ZoneType.RESIDENTIAL);
+            };
             if (tile is MaynotPersistence.IndustrialZone) return new Zone(30, 30, ZoneType.INDUSTRIAL);
             if (tile is MaynotPersistence.ServiceZone) return new Zone(30, 30, ZoneType.SERVICE);
             return new Road(30);
