@@ -46,6 +46,13 @@ namespace MaynotModel
             citizens = new List<Person>();
             //azt van használva a lehelyezésnél
             gameBoard = new Tile[30, 30];
+            for (int i = 0; i < 30; i++)
+            {
+                for (int j = 0; j < 30; j++)
+                {
+                    gameBoard[i, j] = new Empty();
+                }
+            }
             timer = new System.Timers.Timer(500);
             timer.Elapsed += Timer_Elapsed;
             Debug.WriteLine("New game");
@@ -224,6 +231,7 @@ namespace MaynotModel
         public bool placeResidentialZone(int x, int y)
         {
             //Mennyi legyen a capacity?
+            Debug.WriteLine("Placing residental in Model!");
             ResidentialZone r = new ResidentialZone(100);
             return placeTile(r, x, y);
         }

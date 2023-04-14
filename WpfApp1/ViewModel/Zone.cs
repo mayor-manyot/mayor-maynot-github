@@ -19,6 +19,7 @@ namespace Maynot.WPF.ViewModel
             Capacity = capacity;
             CurrentPopulation = currentPopulation;
             Type = type;
+            Name = "Zóna";
         }
     }
 

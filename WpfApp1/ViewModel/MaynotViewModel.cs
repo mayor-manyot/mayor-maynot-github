@@ -31,7 +31,7 @@ namespace Maynot.WPF.ViewModel
             }
         }
 
-        int _selectedItemIndex;
+        private int _selectedItemIndex;
 
         public ICommand RadioButtonCheckedCommand { get; set; }
         public ICommand PlaceItemCommand { get; set; }
@@ -42,7 +42,7 @@ namespace Maynot.WPF.ViewModel
         {
             _model = model;
 
-            Debug.WriteLine("Instantia");
+            
 
             // parancsok kezelése
             NewGameCommand = new DelegateCommand(param => OnNewGame());
@@ -81,32 +81,70 @@ namespace Maynot.WPF.ViewModel
                 {
                     Fields.Add(new MaynotTile
                     {
-                        Name = ModelTileToMaynotTile(_model.GameBoard[i, j]),
                         X = i,
                         Y = j,
-                        ClickCommand = new DelegateCommand((param)=> _model.placeRoad((param as MaynotTile).X, (param as MaynotTile).Y))
+                        ClickCommand = new DelegateCommand((param)=> {
+                            UpdateTable();
+                            Debug.WriteLine("about to place");
+                            MaynotTile tile = param as MaynotTile;
+                            Debug.WriteLine("Clicked on: " + tile.X + " " + tile.Y);
+                            if (_selectedItemIndex == 0)
+                            {
+                                _model.placeRoad(tile.X, tile.Y);
+                            }
+                            else if (_selectedItemIndex == 1)
+                            {
+                                _model.placeResidentialZone(tile.X, tile.Y);
+                                Debug.WriteLine("Place residental!!");
+                            }
+                            else if (_selectedItemIndex == 2)
+                            {
+                                _model.placeServiceZone(tile.X, tile.Y);
+                            }
+                            else if (_selectedItemIndex == 3)
+                            {
+                                _model.placeIndustrialZone(tile.X, tile.Y);
+                            }
+                            tile.Name = ModelTileToMaynotTile(_model.GameBoard[tile.X, tile.Y]).Name;
+                        })
                     });
                 }
             }
             OnPropertyChanged(nameof(Money));
+            UpdateTable();
         }
 
         private void UpdateTable()
         {
             foreach (MaynotTile tile in Fields) 
             {
-                tile.Name = ModelTileToMaynotTile(_model.GameBoard[tile.X, tile.Y]);
+                if (_model.GameBoard[tile.X, tile.Y] != null)
+                {
+                    Type obj = _model.GameBoard[tile.X, tile.Y].GetType();
+                    //Debug.WriteLine("Típusa: " + obj.ToString());
+                    if (obj == typeof(ResidentialZone))
+                    {
+                        Debug.WriteLine("Residental in ViewModel!");
+                    }
+                    
+                }
+                
+                tile.Name = ModelTileToMaynotTile(_model.GameBoard[tile.X, tile.Y]).Name;
 
             }
 
             OnPropertyChanged(nameof(Money));
+            OnPropertyChanged(nameof(Fields));
         }
 
-        private string ModelTileToMaynotTile(Tile tile)
+        private MaynotTile ModelTileToMaynotTile(Tile tile)
         {
-            if (tile is Empty) return String.Empty;
-            if (tile is Road) return "Road";
-            return String.Empty;
+            if (tile is MaynotPersistence.Empty) return new Empty();
+            if (tile is MaynotPersistence.Road) return new Road(30);
+            if (tile is MaynotPersistence.ResidentialZone) return new Zone(30,30, ZoneType.RESIDENTIAL);
+            if (tile is MaynotPersistence.IndustrialZone) return new Zone(30, 30, ZoneType.INDUSTRIAL);
+            if (tile is MaynotPersistence.ServiceZone) return new Zone(30, 30, ZoneType.SERVICE);
+            return new Road(30);
         }
 
         #region Properties

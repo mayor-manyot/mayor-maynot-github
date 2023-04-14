@@ -13,6 +13,7 @@ namespace Maynot.WPF.ViewModel
         public bool CanBeDemolished { get; private set; }
         public Image SpriteImage { get; set; }
         public int MyProperty { get; set; }
+        public string Name { get; set; }
        
         public Int32 X { get; set; }
         public Int32 Y { get; set; }
