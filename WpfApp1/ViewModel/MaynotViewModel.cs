@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace Maynot.WPF.ViewModel
 {
-    class MaynotViewModel : INotifyPropertyChanged
+    class MaynotViewModel : ViewModelBase
     {
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public MaynotViewModel()
         {
