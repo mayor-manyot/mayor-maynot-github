@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MaynotModel;
+using MaynotPersistence;
 
 namespace Maynot.WPF.ViewModel
 {
@@ -27,6 +28,46 @@ namespace Maynot.WPF.ViewModel
             LoadGameCommand = new DelegateCommand(param => OnLoadGame());
             SaveGameCommand = new DelegateCommand(param => OnSaveGame());
             ExitGameCommand = new DelegateCommand(param => OnExitGame());
+
+            Fields = new ObservableCollection<MaynotTile>();
+            FullyRefreshTable();
+        }
+
+        public void FullyRefreshTable()
+        {
+            Fields.Clear();
+            for (Int32 i = 0; i < _model.GameBoard.GetLength(0); i++) // inicializáljuk a mezőket
+            {
+                for (Int32 j = 0; j < _model.GameBoard.GetLength(0); j++)
+                {
+                    Fields.Add(new MaynotTile
+                    {
+                        Name = ModelTileToMaynotTile(_model.GameBoard[i, j]),
+                        X = i,
+                        Y = j,
+                        ClickCommand = new DelegateCommand((param)=> _model.placeRoad((param as MaynotTile).X, (param as MaynotTile).Y))
+                    });
+                }
+            }
+            OnPropertyChanged(nameof(Money));
+        }
+
+        private void UpdateTable()
+        {
+            foreach (MaynotTile tile in Fields) 
+            {
+                tile.Name = ModelTileToMaynotTile(_model.GameBoard[tile.X, tile.Y]);
+
+            }
+
+            OnPropertyChanged(nameof(Money));
+        }
+
+        private string ModelTileToMaynotTile(Tile tile)
+        {
+            if (tile is Empty) return String.Empty;
+            if (tile is Road) return "Road";
+            return String.Empty;
         }
 
         #region Properties
