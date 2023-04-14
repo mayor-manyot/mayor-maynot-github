@@ -31,27 +31,122 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!--építő panel | tábla rács-->
+            <!--építő panel | -->
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0" Text="Letehető elemek" FontWeight="Bold" Padding="3"/>
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible">
+                <StackPanel  Name="RadioButtonList">
+                    <RadioButton>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Button Grid.Row="0" Width="100" Height="100">Image</Button>
+                            <Label Grid.Row="1" FontWeight="Bold" Padding="0">Út</Label>
+                            <TextBlock Grid.Row="2" FontSize="10">Ár: </TextBlock>
+                        </Grid>
+                    </RadioButton>
 
-                <ListBox Grid.Row="1" Name="RadioButtonList">
-                    <ItemsControl ItemsSource="{Binding Options}">
-                        <ItemsControl.Resources>
+                    <Separator Margin="5 10"></Separator>
+                    
+                    <RadioButton>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Button Grid.Row="0" Width="100" Height="100">Image</Button>
+                            <Label Grid.Row="1" FontWeight="Bold" Padding="0">Lakó zóna</Label>
+                            <TextBlock Grid.Row="2" FontSize="10">Ár:</TextBlock>
+                        </Grid>
+                    </RadioButton>
 
-                        </ItemsControl.Resources>
-                    </ItemsControl>
-                </ListBox>
+                    <Separator Margin="5 10"></Separator>
+
+                    <RadioButton>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Button Grid.Row="0" Width="100" Height="100">Image</Button>
+                            <Label Grid.Row="1" FontWeight="Bold" Padding="0">Szolgáltatás zóna</Label>
+                            <TextBlock Grid.Row="2" FontSize="10">Ár:</TextBlock>
+                        </Grid>
+                    </RadioButton>
+
+
+
+                    <Separator Margin="5 10"></Separator>
+
+                    <RadioButton>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Button Grid.Row="0" Width="100" Height="100">Image</Button>
+                            <Label Grid.Row="1" FontWeight="Bold" Padding="0">Ipar zóna</Label>
+                            <TextBlock Grid.Row="2" FontSize="10">Ár:</TextBlock>
+                        </Grid>
+                    </RadioButton>
+                </StackPanel>
+                </ScrollViewer>
+
+                <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="6">
+                    <Button x:Name="slow" Margin="3" Content="&lt;&lt;" Height="30" Width="28" />
+                    <Button x:Name="play" Margin="3" Content="|>" Height="30" Width="28" />
+                    <Button x:Name="pause" Margin="3" Content="||" Height="30" Width="28" />
+                    <Button x:Name="forward" Margin="3" Content=">>" Height="30" Width="28" />
+                </StackPanel>
             </Grid>
 
-            <Grid Grid.Column="1">
-                <TextBlock></TextBlock>
-            </Grid>
+
+            <!-- | tábla rács-->
+            <ItemsControl Grid.Column="1" ItemsSource="{Binding Fields}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <!--a gombokat egy rácsba fűzzük fel-->
+                        <UniformGrid FlowDirection="LeftToRight"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                
+
+                    <ItemsControl.ItemTemplate>
+                        <!--az elemek gombok lesznek-->
+                        <DataTemplate>
+                            <Button Command="{Binding ClickCommand}" CommandParameter="{Binding}" Content="{Binding Name}" FontSize="24" FontWeight="Bold">
+                                <!-- gomb háttérszíne -->
+                                <Button.Style>
+
+                                    <Style TargetType="Button">
+                                        <Style.Triggers>
+
+                                            <DataTrigger Binding="{Binding Name}" Value="Road">
+                                                <Setter Property="Background" Value="Gray" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Name}" Value="Empty">
+                                                <Setter Property="Background" Value="Green" />
+                                            </DataTrigger>
+                                    </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+            </ItemsControl>
 
             </Grid>
 
