@@ -49,6 +49,10 @@ namespace Maynot.WPF.ViewModel
             LoadGameCommand = new DelegateCommand(param => OnLoadGame());
             SaveGameCommand = new DelegateCommand(param => OnSaveGame());
             ExitGameCommand = new DelegateCommand(param => OnExitGame());
+            SlowerGameCommand = new DelegateCommand(param => OnSlowerGame());
+            SpeedUpGameCommand = new DelegateCommand(param => OnSpeedUpGameCommand());
+            PauseGameCommand = new DelegateCommand(param => OnPauseGameCommand());
+            ResumeGameCommand = new DelegateCommand(param => OnResumeGame());
 
             Fields = new ObservableCollection<MaynotTile>();
             FullyRefreshTable();
@@ -57,6 +61,27 @@ namespace Maynot.WPF.ViewModel
             PlaceItemCommand = new DelegateCommand(OnPlaceItem);
 
         }
+
+        private void OnResumeGame()
+        {
+            _model.resumeTime();
+        }
+
+        private void OnPauseGameCommand()
+        {
+            _model.stopTime();
+        }
+
+        private void OnSpeedUpGameCommand()
+        {
+            _model.speedUpTime();
+        }
+
+        private void OnSlowerGame()
+        {
+            _model.slowTime();
+        }
+
         private void OnRadioButtonChecked(object selectedItem)
         {
             
@@ -168,6 +193,15 @@ namespace Maynot.WPF.ViewModel
         /// Kilépés parancs lekérdezése.
         /// </summary>
         public DelegateCommand ExitGameCommand { get; private set; }
+
+        public DelegateCommand SlowerGameCommand { get; private set; }
+
+        public DelegateCommand SpeedUpGameCommand { get; private set; }
+
+        public DelegateCommand PauseGameCommand { get; private set; }
+
+        public DelegateCommand ResumeGameCommand { get; private set; }
+
 
         #endregion
 

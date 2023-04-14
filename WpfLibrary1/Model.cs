@@ -103,7 +103,8 @@ namespace MaynotModel
                     gameSpeed = 0;
                     timer.Stop();                   
                     break;
-            }   
+            }
+            Debug.WriteLine("Gamespeed: " + GameSpeed);
         }
 
         public void speedUpTime()
@@ -129,6 +130,7 @@ namespace MaynotModel
                     timer.Start();
                     break;
             }
+            Debug.WriteLine("Gamespeed: " + GameSpeed);
         }
 
         private bool placeTile(Tile t, int x, int y)

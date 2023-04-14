@@ -105,10 +105,10 @@
                 </ScrollViewer>
 
                 <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="6">
-                    <Button x:Name="slow" Margin="3" Content="&lt;&lt;" Height="30" Width="28" />
-                    <Button x:Name="play" Margin="3" Content="|>" Height="30" Width="28" />
-                    <Button x:Name="pause" Margin="3" Content="||" Height="30" Width="28" />
-                    <Button x:Name="forward" Margin="3" Content=">>" Height="30" Width="28" />
+                    <Button x:Name="slow" Margin="3" Content="&lt;&lt;" Height="30" Width="28" Command="{Binding SlowerGameCommand}" />
+                    <Button x:Name="play" Margin="3" Content="|>" Height="30" Width="28" Command="{Binding ResumeGameCommand}"/>
+                    <Button x:Name="pause" Margin="3" Content="||" Height="30" Width="28" Command="{Binding PauseGameCommand}"/>
+                    <Button x:Name="forward" Margin="3" Content=">>" Height="30" Width="28" Command="{Binding SpeedUpGameCommand}"/>
                 </StackPanel>
             </Grid>
 
