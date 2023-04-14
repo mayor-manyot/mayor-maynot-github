@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using MaynotModel;
 using MaynotPersistence;
 
@@ -16,6 +17,22 @@ namespace Maynot.WPF.ViewModel
         private MaynotGameModel _model;
         public ObservableCollection<MaynotTile> Fields { get; set; }
         public float Money { get { return _model.Money; } }
+
+        private object _selectedItem;
+        public object SelectedItem
+        {
+            get { return _selectedItem; }
+            set
+            {
+                _selectedItem = value;
+                OnPropertyChanged("SelectedItem");
+            }
+        }
+
+        public ICommand RadioButtonCheckedCommand { get; set; }
+        public ICommand PlaceItemCommand { get; set; }
+
+
 
         public MaynotViewModel(MaynotGameModel model)
         {
@@ -31,6 +48,21 @@ namespace Maynot.WPF.ViewModel
 
             Fields = new ObservableCollection<MaynotTile>();
             FullyRefreshTable();
+
+            RadioButtonCheckedCommand = new DelegateCommand(OnRadioButtonChecked);
+            PlaceItemCommand = new DelegateCommand(OnPlaceItem);
+
+        }
+        private void OnRadioButtonChecked(object selectedItem)
+        {
+            Debug.WriteLine("Item selected changed!!!");
+            
+            SelectedItem = selectedItem;
+        }
+
+        private void OnPlaceItem(object selectedItem)
+        {
+            // Handle placing the selected item on the grid
         }
 
         public void FullyRefreshTable()

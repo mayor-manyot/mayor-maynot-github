@@ -45,7 +45,7 @@ namespace MaynotModel
             yearTracker = 1;
             citizens = new List<Person>();
             //azt van használva a lehelyezésnél
-            gameBoard = new Tile[50, 50];
+            gameBoard = new Tile[30, 30];
             timer = new System.Timers.Timer(500);
             timer.Elapsed += Timer_Elapsed;
             Debug.WriteLine("New game");
