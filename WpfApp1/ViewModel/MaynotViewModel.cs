@@ -128,8 +128,17 @@ namespace Maynot.WPF.ViewModel
                             {
                                 _model.placeIndustrialZone(tile.X, tile.Y);
                             }
+                            MaynotTile modelbolTile = ModelTileToMaynotTile(_model.GameBoard[tile.X, tile.Y]);
                             
-                            tile.Name = ModelTileToMaynotTile(_model.GameBoard[tile.X, tile.Y]).Name;
+                            if (modelbolTile is Zone zona)
+                            {
+                                tile.Name = zona.Type.ToString()[0].ToString();
+                            }
+                            else
+                            {
+                                tile.Name = modelbolTile.Name;
+                            }
+                            tile.Background = modelbolTile.Background;
                             //UpdateTable();
                         })
                     });
@@ -143,8 +152,9 @@ namespace Maynot.WPF.ViewModel
         {
             foreach (MaynotTile tile in Fields) 
             {
-                string nam = ModelTileToMaynotTile(_model.GameBoard[tile.X, tile.Y]).Name;
-                tile.Name = nam;
+                MaynotTile modelbolTile = ModelTileToMaynotTile(_model.GameBoard[tile.X, tile.Y]);
+                tile.Name = modelbolTile.Name;
+                tile.Background = modelbolTile.Background;
             }
 
             OnPropertyChanged(nameof(Money));
@@ -157,7 +167,6 @@ namespace Maynot.WPF.ViewModel
             if (tile is MaynotPersistence.Road) return new Road(30);
             if (tile is MaynotPersistence.ResidentialZone)
             {
-                Debug.WriteLine("Residental zóna felismerve a konverterben!");
                 return new Zone(30, 30, ZoneType.RESIDENTIAL);
             };
             if (tile is MaynotPersistence.IndustrialZone) return new Zone(30, 30, ZoneType.INDUSTRIAL);

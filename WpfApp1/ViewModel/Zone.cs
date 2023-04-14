@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace Maynot.WPF.ViewModel
 {
@@ -20,6 +21,7 @@ namespace Maynot.WPF.ViewModel
             CurrentPopulation = currentPopulation;
             Type = type;
             Name = "Zóna";
+            Background = new SolidColorBrush(Colors.LightYellow);
         }
     }
 

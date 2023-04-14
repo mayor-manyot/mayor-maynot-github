@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace Maynot.WPF.ViewModel
 {
@@ -11,6 +12,7 @@ namespace Maynot.WPF.ViewModel
     {
         private bool _canBeDemolished;
         private string _name;
+        private SolidColorBrush _background;
         public bool CanBeDemolished { get; private set; }
         public Image SpriteImage { get; set; }
         public int MyProperty { get; set; }
@@ -26,5 +28,16 @@ namespace Maynot.WPF.ViewModel
         public Int32 X { get; set; }
         public Int32 Y { get; set; }
         public DelegateCommand? ClickCommand { get; set; }
+
+        public SolidColorBrush Background {
+            get
+            {
+                return _background;
+            }
+            set {
+                _background = value;
+                OnPropertyChanged(nameof(Background));
+            }
+        }
     }
 }
