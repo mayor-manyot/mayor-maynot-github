@@ -4,8 +4,10 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
 using MaynotModel;
 using MaynotPersistence;
@@ -28,6 +30,8 @@ namespace Maynot.WPF.ViewModel
                 OnPropertyChanged("SelectedItem");
             }
         }
+
+        int _selectedItemIndex;
 
         public ICommand RadioButtonCheckedCommand { get; set; }
         public ICommand PlaceItemCommand { get; set; }
@@ -55,9 +59,12 @@ namespace Maynot.WPF.ViewModel
         }
         private void OnRadioButtonChecked(object selectedItem)
         {
-            Debug.WriteLine("Item selected changed!!!");
             
             SelectedItem = selectedItem;
+            if (selectedItem is RadioButton radioButton)
+            {
+                _selectedItemIndex = Int32.Parse((String)radioButton.Tag);
+            }
         }
 
         private void OnPlaceItem(object selectedItem)
