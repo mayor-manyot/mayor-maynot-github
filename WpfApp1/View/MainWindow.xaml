@@ -31,7 +31,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!--építő panel | tábla rács-->
+            <!--építő panel | -->
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -39,16 +39,73 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0" Text="Letehető elemek" FontWeight="Bold" Padding="3"/>
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible">
+                <StackPanel  Name="RadioButtonList">
+                    <RadioButton>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Button Grid.Row="0" Width="100" Height="100">Image</Button>
+                            <Label Grid.Row="1" FontWeight="Bold" Padding="0">Út</Label>
+                            <TextBlock Grid.Row="2" FontSize="10">Ár: </TextBlock>
+                        </Grid>
+                    </RadioButton>
 
-                <ListBox Grid.Row="1" Name="RadioButtonList">
-                    <ItemsControl ItemsSource="{Binding Options}">
-                        <ItemsControl.Resources>
+                    <Separator Margin="5 10"></Separator>
+                    
+                    <RadioButton>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Button Grid.Row="0" Width="100" Height="100">Image</Button>
+                            <Label Grid.Row="1" FontWeight="Bold" Padding="0">Lakó zóna</Label>
+                            <TextBlock Grid.Row="2" FontSize="10">Ár:</TextBlock>
+                        </Grid>
+                    </RadioButton>
 
-                        </ItemsControl.Resources>
-                    </ItemsControl>
-                </ListBox>
+                    <Separator Margin="5 10"></Separator>
+
+                    <RadioButton>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Button Grid.Row="0" Width="100" Height="100">Image</Button>
+                            <Label Grid.Row="1" FontWeight="Bold" Padding="0">Szolgáltatás zóna</Label>
+                            <TextBlock Grid.Row="2" FontSize="10">Ár:</TextBlock>
+                        </Grid>
+                    </RadioButton>
+
+
+
+                    <Separator Margin="5 10"></Separator>
+
+                    <RadioButton>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Button Grid.Row="0" Width="100" Height="100">Image</Button>
+                            <Label Grid.Row="1" FontWeight="Bold" Padding="0">Ipar zóna</Label>
+                            <TextBlock Grid.Row="2" FontSize="10">Ár:</TextBlock>
+                        </Grid>
+                    </RadioButton>
+                </StackPanel>
+                </ScrollViewer>
             </Grid>
 
+
+            <!-- | tábla rács-->
             <Grid Grid.Column="1">
                 <TextBlock></TextBlock>
             </Grid>
