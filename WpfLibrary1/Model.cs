@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Security.Cryptography.X509Certificates;
 using System.Windows.Markup.Localizer;
 using MaynotPersistence;
@@ -49,11 +50,19 @@ namespace MaynotModel
             weakTracker = 0;
             citizens = new List<Person>();
             //azt van használva a lehelyezésnél
-            gameBoard = new Tile[50, 50];
+            gameBoard = new Tile[30, 30];
+            for (int i = 0; i < 30; i++)
+            {
+                for (int j = 0; j < 30; j++)
+                {
+                    gameBoard[i, j] = new Empty();
+                }
+            }
             timer = new System.Timers.Timer(500);
             timer.Elapsed += Timer_Elapsed;
             homes = new List<(Zone, int, int)>();
             workPlaces = new List<(Zone, int, int)>();
+            Debug.WriteLine("New game");
         }
 
         private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
@@ -168,7 +177,8 @@ namespace MaynotModel
                     gameSpeed = 0;
                     timer.Stop();                   
                     break;
-            }   
+            }
+            Debug.WriteLine("Gamespeed: " + GameSpeed);
         }
 
         public void speedUpTime()
@@ -194,11 +204,13 @@ namespace MaynotModel
                     timer.Start();
                     break;
             }
+            Debug.WriteLine("Gamespeed: " + GameSpeed);
+
         }
 
         private bool placeTile(Tile t, int x, int y)
         {
-            if (gameBoard[x, y] is Tile)
+            if (gameBoard[x, y] is Empty)
             {
                 gameBoard[x, y] = t;
                 if (t is ResidentialZone)
