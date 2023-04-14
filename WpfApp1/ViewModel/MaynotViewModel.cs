@@ -1,18 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MaynotModel;
 
 namespace Maynot.WPF.ViewModel
 {
     class MaynotViewModel : ViewModelBase
     {
+        private MaynotGameModel _model;
+        public ObservableCollection<MaynotTile> Fields { get; set; }
+        public float Money { get { return _model.Money; } }
 
-        public MaynotViewModel()
+        public MaynotViewModel(MaynotGameModel model)
         {
+            _model = model;
+
             Debug.WriteLine("Instantia");
 
             // parancsok kezelése
