@@ -131,12 +131,37 @@ namespace Maynot.WPF.ViewModel
                             {
                                 _model.placeIndustrialZone(tile.X, tile.Y);
                             }
-
-                            if (tile != null)
+                            else if (_selectedItemIndex == 4)
                             {
-                                tile.Name = ModelTileToMaynotTile(_model.GameBoard[tile.X, tile.Y]).Name;
+                                _model.placePoliceStation(tile.X, tile.Y);
                             }
-
+                            else if (_selectedItemIndex == 5)
+                            {
+                                _model.placeStadium(tile.X, tile.Y);
+                            }
+                            else if (_selectedItemIndex == 6)
+                            {
+                                _model.placeSchool(tile.X, tile.Y);
+                            }
+                            else if (_selectedItemIndex == 7)
+                            {
+                                _model.placeUni(tile.X, tile.Y);
+                            }
+                            MaynotTile modelbolTile = ModelTileToMaynotTile(_model.GameBoard[tile.X, tile.Y]);
+                            
+                            if (modelbolTile is Zone zona)
+                            {
+                                tile.Name = zona.Type.ToString()[0].ToString();
+                            }
+                            else if (modelbolTile is Facility facility)
+                            {
+                                tile.Name = facility.Type.ToString()[0].ToString();
+                            }
+                            else
+                            {
+                                tile.Name = modelbolTile.Name;
+                            }
+                            tile.Background = modelbolTile.Background;
                             //UpdateTable();
                         })
                     });
@@ -150,8 +175,9 @@ namespace Maynot.WPF.ViewModel
         {
             foreach (MaynotTile tile in Fields) 
             {
-                string nam = ModelTileToMaynotTile(_model.GameBoard[tile.X, tile.Y]).Name;
-                tile.Name = nam;
+                MaynotTile modelbolTile = ModelTileToMaynotTile(_model.GameBoard[tile.X, tile.Y]);
+                tile.Name = modelbolTile.Name;
+                tile.Background = modelbolTile.Background;
             }
 
             OnPropertyChanged(nameof(Money));
@@ -162,13 +188,15 @@ namespace Maynot.WPF.ViewModel
         {
             if (tile is MaynotPersistence.Empty) return new Empty();
             if (tile is MaynotPersistence.Road) return new Road(30);
-            if (tile is MaynotPersistence.ResidentialZone)
-            {
-                Debug.WriteLine("Residental zóna felismerve a konverterben!");
-                return new Zone(30, 30, ZoneType.RESIDENTIAL);
-            };
+            if (tile is MaynotPersistence.ResidentialZone) return new Zone(30, 30, ZoneType.RESIDENTIAL);
             if (tile is MaynotPersistence.IndustrialZone) return new Zone(30, 30, ZoneType.INDUSTRIAL);
             if (tile is MaynotPersistence.ServiceZone) return new Zone(30, 30, ZoneType.SERVICE);
+            if (tile is MaynotPersistence.Forest) return new Forest(10, 10);
+            if (tile is MaynotPersistence.PoliceStation) return new Facility(10, 10, FacilityType.POLICESTATION, 10);
+            if (tile is MaynotPersistence.Stadium) return new Facility(10, 10, FacilityType.STADIUM, 10);
+            if (tile is MaynotPersistence.School) return new Facility(10, 10, FacilityType.SCHOOL, 10);
+            if (tile is MaynotPersistence.University) return new Facility(10, 10, FacilityType.UNIVERSITY, 10);
+            
             return new Road(30);
         }
 

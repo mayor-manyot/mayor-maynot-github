@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Maynot.WPF.ViewModel
 {
-    public class Forest
+    public class Forest : MaynotTile
     {
         private Int32 _age;
         private Int32 _buildCost;

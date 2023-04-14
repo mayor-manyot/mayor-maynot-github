@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace Maynot.WPF.ViewModel
 {
@@ -15,13 +16,8 @@ namespace Maynot.WPF.ViewModel
         {
             BuildCost = buildCost;
             Name = "Út";
+            Background = new SolidColorBrush(Colors.SlateGray);
         }
     }
-    public class Empty : MaynotTile 
-    {
-        public Empty()
-        { 
-            Name = " ";
-        }
-    }
+    
 }
