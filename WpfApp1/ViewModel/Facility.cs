@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace Maynot.WPF.ViewModel
 {
@@ -21,6 +22,23 @@ namespace Maynot.WPF.ViewModel
             CurrentPopulation = currentPopulation;
             Type = type;
             BuildCost = buildCost;
+            switch (type)
+            {
+                case FacilityType.POLICESTATION:
+                    Background = new SolidColorBrush(Colors.Blue);
+                    break;
+                case FacilityType.STADIUM:
+                    Background = new SolidColorBrush(Colors.Orange);
+                    break;
+                case FacilityType.SCHOOL:
+                    Background = new SolidColorBrush(Colors.MediumVioletRed);
+                    break;
+                case FacilityType.UNIVERSITY:
+                    Background = new SolidColorBrush(Colors.RoyalBlue);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
