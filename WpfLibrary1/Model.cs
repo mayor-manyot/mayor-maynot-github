@@ -8,114 +8,97 @@ namespace MaynotModel
 {
     public class MaynotGameModel
     {
-        private float money;
-        private DateTime time;
-        private int gameSpeed;
-        private int prevGameSpeed;
-        private Tile[,] gameBoard;
-        private List<Person> citizens;
-        private System.Timers.Timer timer;
-        private int yearTracker;
-        private int weakTracker;
-        private float income;
-        private float expense;
-        private List<(Zone, int, int)> homes;
-        private List<(Zone, int, int)> workPlaces;
+        private MaynotGameState _state;
+        
+        public event EventHandler<MaynotEventArg>? SaveGame;
+        public event EventHandler<MaynotEventArg>? LoadGame;
+        public event EventHandler<MaynotEventArg>? ExitGame;
+        public event EventHandler<MaynotEventArg>? TilePlaced;
+        public event EventHandler<MaynotEventArg>? GeneralInfoAsked;
 
-        public event EventHandler<MaynotEventArg> SaveGame;
-        public event EventHandler<MaynotEventArg> LoadGame;
-        public event EventHandler<MaynotEventArg> ExitGame;
-        public event EventHandler<MaynotEventArg> TilePlaced;
-        public event EventHandler<MaynotEventArg> GeneralInfoAsked;
-
-        public float Money { get => money; set => money = value; }
-        public DateTime Time { get => time; set => time = value; }
-        public int GameSpeed { get => gameSpeed; set => gameSpeed = value; }
-        public Tile[,] GameBoard { get => gameBoard; set => gameBoard = value; }
-        public List<Person> Citizens { get => citizens; set => citizens = value; }
+        public float Money { get => _state.money; set => _state.money = value; }
+        public DateTime Time { get => _state.time; set => _state.time = value; }
+        public int GameSpeed { get => _state.gameSpeed; set => _state.gameSpeed = value; }
+        public Tile[,] GameBoard { get => _state.gameBoard; set => _state.gameBoard = value; }
+        public List<Person> Citizens { get => _state.citizens; set => _state.citizens = value; }
 
         public MaynotGameModel()
         {
-            money = 0;
-            gameSpeed = 0;
+            _state = new MaynotGameState(0);
         }
 
         public void newGame()
         {
-            money = 100000;
-            gameSpeed = 1;
-            time = new DateTime(1,1,1);
-            yearTracker = 1;
-            weakTracker = 0;
-            citizens = new List<Person>();
+            _state = new MaynotGameState(30);
+            _state.money = 100000;
+            _state.gameSpeed = 1;
+            _state.yearTracker = 1;
+            _state.weakTracker = 0;
             //azt van használva a lehelyezésnél
-            gameBoard = new Tile[30, 30];
             for (int i = 0; i < 30; i++)
             {
                 for (int j = 0; j < 30; j++)
                 {
-                    gameBoard[i, j] = new Empty();
+                    _state.gameBoard[i, j] = new Empty();
                 }
             }
-            timer = new System.Timers.Timer(500);
-            timer.Elapsed += Timer_Elapsed;
-            homes = new List<(Zone, int, int)>();
-            workPlaces = new List<(Zone, int, int)>();
+            _state.timer.Elapsed += Timer_Elapsed;            
             Debug.WriteLine("New game");
         }
 
         private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
-            time.AddDays(1);
-            weakTracker++;
-            if (yearTracker != time.Year)
+            _state.time.AddDays(1);
+            _state.weakTracker++;
+            if (_state.yearTracker != _state.time.Year)
             {
-                yearTracker = time.Month;
-                money = money - expense;
-                money = money + income;
+                _state.yearTracker = _state.time.Month;
+                _state.money = _state.money - _state.expense;
+                _state.money = _state.money + _state.income;
             }
             movingIn();
         }
 
         private void movingIn()
         {
-            if (weakTracker % 7 == 0)
+            if (_state.weakTracker % 7 == 0)
             {
                 Random r = new Random();
                 int num = r.Next(1, 25);
-                if (homes.Count == 0 || workPlaces.Count == 0) { }
+                if (_state.homes.Count == 0 || _state.workPlaces.Count == 0) { }
                 else
                 {
                     for (int i = 0; i < num; ++i)
                     {
-                        Zone home;
+                        //Kikommenteltem warning miatt
+                        //Zone home;
                         int n = r.Next(0, 99);
                         if (n < 18)
                         {
                             int k = 0;
-                            for (int j = 0;j < homes.Count; ++j) 
+                            for (int j = 0;j < _state.homes.Count; ++j) 
                             {
-                                if (homes[j].Item1.Capacity < homes[k].Item1.Capacity)
+                                if (_state.homes[j].Item1.Capacity < _state.homes[k].Item1.Capacity)
                                 {
                                     k = j;
                                 }
                             }
-                            Person p = new Person(50, n, homes[k].Item1, null, Level.ELEMENTARY);
-                            citizens.Add(p);
+                            Person p = new Person(50, n, _state.homes[k].Item1, null, Level.ELEMENTARY);
+                            _state.citizens.Add(p);
                         }
                         else
                         {
                             int k = 0;
-                            for (int j = 0; j < homes.Count; ++j)
+                            for (int j = 0; j < _state.homes.Count; ++j)
                             {
-                                if (homes[j].Item1.Capacity < homes[k].Item1.Capacity)
+                                if (_state.homes[j].Item1.Capacity < _state.homes[k].Item1.Capacity)
                                 {
                                     k = j;
                                 }
                             }
-                            for (int j = 0; j < workPlaces.Count; ++j)
+                            for (int j = 0; j < _state.workPlaces.Count; ++j)
                             {
-                                if (workPlaces[j].Item1.Capacity < workPlaces[k].Item1.Capacity)
+                                if (_state.workPlaces[j].Item1.Capacity < _state.workPlaces[k].Item1.Capacity)
                                 {
                                     k = j;
                                 }
@@ -124,57 +107,53 @@ namespace MaynotModel
                             Person p;
                             if (ch == 2) 
                             {
-                                p = new Person(50, n, workPlaces[k].Item1, null, Level.INTERMEDIATE);
+                                p = new Person(50, n, _state.workPlaces[k].Item1, null, Level.INTERMEDIATE);
                             }
                             else
                             {
-                                p = new Person(50, n, workPlaces[k].Item1, null, Level.SUPERLATIVE);
+                                p = new Person(50, n, _state.workPlaces[k].Item1, null, Level.SUPERLATIVE);
                             }
-                            citizens.Add(p);
+                            _state.citizens.Add(p);
 
                         }
 
                     }
                 }
-
-                
-                
-                
             }
         }
 
         public void stopTime()
         {
-            timer.Stop();
-            prevGameSpeed = gameSpeed;
-            gameSpeed = 0;
+            _state.timer.Stop();
+            _state.prevGameSpeed = _state.gameSpeed;
+            _state.gameSpeed = 0;
         }
 
         public void resumeTime()
         {
-            timer.Start();
-            gameSpeed = prevGameSpeed;
+            _state.timer.Start();
+            _state.gameSpeed = _state.prevGameSpeed;
         }
 
         public void slowTime()
         {
-            switch (gameSpeed)
+            switch (_state.gameSpeed)
             {
                 case 3:
-                    gameSpeed = 2;
-                    timer.Stop();
-                    timer.Interval = 500 / gameSpeed;
-                    timer.Start();
+                    _state.gameSpeed = 2;
+                    _state.timer.Stop();
+                    _state.timer.Interval = 500 / _state.gameSpeed;
+                    _state.timer.Start();
                     break;
                 case 2:
-                    gameSpeed = 1;
-                    timer.Stop();
-                    timer.Interval = 500 / gameSpeed;
-                    timer.Start();
+                    _state.gameSpeed = 1;
+                    _state.timer.Stop();
+                    _state.timer.Interval = 500 / _state.gameSpeed;
+                    _state.timer.Start();
                     break;
                 case 1:
-                    gameSpeed = 0;
-                    timer.Stop();                   
+                    _state.gameSpeed = 0;
+                    _state.timer.Stop();                   
                     break;
             }
             Debug.WriteLine("Gamespeed: " + GameSpeed);
@@ -182,25 +161,25 @@ namespace MaynotModel
 
         public void speedUpTime()
         {
-            switch (gameSpeed)
+            switch (_state.gameSpeed)
             {
                 case 0:
-                    gameSpeed = 1;
-                    timer.Stop();
-                    timer.Interval = 500 / gameSpeed;
-                    timer.Start();
+                    _state.gameSpeed = 1;
+                    _state.timer.Stop();
+                    _state.timer.Interval = 500 / _state.gameSpeed;
+                    _state.timer.Start();
                     break;
                 case 1:
-                    gameSpeed = 2;
-                    timer.Stop();
-                    timer.Interval = 500 / gameSpeed;
-                    timer.Start();
+                    _state.gameSpeed = 2;
+                    _state.timer.Stop();
+                    _state.timer.Interval = 500 / _state.gameSpeed;
+                    _state.timer.Start();
                     break;
                 case 2:
-                    gameSpeed = 3;
-                    timer.Stop();
-                    timer.Interval = 500 / gameSpeed;
-                    timer.Start();
+                    _state.gameSpeed = 3;
+                    _state.timer.Stop();
+                    _state.timer.Interval = 500 / _state.gameSpeed;
+                    _state.timer.Start();
                     break;
             }
             Debug.WriteLine("Gamespeed: " + GameSpeed);
@@ -208,23 +187,23 @@ namespace MaynotModel
 
         private bool placeTile(Tile t, int x, int y)
         {
-            if (gameBoard[x, y] is Empty)
+            if (_state.gameBoard[x, y] is Empty)
             {
-                gameBoard[x, y] = t;
+                _state.gameBoard[x, y] = t;
                 if (t is ResidentialZone)
                 {
 
                     (Tile, int, int) adding = (t, x, y);
-                    homes.Add(((Zone, int, int))adding);
+                    _state.homes.Add(((Zone, int, int))adding);
                 }else if(t is IndustrialZone)
                 {
                     (Tile, int, int) adding = (t, x, y);
-                    homes.Add(((Zone, int, int))adding);
+                    _state.homes.Add(((Zone, int, int))adding);
                 }
                 else if (t is ServiceZone)
                 {
                     (Tile, int, int) adding = (t, x, y);
-                    homes.Add(((Zone, int, int))adding);
+                    _state.homes.Add(((Zone, int, int))adding);
                 }
                 return true;
             }
@@ -240,28 +219,28 @@ namespace MaynotModel
         {
             
             Road r = new Road();
-            money = money - Road.buildCost;
-            expense = expense + Road.maintenanceFee;
+            _state.money = _state.money - Road.buildCost;
+            _state.expense = _state.expense + Road.maintenanceFee;
             return placeTile(r, x, y);
         }
 
         public bool placeForest(int x, int y)
         {
-            Forest f = new Forest(time);
+            Forest f = new Forest(_state.time);
             return placeTile(f, x, y);
         }
 
         public bool placeStadium(int x, int y)
         {
             Stadium s = new Stadium();
-            money = money - Stadium.buildCost;
-            expense = expense + Stadium.maintenanceFee;
+            _state.money = _state.money - Stadium.buildCost;
+            _state.expense = _state.expense + Stadium.maintenanceFee;
             if (x + 1 < 50 && y + 1 < 50)
             {
-                gameBoard[x, y] = s;
-                gameBoard[x+1, y] = s;
-                gameBoard[x, y+1] = s;
-                gameBoard[x+1, y+1] = s;
+                _state.gameBoard[x, y] = s;
+                _state.gameBoard[x+1, y] = s;
+                _state.gameBoard[x, y+1] = s;
+                _state.gameBoard[x+1, y+1] = s;
                 return true;
             }
             else
@@ -273,8 +252,8 @@ namespace MaynotModel
         public bool placePoliceStation(int x, int y)
         {
             PoliceStation p = new PoliceStation();
-            money = money - PoliceStation.buildCost;
-            expense = expense + PoliceStation.maintenanceFee;
+            _state.money = _state.money - PoliceStation.buildCost;
+            _state.expense = _state.expense + PoliceStation.maintenanceFee;
             return placeTile(p, x, y);
         }
 
@@ -283,12 +262,12 @@ namespace MaynotModel
             Random rand = new Random();
             int id = rand.Next(1, 1000);
             School s = new School(id);
-            money = money - School.buildCost;
-            expense = expense + School.maintenanceFee;
+            _state.money = _state.money - School.buildCost;
+            _state.expense = _state.expense + School.maintenanceFee;
             if (x + 1 < 50 && y + 1 < 50)
             {
-                gameBoard[x, y] = s;
-                gameBoard[x + 1, y] = s;
+                _state.gameBoard[x, y] = s;
+                _state.gameBoard[x + 1, y] = s;
                 return true;
             }
             else
@@ -302,14 +281,14 @@ namespace MaynotModel
             Random rand = new Random();
             int id = rand.Next(1, 1000);
             University u = new University(id);
-            money = money - University.buildCost;
-            expense = expense + University.maintenanceFee;
+            _state.money = _state.money - University.buildCost;
+            _state.expense = _state.expense + University.maintenanceFee;
             if (x + 1 < 50 && y + 1 < 50)
             {
-                gameBoard[x, y] = u;
-                gameBoard[x + 1, y] = u;
-                gameBoard[x, y + 1] = u;
-                gameBoard[x + 1, y + 1] = u;
+                _state.gameBoard[x, y] = u;
+                _state.gameBoard[x + 1, y] = u;
+                _state.gameBoard[x, y + 1] = u;
+                _state.gameBoard[x + 1, y + 1] = u;
                 return true;
             }
             else
