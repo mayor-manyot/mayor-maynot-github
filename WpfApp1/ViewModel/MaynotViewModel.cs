@@ -20,8 +20,8 @@ namespace Maynot.WPF.ViewModel
         public ObservableCollection<MaynotTile> Fields { get; set; }
         public float Money { get { return _model.Money; } }
 
-        private object _selectedItem;
-        public object SelectedItem
+        private object? _selectedItem;
+        public object? SelectedItem
         {
             get { return _selectedItem; }
             set
@@ -82,17 +82,20 @@ namespace Maynot.WPF.ViewModel
             _model.slowTime();
         }
 
-        private void OnRadioButtonChecked(object selectedItem)
+        private void OnRadioButtonChecked(object? selectedItem)
         {
-            
-            SelectedItem = selectedItem;
-            if (selectedItem is RadioButton radioButton)
+            if (selectedItem != null)
             {
-                _selectedItemIndex = Int32.Parse((String)radioButton.Tag);
+                SelectedItem = selectedItem;
+                if (selectedItem is RadioButton radioButton)
+                {
+                    _selectedItemIndex = Int32.Parse((String)radioButton.Tag);
+                }
             }
         }
 
-        private void OnPlaceItem(object selectedItem)
+
+        private void OnPlaceItem(object? selectedItem)
         {
             // Handle placing the selected item on the grid
         }
@@ -116,15 +119,15 @@ namespace Maynot.WPF.ViewModel
                             {
                                 _model.placeRoad(tile.X, tile.Y);
                             }
-                            else if (_selectedItemIndex == 1)
+                            else if (_selectedItemIndex == 1 && tile != null)
                             {
                                 _model.placeResidentialZone(tile.X, tile.Y);
                             }
-                            else if (_selectedItemIndex == 2)
+                            else if (_selectedItemIndex == 2 && tile != null)
                             {
                                 _model.placeServiceZone(tile.X, tile.Y);
                             }
-                            else if (_selectedItemIndex == 3)
+                            else if (_selectedItemIndex == 3 && tile != null)
                             {
                                 _model.placeIndustrialZone(tile.X, tile.Y);
                             }

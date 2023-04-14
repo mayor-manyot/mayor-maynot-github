@@ -17,22 +17,21 @@ namespace MaynotPersistence
         public List<Person> citizens;
         public System.Timers.Timer timer;
         public int yearTracker;
+        public int weakTracker;
         public float income;
         public float expense;
-        // + amit majd menteni kell
+        public List<(Zone, int, int)> homes;
+        public List<(Zone, int, int)> workPlaces;
 
-        public MaynotGameState(float money, DateTime time, int gameSpeed, int prevGameSpeed, Tile[,] gameBoard, List<Person> citizens, Timer timer, int yearTracker, float income, float expense)
+        //Konstruktor kapja meg a méretet és hozza létre az adattagokat null reference check miatt
+        public MaynotGameState(int boardSize)
         {
-            this.money = money;
-            this.time = time;
-            this.gameSpeed = gameSpeed;
-            this.prevGameSpeed = prevGameSpeed;
-            this.gameBoard = gameBoard;
-            this.citizens = citizens;
-            this.timer = timer;
-            this.yearTracker = yearTracker;
-            this.income = income;
-            this.expense = expense;
+            time = new DateTime(1, 1, 1);
+            gameBoard = new Tile[boardSize, boardSize];
+            timer = new System.Timers.Timer(500);
+            citizens = new List<Person> ();
+            homes = new List<(Zone, int, int)> ();
+            workPlaces = new List<(Zone, int, int)> ();
         }
     }
 }
