@@ -61,6 +61,7 @@ namespace MaynotModel
             timer.Elapsed += Timer_Elapsed;
             homes = new List<(Zone, int, int)>();
             workPlaces = new List<(Zone, int, int)>();
+            Debug.WriteLine("New game");
         }
 
         private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
@@ -207,7 +208,7 @@ namespace MaynotModel
 
         private bool placeTile(Tile t, int x, int y)
         {
-            if (gameBoard[x, y] is Tile)
+            if (gameBoard[x, y] is Empty)
             {
                 gameBoard[x, y] = t;
                 if (t is ResidentialZone)
