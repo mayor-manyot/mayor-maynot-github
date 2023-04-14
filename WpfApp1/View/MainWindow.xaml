@@ -42,7 +42,7 @@
                 <TextBlock Grid.Row="0" Text="Letehető elemek" FontWeight="Bold" Padding="3"/>
                 <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible">
                 <StackPanel  Name="RadioButtonList">
-                    <RadioButton>
+                    <RadioButton Tag="0" Command="{Binding RadioButtonCheckedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -56,8 +56,8 @@
                     </RadioButton>
 
                     <Separator Margin="5 10"></Separator>
-                    
-                    <RadioButton>
+
+                    <RadioButton Tag="1" Command="{Binding RadioButtonCheckedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -72,7 +72,7 @@
 
                     <Separator Margin="5 10"></Separator>
 
-                    <RadioButton>
+                    <RadioButton Tag="2" Command="{Binding RadioButtonCheckedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -89,7 +89,7 @@
 
                     <Separator Margin="5 10"></Separator>
 
-                    <RadioButton>
+                    <RadioButton Tag="3" Command="{Binding RadioButtonCheckedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -105,10 +105,10 @@
                 </ScrollViewer>
 
                 <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="6">
-                    <Button x:Name="slow" Margin="3" Content="&lt;&lt;" Height="30" Width="28" />
-                    <Button x:Name="play" Margin="3" Content="|>" Height="30" Width="28" />
-                    <Button x:Name="pause" Margin="3" Content="||" Height="30" Width="28" />
-                    <Button x:Name="forward" Margin="3" Content=">>" Height="30" Width="28" />
+                    <Button x:Name="slow" Margin="3" Content="&lt;&lt;" Height="30" Width="28" Command="{Binding SlowerGameCommand}" />
+                    <Button x:Name="play" Margin="3" Content="|>" Height="30" Width="28" Command="{Binding ResumeGameCommand}"/>
+                    <Button x:Name="pause" Margin="3" Content="||" Height="30" Width="28" Command="{Binding PauseGameCommand}"/>
+                    <Button x:Name="forward" Margin="3" Content=">>" Height="30" Width="28" Command="{Binding SpeedUpGameCommand}"/>
                 </StackPanel>
             </Grid>
 

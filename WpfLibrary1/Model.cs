@@ -45,7 +45,14 @@ namespace MaynotModel
             yearTracker = 1;
             citizens = new List<Person>();
             //azt van használva a lehelyezésnél
-            gameBoard = new Tile[50, 50];
+            gameBoard = new Tile[30, 30];
+            for (int i = 0; i < 30; i++)
+            {
+                for (int j = 0; j < 30; j++)
+                {
+                    gameBoard[i, j] = new Empty();
+                }
+            }
             timer = new System.Timers.Timer(500);
             timer.Elapsed += Timer_Elapsed;
             Debug.WriteLine("New game");
@@ -96,7 +103,8 @@ namespace MaynotModel
                     gameSpeed = 0;
                     timer.Stop();                   
                     break;
-            }   
+            }
+            Debug.WriteLine("Gamespeed: " + GameSpeed);
         }
 
         public void speedUpTime()
@@ -122,6 +130,7 @@ namespace MaynotModel
                     timer.Start();
                     break;
             }
+            Debug.WriteLine("Gamespeed: " + GameSpeed);
         }
 
         private bool placeTile(Tile t, int x, int y)
@@ -224,6 +233,7 @@ namespace MaynotModel
         public bool placeResidentialZone(int x, int y)
         {
             //Mennyi legyen a capacity?
+            Debug.WriteLine("Placing residental in Model!");
             ResidentialZone r = new ResidentialZone(100);
             return placeTile(r, x, y);
         }

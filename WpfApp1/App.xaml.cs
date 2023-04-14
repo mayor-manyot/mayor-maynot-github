@@ -35,7 +35,7 @@ namespace Maynot
             _model.newGame();
 
             //ViewModel példányosítás előszőr
-            _viewModel = new MaynotViewModel();
+            _viewModel = new MaynotViewModel(_model);
             _viewModel.NewGame += new EventHandler(ViewModel_NewGame);
             _viewModel.ExitGame += new EventHandler(ViewModel_ExitGame);
             _viewModel.LoadGame += new EventHandler(ViewModel_LoadGame);
