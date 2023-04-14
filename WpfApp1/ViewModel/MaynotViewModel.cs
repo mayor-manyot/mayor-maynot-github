@@ -20,8 +20,8 @@ namespace Maynot.WPF.ViewModel
         public ObservableCollection<MaynotTile> Fields { get; set; }
         public float Money { get { return _model.Money; } }
 
-        private object _selectedItem;
-        public object SelectedItem
+        private object? _selectedItem;
+        public object? SelectedItem
         {
             get { return _selectedItem; }
             set
@@ -82,17 +82,20 @@ namespace Maynot.WPF.ViewModel
             _model.slowTime();
         }
 
-        private void OnRadioButtonChecked(object selectedItem)
+        private void OnRadioButtonChecked(object? selectedItem)
         {
-            
-            SelectedItem = selectedItem;
-            if (selectedItem is RadioButton radioButton)
+            if (selectedItem != null)
             {
-                _selectedItemIndex = Int32.Parse((String)radioButton.Tag);
+                SelectedItem = selectedItem;
+                if (selectedItem is RadioButton radioButton)
+                {
+                    _selectedItemIndex = Int32.Parse((String)radioButton.Tag);
+                }
             }
         }
 
-        private void OnPlaceItem(object selectedItem)
+
+        private void OnPlaceItem(object? selectedItem)
         {
             // Handle placing the selected item on the grid
         }
@@ -111,27 +114,31 @@ namespace Maynot.WPF.ViewModel
                         ClickCommand = new DelegateCommand((param)=> {
                             
                             Debug.WriteLine("about to place");
-                            MaynotTile tile = param as MaynotTile;
-                            Debug.WriteLine("Clicked on: " + tile.X + " " + tile.Y);
-                            if (_selectedItemIndex == 0)
+                            MaynotTile? tile = param as MaynotTile;
+                            Debug.WriteLine("Clicked on: " + (tile?.X ?? 0) + " " + (tile?.Y ?? 0));
+                            if (_selectedItemIndex == 0 && tile != null)
                             {
                                 _model.placeRoad(tile.X, tile.Y);
                             }
-                            else if (_selectedItemIndex == 1)
+                            else if (_selectedItemIndex == 1 && tile != null)
                             {
                                 _model.placeResidentialZone(tile.X, tile.Y);
                                 Debug.WriteLine("Place residental!!");
                             }
-                            else if (_selectedItemIndex == 2)
+                            else if (_selectedItemIndex == 2 && tile != null)
                             {
                                 _model.placeServiceZone(tile.X, tile.Y);
                             }
-                            else if (_selectedItemIndex == 3)
+                            else if (_selectedItemIndex == 3 && tile != null)
                             {
                                 _model.placeIndustrialZone(tile.X, tile.Y);
                             }
-                            
-                            tile.Name = ModelTileToMaynotTile(_model.GameBoard[tile.X, tile.Y]).Name;
+
+                            if (tile != null)
+                            {
+                                tile.Name = ModelTileToMaynotTile(_model.GameBoard[tile.X, tile.Y]).Name;
+                            }
+
                             //UpdateTable();
                         })
                     });
@@ -143,7 +150,8 @@ namespace Maynot.WPF.ViewModel
 
         private void UpdateTable()
         {
-            Int32[] voltak;
+            //Kikommenteltem warning miatt
+            //Int32[] voltak;
             foreach (MaynotTile tile in Fields) 
             {
                 if (_model.GameBoard[tile.X, tile.Y] != null)

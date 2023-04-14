@@ -65,7 +65,7 @@ namespace Maynot
         /// <summary>
         /// Játék betöltésének eseménykezelője.
         /// </summary>
-        private async void ViewModel_LoadGame(object? sender, System.EventArgs e)
+        private void ViewModel_LoadGame(object? sender, System.EventArgs e)
         {
             try
             {
@@ -89,7 +89,7 @@ namespace Maynot
         /// <summary>
         /// Játék mentésének eseménykezelője.
         /// </summary>
-        private async void ViewModel_SaveGame(object? sender, EventArgs e)
+        private void ViewModel_SaveGame(object? sender, EventArgs e)
         {
 
             try

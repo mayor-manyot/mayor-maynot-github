@@ -11,12 +11,12 @@ namespace MaynotPersistence
         public int Satisfaction { get; set; }
         public int Age { get; set; }
         public Tile Residency { get; set; }
-        public Tile WorkPlace { get; set; }
+        public Tile? WorkPlace { get; set; }
         public Level Education { get; set; }
         public Person(int satisfaction,
             int age,
             Tile residency,
-            Tile workPlace,
+            Tile? workPlace,
             Level education)
         {
             Satisfaction = satisfaction;
