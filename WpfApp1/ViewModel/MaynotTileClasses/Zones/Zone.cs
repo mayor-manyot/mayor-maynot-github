@@ -14,6 +14,7 @@ namespace Maynot.WPF.ViewModel
         private Int32 _currentPopulation;
 
         public override string DisplayName { get; } = "Zóna";
+        public override SolidColorBrush Background { get; } = new SolidColorBrush(Colors.LightYellow);
         public int CurrentPopulation { get { return _currentPopulation; } set { _currentPopulation = value; } }
         public Int32 Capacity { get { return _capacity; } set { _capacity = value; } }
         public Zone(int capacity, int currentPopulation)
@@ -21,7 +22,6 @@ namespace Maynot.WPF.ViewModel
             Capacity = capacity;
             CurrentPopulation = currentPopulation;
             Name = "Zóna";
-            Background = new SolidColorBrush(Colors.LightYellow);
         }
     }
 

@@ -29,14 +29,10 @@ namespace Maynot.WPF.ViewModel
         public Int32 Y { get; set; }
         public DelegateCommand? ClickCommand { get; set; }
 
-        public SolidColorBrush Background {
+        public virtual SolidColorBrush Background {
             get
             {
                 return _background;
-            }
-            set {
-                _background = value;
-                OnPropertyChanged(nameof(Background));
             }
         }
     }

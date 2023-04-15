@@ -167,8 +167,6 @@ namespace Maynot.WPF.ViewModel
                 MaynotTile tile = Fields[i];
                 MaynotTile modelbolTile = ModelTileToMaynotTile(_model.GameBoard[tile.X, tile.Y]);
                 tile = modelbolTile;
-                tile.Name = modelbolTile.Name;
-                tile.Background = modelbolTile.Background;
             }
 
             OnPropertyChanged(nameof(Money));
