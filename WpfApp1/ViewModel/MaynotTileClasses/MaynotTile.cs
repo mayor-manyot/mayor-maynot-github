@@ -15,7 +15,7 @@ namespace Maynot.WPF.ViewModel
         private SolidColorBrush _background;
         public bool CanBeDemolished { get; private set; }
         public Image? SpriteImage { get; set; }
-        public int MyProperty { get; set; }
+        public virtual string DisplayName { get; } // statikusan felülírja az összes gyerekosztáj
         public string Name {
             get { return _name; }
             set
@@ -29,14 +29,10 @@ namespace Maynot.WPF.ViewModel
         public Int32 Y { get; set; }
         public DelegateCommand? ClickCommand { get; set; }
 
-        public SolidColorBrush Background {
+        public virtual SolidColorBrush Background {
             get
             {
                 return _background;
-            }
-            set {
-                _background = value;
-                OnPropertyChanged(nameof(Background));
             }
         }
     }

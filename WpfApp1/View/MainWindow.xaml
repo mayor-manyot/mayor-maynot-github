@@ -42,121 +42,26 @@
 
                 <TextBlock Grid.Row="0" Text="Letehető elemek" FontWeight="Bold" Padding="3"/>
                 <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible">
-                <StackPanel  Name="RadioButtonList">
-                    <RadioButton Tag="0" Command="{Binding RadioButtonCheckedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
-                        
-                            <Grid Background="LightGray">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Button Grid.Row="0" Width="100" Height="100">Image</Button>
-                            <Label Grid.Row="1" FontWeight="Bold" Padding="0">Út</Label>
-                            <TextBlock Grid.Row="2" FontSize="10">Ár: </TextBlock>
-                        </Grid>
-                    </RadioButton>
-
-                    <Separator Margin="5 10"></Separator>
-
-                    <RadioButton Tag="1" Command="{Binding RadioButtonCheckedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
-                        <Grid Background="LightYellow">
-                                <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Button Grid.Row="0" Width="100" Height="100">Image</Button>
-                            <Label Grid.Row="1" FontWeight="Bold" Padding="0">Rezidenciális zóna</Label>
-                            <TextBlock Grid.Row="2" FontSize="10">Ár:</TextBlock>
-                        </Grid>
-                    </RadioButton>
-
-                    <Separator Margin="5 10"></Separator>
-
-                    <RadioButton Tag="2" Command="{Binding RadioButtonCheckedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
-                        <Grid Background="LightYellow">
-                                <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Button Grid.Row="0" Width="100" Height="100">Image</Button>
-                            <Label Grid.Row="1" FontWeight="Bold" Padding="0">Szolgáltatás zóna</Label>
-                            <TextBlock Grid.Row="2" FontSize="10">Ár:</TextBlock>
-                        </Grid>
-                    </RadioButton>
-
-
-
-                    <Separator Margin="5 10"></Separator>
-
-                    <RadioButton Tag="3" Command="{Binding RadioButtonCheckedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
-                        <Grid Background="LightYellow">
-                                <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Button Grid.Row="0" Width="100" Height="100">Image</Button>
-                            <Label Grid.Row="1" FontWeight="Bold" Padding="0">Ipar zóna</Label>
-                            <TextBlock Grid.Row="2" FontSize="10">Ár:</TextBlock>
-                        </Grid>
-                    </RadioButton>
-                    <Separator Margin="5 10"></Separator>
-                    <RadioButton Tag="4" Command="{Binding RadioButtonCheckedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
-                        <Grid Background="Blue">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Button Grid.Row="0" Width="100" Height="100">Image</Button>
-                            <Label Grid.Row="1" FontWeight="Bold" Padding="0">Police Station</Label>
-                            <TextBlock Grid.Row="2" FontSize="10">Ár:</TextBlock>
-                        </Grid>
-                    </RadioButton>
-                    <Separator Margin="5 10"></Separator>
-                        <RadioButton Tag="5" Command="{Binding RadioButtonCheckedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
-                        <Grid Background="Orange">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Button Grid.Row="0" Width="100" Height="100">Image</Button>
-                            <Label Grid.Row="1" FontWeight="Bold" Padding="0">Stadion</Label>
-                            <TextBlock Grid.Row="2" FontSize="10">Ár:</TextBlock>
-                        </Grid>
-                    </RadioButton>
-                    <Separator Margin="5 10"></Separator>
-                        <RadioButton Tag="6" Command="{Binding RadioButtonCheckedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
-                        <Grid Background="MediumVioletRed">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Button Grid.Row="0" Width="100" Height="100">Image</Button>
-                            <Label Grid.Row="1" FontWeight="Bold" Padding="0">School</Label>
-                            <TextBlock Grid.Row="2" FontSize="10">Ár:</TextBlock>
-                        </Grid>
-                    </RadioButton>
-                    <Separator Margin="5 10"></Separator>
-                        <RadioButton Tag="7" Command="{Binding RadioButtonCheckedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
-                        <Grid Background="RoyalBlue">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Button Grid.Row="0" Width="100" Height="100">Image</Button>
-                            <Label Grid.Row="1" FontWeight="Bold" Padding="0">University</Label>
-                            <TextBlock Grid.Row="2" FontSize="10">Ár:</TextBlock>
-                        </Grid>
-                    </RadioButton>
-
-                    </StackPanel>
+                    <ItemsControl ItemsSource="{Binding LetehetoElemek}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Background="Transparent" BorderThickness="0"
+                                Command="{Binding Path=DataContext.RadioButtonCheckedCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding}">
+                                    <Grid Background="{Binding Background}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <Button Grid.Row="0" Width="100" Height="100">Image</Button>
+                                        <Label Grid.Row="1" FontWeight="Bold" Padding="0" Content="{Binding DisplayName}" />
+                                        <TextBlock Grid.Row="2" FontSize="10">Ár:</TextBlock>
+                                    </Grid>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </ScrollViewer>
 
                 <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="6">
