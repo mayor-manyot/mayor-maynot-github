@@ -8,6 +8,7 @@ namespace Maynot.WPF.ViewModel
 {
     public class ResidentialZone : Zone
     {
+        public override string DisplayName { get; } = "Lakó Zóna";
         public ResidentialZone() : this(100, 0) { }
         public ResidentialZone(int capacity, int currentPopulation) : base(capacity, currentPopulation) { }
     }
