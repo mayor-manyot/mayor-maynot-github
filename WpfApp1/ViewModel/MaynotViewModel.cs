@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using MaynotModel;
@@ -32,6 +34,18 @@ namespace Maynot.WPF.ViewModel
         }
 
         private int _selectedItemIndex;
+
+        private MaynotTile _selectedTile;
+
+        public MaynotTile SelectedTile
+        {
+            get { return _selectedTile; }
+            set
+            {
+                _selectedTile = value;
+                OnPropertyChanged(nameof(SelectedTile));
+            }
+        }
 
         public ICommand RadioButtonCheckedCommand { get; set; }
         public ICommand PlaceItemCommand { get; set; }
@@ -103,13 +117,15 @@ namespace Maynot.WPF.ViewModel
 
         private void OnRadioButtonChecked(object? selectedItem)
         {
-            if (selectedItem != null)
+            if (selectedItem is MaynotTile maynotTile)
             {
-                SelectedItem = selectedItem;
-                if (selectedItem is RadioButton radioButton)
-                {
-                    _selectedItemIndex = Int32.Parse((String)radioButton.Tag);
-                }
+                // Your logic to handle the click event
+                Debug.WriteLine($"Klikkelve: {maynotTile.Name}");
+                SelectedTile = maynotTile;
+            }
+            else
+            {
+                throw new ArgumentException("Olyan elemen jött be 'OnRadioButtonChecked' esemény amely nem MaynotTile típusú!");
             }
         }
 
@@ -130,59 +146,7 @@ namespace Maynot.WPF.ViewModel
                     {
                         X = i,
                         Y = j,
-                        ClickCommand = new DelegateCommand((param)=> {
-                            
-                            MaynotTile tile = param as MaynotTile;
-                            Debug.WriteLine("Clicked on: " + tile.X + " " + tile.Y);
-                            if (_selectedItemIndex == 0)
-                            {
-                                _model.placeRoad(tile.X, tile.Y);
-                            }
-                            else if (_selectedItemIndex == 1 && tile != null)
-                            {
-                                _model.placeResidentialZone(tile.X, tile.Y);
-                            }
-                            else if (_selectedItemIndex == 2 && tile != null)
-                            {
-                                _model.placeServiceZone(tile.X, tile.Y);
-                            }
-                            else if (_selectedItemIndex == 3 && tile != null)
-                            {
-                                _model.placeIndustrialZone(tile.X, tile.Y);
-                            }
-                            else if (_selectedItemIndex == 4)
-                            {
-                                _model.placePoliceStation(tile.X, tile.Y);
-                            }
-                            else if (_selectedItemIndex == 5)
-                            {
-                                _model.placeStadium(tile.X, tile.Y);
-                            }
-                            else if (_selectedItemIndex == 6)
-                            {
-                                _model.placeSchool(tile.X, tile.Y);
-                            }
-                            else if (_selectedItemIndex == 7)
-                            {
-                                _model.placeUni(tile.X, tile.Y);
-                            }
-                            MaynotTile modelbolTile = ModelTileToMaynotTile(_model.GameBoard[tile.X, tile.Y]);
-                            
-                            if (modelbolTile is Zone zona)
-                            {
-                                tile.Name = zona.Type.ToString()[0].ToString();
-                            }
-                            else if (modelbolTile is Facility facility)
-                            {
-                                tile.Name = facility.Type.ToString()[0].ToString();
-                            }
-                            else
-                            {
-                                tile.Name = modelbolTile.Name;
-                            }
-                            tile.Background = modelbolTile.Background;
-                            //UpdateTable();
-                        })
+                        ClickCommand = new DelegateCommand((param)=> PlaceTile(param as MaynotTile))
                     });
                 }
             }
@@ -192,15 +156,87 @@ namespace Maynot.WPF.ViewModel
 
         private void UpdateTable()
         {
-            foreach (MaynotTile tile in Fields) 
+            for (int i = 0; i < Fields.Count; i++)
             {
+                MaynotTile tile = Fields[i];
                 MaynotTile modelbolTile = ModelTileToMaynotTile(_model.GameBoard[tile.X, tile.Y]);
+                tile = modelbolTile;
                 tile.Name = modelbolTile.Name;
                 tile.Background = modelbolTile.Background;
             }
 
             OnPropertyChanged(nameof(Money));
             OnPropertyChanged(nameof(Fields));
+        }
+
+        private void PlaceTile(MaynotTile tile)
+        {
+            Debug.WriteLine("Clicked on: " + tile.X + " " + tile.Y);
+
+            if (SelectedTile is Road)
+            {
+                _model.placeRoad(tile.X, tile.Y);
+            }
+            else if (SelectedTile is Zone zone)
+            {
+                ZoneType zonaTipusa = zone.Type;
+                switch (zonaTipusa)
+                {
+                    case ZoneType.RESIDENTIAL:
+                        _model.placeResidentialZone(tile.X, tile.Y);
+                        break;
+                    case ZoneType.INDUSTRIAL:
+                        _model.placeIndustrialZone(tile.X, tile.Y);
+                        break;
+                    case ZoneType.SERVICE:
+                        _model.placeServiceZone(tile.X, tile.Y);
+                        break;
+                    case ZoneType.EMPTY:
+                        throw new NotImplementedException("Üres még nem tehető le!");
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else if (SelectedTile is Facility facility)
+            {
+                FacilityType facilityType = facility.Type;
+                switch (facilityType)
+                {
+                    case FacilityType.POLICESTATION:
+                        _model.placePoliceStation(tile.X, tile.Y);
+                        break;
+                    case FacilityType.STADIUM:
+                        _model.placeStadium(tile.X, tile.Y);
+                        break;
+                    case FacilityType.SCHOOL:
+                        _model.placeSchool(tile.X, tile.Y);
+                        break;
+                    case FacilityType.UNIVERSITY:
+                        _model.placeUni(tile.X, tile.Y);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            MaynotTile modelbolTile = ModelTileToMaynotTile(_model.GameBoard[tile.X, tile.Y]);
+
+            if (modelbolTile is Zone zona)
+            {
+                tile.Name = zona.Type.ToString()[0].ToString();
+            }
+            else if (modelbolTile is Facility facility)
+            {
+                tile.Name = facility.Type.ToString()[0].ToString();
+            }
+            else
+            {
+                tile.Name = modelbolTile.Name;
+            }
+            tile.Background = modelbolTile.Background;
+            //UpdateTable();
+
         }
 
         private MaynotTile ModelTileToMaynotTile(Tile tile)

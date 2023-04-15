@@ -45,8 +45,9 @@
                     <ItemsControl ItemsSource="{Binding LetehetoElemek}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <RadioButton Command="{Binding Path=DataContext.RadioButtonCheckedCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                     CommandParameter="{Binding}">
+                                <Button Background="Transparent" BorderThickness="0"
+                                Command="{Binding Path=DataContext.RadioButtonCheckedCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding}">
                                     <Grid Background="{Binding Background}">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto" />
@@ -57,7 +58,7 @@
                                         <Label Grid.Row="1" FontWeight="Bold" Padding="0" Content="{Binding Name}" />
                                         <TextBlock Grid.Row="2" FontSize="10">Ár:</TextBlock>
                                     </Grid>
-                                </RadioButton>
+                                </Button>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
