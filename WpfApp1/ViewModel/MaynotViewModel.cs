@@ -36,6 +36,18 @@ namespace Maynot.WPF.ViewModel
         public ICommand RadioButtonCheckedCommand { get; set; }
         public ICommand PlaceItemCommand { get; set; }
 
+        private ObservableCollection<MaynotTile> _letehetoElemek;
+
+        public ObservableCollection<MaynotTile> LetehetoElemek
+        {
+            get { return _letehetoElemek; }
+            set
+            {
+                _letehetoElemek = value;
+                OnPropertyChanged(nameof(LetehetoElemek));
+            }
+        }
+
 
 
         public MaynotViewModel(MaynotGameModel model)

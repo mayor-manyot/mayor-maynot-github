@@ -12,6 +12,7 @@ namespace Maynot.WPF.ViewModel
     {
         private Int32 _buildCost;
         public Int32 BuildCost { get { return _buildCost; } set { _buildCost = value; } }
+        public Road() : this(5000) { }
         public Road(int buildCost)
         {
             BuildCost = buildCost;
