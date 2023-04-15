@@ -55,7 +55,7 @@
                                             <RowDefinition Height="*" />
                                         </Grid.RowDefinitions>
                                         <Button Grid.Row="0" Width="100" Height="100">Image</Button>
-                                        <Label Grid.Row="1" FontWeight="Bold" Padding="0" Content="{Binding Name}" />
+                                        <Label Grid.Row="1" FontWeight="Bold" Padding="0" Content="{Binding DisplayName}" />
                                         <TextBlock Grid.Row="2" FontSize="10">Ár:</TextBlock>
                                     </Grid>
                                 </Button>

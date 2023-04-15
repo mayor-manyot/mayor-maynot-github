@@ -12,6 +12,8 @@ namespace Maynot.WPF.ViewModel
     {
         private Int32 _capacity;
         private Int32 _currentPopulation;
+
+        public override string DisplayName { get; } = "Zóna";
         public int CurrentPopulation { get { return _currentPopulation; } set { _currentPopulation = value; } }
         public Int32 Capacity { get { return _capacity; } set { _capacity = value; } }
         public ZoneType Type { get; set; }

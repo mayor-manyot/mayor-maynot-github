@@ -89,8 +89,14 @@ namespace Maynot.WPF.ViewModel
             LetehetoElemek = new ObservableCollection<MaynotTile>
             {
                 new Road(),
-                new Zone(ZoneType.RESIDENTIAL)
-                
+                new Zone(ZoneType.RESIDENTIAL),
+                new Zone(ZoneType.INDUSTRIAL),
+                new Zone(ZoneType.SERVICE),
+                new Facility(FacilityType.POLICESTATION),
+                new Facility(FacilityType.STADIUM),
+                new Facility(FacilityType.SCHOOL),
+                new Facility(FacilityType.UNIVERSITY),
+                new Forest()
             };
 
         }
@@ -218,6 +224,10 @@ namespace Maynot.WPF.ViewModel
                     default:
                         break;
                 }
+            }
+            else if (SelectedTile is Forest)
+            {
+                _model.placeForest(tile.X, tile.Y);
             }
 
             MaynotTile modelbolTile = ModelTileToMaynotTile(_model.GameBoard[tile.X, tile.Y]);

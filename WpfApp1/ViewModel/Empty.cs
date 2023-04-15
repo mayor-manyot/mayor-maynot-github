@@ -8,9 +8,10 @@ namespace Maynot.WPF.ViewModel
 {
     public class Empty : MaynotTile
     {
+        public override string DisplayName { get; } = "Üres";
         public Empty()
         {
-            Name = "Üres";
+            Name = " ";
         }
     }
 }

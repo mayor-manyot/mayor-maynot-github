@@ -16,6 +16,8 @@ namespace Maynot.WPF.ViewModel
         public Int32 Capacity { get { return _capacity; } set { _capacity = value; } }
         public FacilityType Type { get { return _type; } set { _type = value; } }
         public Int32 BuildCost { get; set; }
+        public override string DisplayName { get; } = "Facility";
+        public Facility(FacilityType facilityType) : this(10, 0, facilityType, 5000) { }
         public Facility(int capacity, int currentPopulation, FacilityType type, int buildCost)
         {
             Capacity = capacity;

@@ -15,7 +15,7 @@ namespace Maynot.WPF.ViewModel
         private SolidColorBrush _background;
         public bool CanBeDemolished { get; private set; }
         public Image? SpriteImage { get; set; }
-        public int MyProperty { get; set; }
+        public virtual string DisplayName { get; } // statikusan felülírja az összes gyerekosztáj
         public string Name {
             get { return _name; }
             set
