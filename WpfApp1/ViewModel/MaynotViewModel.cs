@@ -142,7 +142,7 @@ namespace Maynot.WPF.ViewModel
             {
                 for (Int32 j = 0; j < _model.GameBoard.GetLength(0); j++)
                 {
-                    Fields.Add(new MaynotTile
+                    Fields.Add(new Empty
                     {
                         X = i,
                         Y = j,
@@ -222,19 +222,9 @@ namespace Maynot.WPF.ViewModel
 
             MaynotTile modelbolTile = ModelTileToMaynotTile(_model.GameBoard[tile.X, tile.Y]);
 
-            if (modelbolTile is Zone zona)
-            {
-                tile.Name = zona.Type.ToString()[0].ToString();
-            }
-            else if (modelbolTile is Facility facility)
-            {
-                tile.Name = facility.Type.ToString()[0].ToString();
-            }
-            else
-            {
-                tile.Name = modelbolTile.Name;
-            }
-            tile.Background = modelbolTile.Background;
+            int fieldMeret = (int) (Math.Sqrt(Fields.Count));
+            Fields[tile.X * fieldMeret + tile.Y] = modelbolTile; // Itt nagyon gagyin felülírjuk a Fields listában lévő MaynotTile-t a mi tile-unkra
+            OnPropertyChanged(nameof(Fields));
             //UpdateTable();
 
         }

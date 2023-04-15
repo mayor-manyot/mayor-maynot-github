@@ -10,7 +10,7 @@ namespace Maynot.WPF.ViewModel
     {
         public Empty()
         {
-            Name = " ";
+            Name = "Üres";
         }
     }
 }
