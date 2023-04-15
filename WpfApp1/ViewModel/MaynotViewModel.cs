@@ -89,9 +89,9 @@ namespace Maynot.WPF.ViewModel
             LetehetoElemek = new ObservableCollection<MaynotTile>
             {
                 new Road(),
-                new Zone(ZoneType.RESIDENTIAL),
-                new Zone(ZoneType.INDUSTRIAL),
-                new Zone(ZoneType.SERVICE),
+                new ResidentialZone(),
+                new IndustrialZone(),
+                new ServiceZone(),
                 new PoliceStation(),
                 new Stadium(),
                 new School(),
@@ -185,23 +185,17 @@ namespace Maynot.WPF.ViewModel
             }
             else if (SelectedTile is Zone zone)
             {
-                ZoneType zonaTipusa = zone.Type;
-                switch (zonaTipusa)
+                if (zone is ResidentialZone)
                 {
-                    case ZoneType.RESIDENTIAL:
-                        _model.placeResidentialZone(tile.X, tile.Y);
-                        break;
-                    case ZoneType.INDUSTRIAL:
-                        _model.placeIndustrialZone(tile.X, tile.Y);
-                        break;
-                    case ZoneType.SERVICE:
-                        _model.placeServiceZone(tile.X, tile.Y);
-                        break;
-                    case ZoneType.EMPTY:
-                        throw new NotImplementedException("Üres még nem tehető le!");
-                        break;
-                    default:
-                        break;
+                    _model.placeResidentialZone(tile.X, tile.Y);
+                }
+                else if (zone is IndustrialZone)
+                {
+                    _model.placeIndustrialZone(tile.X, tile.Y);
+                }
+                else if (zone is ServiceZone)
+                {
+                    _model.placeServiceZone(tile.X, tile.Y);
                 }
             }
             else if (SelectedTile is Facility facility)
@@ -241,9 +235,9 @@ namespace Maynot.WPF.ViewModel
         {
             if (tile is MaynotPersistence.Empty) return new Empty();
             if (tile is MaynotPersistence.Road) return new Road(30);
-            if (tile is MaynotPersistence.ResidentialZone) return new Zone(30, 30, ZoneType.RESIDENTIAL);
-            if (tile is MaynotPersistence.IndustrialZone) return new Zone(30, 30, ZoneType.INDUSTRIAL);
-            if (tile is MaynotPersistence.ServiceZone) return new Zone(30, 30, ZoneType.SERVICE);
+            if (tile is MaynotPersistence.ResidentialZone) return new ResidentialZone();
+            if (tile is MaynotPersistence.IndustrialZone) return new IndustrialZone();
+            if (tile is MaynotPersistence.ServiceZone) return new ServiceZone();
             if (tile is MaynotPersistence.Forest) return new Forest(10, 10);
             if (tile is MaynotPersistence.PoliceStation) return new PoliceStation();
             if (tile is MaynotPersistence.Stadium) return new Stadium();
