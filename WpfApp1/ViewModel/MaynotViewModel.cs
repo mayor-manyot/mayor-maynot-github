@@ -92,10 +92,10 @@ namespace Maynot.WPF.ViewModel
                 new Zone(ZoneType.RESIDENTIAL),
                 new Zone(ZoneType.INDUSTRIAL),
                 new Zone(ZoneType.SERVICE),
-                new Facility(FacilityType.POLICESTATION),
-                new Facility(FacilityType.STADIUM),
-                new Facility(FacilityType.SCHOOL),
-                new Facility(FacilityType.UNIVERSITY),
+                new PoliceStation(),
+                new Stadium(),
+                new School(),
+                new University(),
                 new Forest()
             };
 
@@ -206,23 +206,21 @@ namespace Maynot.WPF.ViewModel
             }
             else if (SelectedTile is Facility facility)
             {
-                FacilityType facilityType = facility.Type;
-                switch (facilityType)
+                if (facility is PoliceStation)
                 {
-                    case FacilityType.POLICESTATION:
-                        _model.placePoliceStation(tile.X, tile.Y);
-                        break;
-                    case FacilityType.STADIUM:
-                        _model.placeStadium(tile.X, tile.Y);
-                        break;
-                    case FacilityType.SCHOOL:
-                        _model.placeSchool(tile.X, tile.Y);
-                        break;
-                    case FacilityType.UNIVERSITY:
-                        _model.placeUni(tile.X, tile.Y);
-                        break;
-                    default:
-                        break;
+                    _model.placePoliceStation(tile.X, tile.Y);
+                }
+                else if (facility is Stadium)
+                {
+                    _model.placeStadium(tile.X, tile.Y);
+                }
+                else if (facility is School)
+                {
+                    _model.placeSchool(tile.X, tile.Y);
+                }
+                else if (facility is University)
+                {
+                    _model.placeUni(tile.X, tile.Y);
                 }
             }
             else if (SelectedTile is Forest)
@@ -247,10 +245,10 @@ namespace Maynot.WPF.ViewModel
             if (tile is MaynotPersistence.IndustrialZone) return new Zone(30, 30, ZoneType.INDUSTRIAL);
             if (tile is MaynotPersistence.ServiceZone) return new Zone(30, 30, ZoneType.SERVICE);
             if (tile is MaynotPersistence.Forest) return new Forest(10, 10);
-            if (tile is MaynotPersistence.PoliceStation) return new Facility(10, 10, FacilityType.POLICESTATION, 10);
-            if (tile is MaynotPersistence.Stadium) return new Facility(10, 10, FacilityType.STADIUM, 10);
-            if (tile is MaynotPersistence.School) return new Facility(10, 10, FacilityType.SCHOOL, 10);
-            if (tile is MaynotPersistence.University) return new Facility(10, 10, FacilityType.UNIVERSITY, 10);
+            if (tile is MaynotPersistence.PoliceStation) return new PoliceStation();
+            if (tile is MaynotPersistence.Stadium) return new Stadium();
+            if (tile is MaynotPersistence.School) return new School();
+            if (tile is MaynotPersistence.University) return new University();
             
             return new Road(30);
         }
