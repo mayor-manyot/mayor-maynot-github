@@ -72,6 +72,13 @@ namespace Maynot.WPF.ViewModel
             RadioButtonCheckedCommand = new DelegateCommand(OnRadioButtonChecked);
             PlaceItemCommand = new DelegateCommand(OnPlaceItem);
 
+            LetehetoElemek = new ObservableCollection<MaynotTile>
+            {
+                new Road(),
+                new Zone(ZoneType.RESIDENTIAL)
+                
+            };
+
         }
 
         private void OnResumeGame()
