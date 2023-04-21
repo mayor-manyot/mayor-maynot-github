@@ -9,8 +9,62 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\RoadTiles\roadEW.jpg" />
+    <None Remove="Assets\RoadTiles\roadEWS.jpg" />
+    <None Remove="Assets\RoadTiles\roadNE.jpg" />
+    <None Remove="Assets\RoadTiles\roadNES.jpg" />
+    <None Remove="Assets\RoadTiles\roadNEW.jpg" />
+    <None Remove="Assets\RoadTiles\roadNEWS.jpg" />
+    <None Remove="Assets\RoadTiles\roadNS.jpg" />
+    <None Remove="Assets\RoadTiles\roadNW.jpg" />
+    <None Remove="Assets\RoadTiles\roadNWS.jpg" />
+    <None Remove="Assets\RoadTiles\roadPLAZA.jpg" />
+    <None Remove="Assets\RoadTiles\roadSE.jpg" />
+    <None Remove="Assets\RoadTiles\roadSW.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MaynotPersistence\MaynotPersistence.csproj" />
     <ProjectReference Include="..\WpfLibrary1\MaynotModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\RoadTiles\roadEW.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\RoadTiles\roadEWS.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\RoadTiles\roadNE.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\RoadTiles\roadNES.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\RoadTiles\roadNEW.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\RoadTiles\roadNEWS.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\RoadTiles\roadNS.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\RoadTiles\roadNW.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\RoadTiles\roadNWS.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\RoadTiles\roadPLAZA.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\RoadTiles\roadSE.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\RoadTiles\roadSW.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

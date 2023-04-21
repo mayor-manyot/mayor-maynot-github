@@ -167,6 +167,18 @@ namespace Maynot.WPF.ViewModel
                 MaynotTile tile = Fields[i];
                 MaynotTile modelbolTile = ModelTileToMaynotTile(_model.GameBoard[tile.X, tile.Y]);
                 tile = modelbolTile;
+                if (Fields[i] is Road road)
+                {
+                    bool north = false, east = false, south = false, west = false;
+                    int fieldSize = (int)Math.Sqrt(Fields.Count);
+
+                    if (road.Y > 0 && Fields[(road.X * fieldSize) + road.Y - 1] is Road) west = true;
+                    if (road.Y < fieldSize - 1 && Fields[(road.X * fieldSize) + road.Y + 1] is Road) east = true;
+                    if (road.X > 0 && Fields[((road.X - 1) * fieldSize) + road.Y] is Road) north = true;
+                    if (road.X < fieldSize - 1 && Fields[((road.X + 1) * fieldSize) + road.Y] is Road) south = true;
+
+                    road.SetRoadSprite(north, east, south, west);
+                }
             }
 
             OnPropertyChanged(nameof(Money));
@@ -225,7 +237,7 @@ namespace Maynot.WPF.ViewModel
             int fieldMeret = (int) (Math.Sqrt(Fields.Count));
             Fields[tile.X * fieldMeret + tile.Y] = modelbolTile; // Itt nagyon gagyin felülírjuk a Fields listában lévő MaynotTile-t a mi tile-unkra
             OnPropertyChanged(nameof(Fields));
-            //UpdateTable();
+            UpdateTable();
 
         }
 
