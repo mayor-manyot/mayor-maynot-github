@@ -167,10 +167,10 @@ namespace Maynot.WPF.ViewModel
             {
                 MaynotTile tile = Fields[i];
                 MaynotTile modelbolTile = GetTileAtCoordinatesFromModel(tile.X, tile.Y);
-                tile = modelbolTile;
+                Fields[i] = modelbolTile;
                 if (Fields[i] is Road road)
                 {
-                    Debug.WriteLine("A Fieldsben talalt ut koodinatai: " + road.X + " " + road.Y);
+                    //Debug.WriteLine("A Fieldsben talalt ut koodinatai: " + road.X + " " + road.Y);
                     bool north = false, east = false, south = false, west = false;
                     int fieldSize = (int)Math.Sqrt(Fields.Count);
 
@@ -204,12 +204,14 @@ namespace Maynot.WPF.ViewModel
             Debug.WriteLine("Number of Roads: " + numOfRoads);
             OnPropertyChanged(nameof(Money));
             OnPropertyChanged(nameof(Fields));
+            Debug.WriteLine(Fields.Count);
+            Debug.WriteLine(Fields[0].GetType());
         }
 
         private void PlaceTile(MaynotTile tile)
         {
             Debug.WriteLine("Clicked on: " + tile.X + " " + tile.Y);
-
+            //Debug.WriteLine("Selected Tile is: " + SelectedTile.GetType());
             if (SelectedTile is Road)
             {
                 _model.placeRoad(tile.X, tile.Y);
@@ -256,8 +258,8 @@ namespace Maynot.WPF.ViewModel
             MaynotTile modelbolTile = GetTileAtCoordinatesFromModel(tile.X, tile.Y);
 
             int fieldMeret = (int) (Math.Sqrt(Fields.Count));
-            Fields[tile.X * fieldMeret + tile.Y] = modelbolTile; // Itt nagyon gagyin felülírjuk a Fields listában lévő MaynotTile-t a mi tile-unkra
-            OnPropertyChanged(nameof(Fields));
+            //Fields[tile.X * fieldMeret + tile.Y] = modelbolTile; // Itt nagyon gagyin felülírjuk a Fields listában lévő MaynotTile-t a mi tile-unkra
+            //OnPropertyChanged(nameof(Fields));
             UpdateTable();
 
         }
@@ -283,6 +285,7 @@ namespace Maynot.WPF.ViewModel
             MaynotTile tile = ModelTileToMaynotTile(_model.GameBoard[x, y]);
             tile.X = x;
             tile.Y = y;
+            tile.ClickCommand = new DelegateCommand((param) => PlaceTile(param as MaynotTile));
             return tile;
         }
 
