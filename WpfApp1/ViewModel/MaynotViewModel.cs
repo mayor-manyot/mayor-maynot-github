@@ -162,25 +162,46 @@ namespace Maynot.WPF.ViewModel
 
         private void UpdateTable()
         {
+            int numOfRoads = 0;
             for (int i = 0; i < Fields.Count; i++)
             {
                 MaynotTile tile = Fields[i];
-                MaynotTile modelbolTile = ModelTileToMaynotTile(_model.GameBoard[tile.X, tile.Y]);
+                MaynotTile modelbolTile = GetTileAtCoordinatesFromModel(tile.X, tile.Y);
                 tile = modelbolTile;
                 if (Fields[i] is Road road)
                 {
+                    Debug.WriteLine("A Fieldsben talalt ut koodinatai: " + road.X + " " + road.Y);
                     bool north = false, east = false, south = false, west = false;
                     int fieldSize = (int)Math.Sqrt(Fields.Count);
 
-                    if (road.Y > 0 && Fields[(road.X * fieldSize) + road.Y - 1] is Road) west = true;
+                    if (road.Y > 0 && GetFieldAtCoordinates(road.X, road.Y - 1) is not Empty)
+                    {
+                        west = true;
+                    }
+                    if (road.Y < (fieldSize-1) && GetFieldAtCoordinates(road.X, road.Y + 1) is not Empty)
+                    {
+                        east = true;
+                    }
+                    if (0 < road.X && GetFieldAtCoordinates(road.X - 1, road.Y) is not Empty)
+                    {
+                        north = true;
+                    }
+                    if (road.X < (fieldSize - 1) && GetFieldAtCoordinates(road.X + 1, road.Y) is not Empty)
+                    {
+                        south = true;
+                    }
+                    
+                    /*
+                    if (road.X > 0 && Fields[(road.Y * fieldSize) + road.X - 1] is Road) west = true;
                     if (road.Y < fieldSize - 1 && Fields[(road.X * fieldSize) + road.Y + 1] is Road) east = true;
                     if (road.X > 0 && Fields[((road.X - 1) * fieldSize) + road.Y] is Road) north = true;
                     if (road.X < fieldSize - 1 && Fields[((road.X + 1) * fieldSize) + road.Y] is Road) south = true;
-
+                    */
                     road.SetRoadSprite(north, east, south, west);
+                    numOfRoads++;
                 }
             }
-
+            Debug.WriteLine("Number of Roads: " + numOfRoads);
             OnPropertyChanged(nameof(Money));
             OnPropertyChanged(nameof(Fields));
         }
@@ -232,7 +253,7 @@ namespace Maynot.WPF.ViewModel
                 _model.placeForest(tile.X, tile.Y);
             }
 
-            MaynotTile modelbolTile = ModelTileToMaynotTile(_model.GameBoard[tile.X, tile.Y]);
+            MaynotTile modelbolTile = GetTileAtCoordinatesFromModel(tile.X, tile.Y);
 
             int fieldMeret = (int) (Math.Sqrt(Fields.Count));
             Fields[tile.X * fieldMeret + tile.Y] = modelbolTile; // Itt nagyon gagyin felülírjuk a Fields listában lévő MaynotTile-t a mi tile-unkra
@@ -241,7 +262,7 @@ namespace Maynot.WPF.ViewModel
 
         }
 
-        private MaynotTile ModelTileToMaynotTile(Tile tile)
+        private MaynotTile ModelTileToMaynotTile(Tile tile) //Itt nem fogjuk az újonnan létrehozott instance-nek átadni a pozíciót a táblán
         {
             if (tile is MaynotPersistence.Empty) return new Empty();
             if (tile is MaynotPersistence.Road) return new Road(30);
@@ -255,6 +276,25 @@ namespace Maynot.WPF.ViewModel
             if (tile is MaynotPersistence.University) return new University();
             
             return new Road(30);
+        }
+
+        private MaynotTile GetTileAtCoordinatesFromModel(int x, int y)
+        {
+            MaynotTile tile = ModelTileToMaynotTile(_model.GameBoard[x, y]);
+            tile.X = x;
+            tile.Y = y;
+            return tile;
+        }
+
+        public MaynotTile GetFieldAtCoordinates(int x, int y)
+        {
+            int sorHossz = (int) Math.Sqrt(Fields.Count);
+            return Fields[x * sorHossz + y];
+        }
+        public void SetFieldAtCoordinates(int x, int y, MaynotTile tile)
+        {
+            int sorHossz = (int)Math.Sqrt(Fields.Count);
+            Fields[x * sorHossz + y] = tile;
         }
 
         #region Properties

@@ -52,13 +52,13 @@ namespace Maynot.WPF.ViewModel
 
             //string imagePath = Path.Combine("Assets", "RoadTiles", spriteName);
             string imagePath = "/Assets/RoadTiles/" + spriteName + ".jpg";
-            Debug.WriteLine("north, east, south, west" + north + east + south + west);
+            //Debug.WriteLine("north, east, west, south " + north + east + west + south);
             
-            Debug.WriteLine("Path amit ad: " + imagePath);
+            //Debug.WriteLine("Path amit ad: " + imagePath);
             SpriteImage = new BitmapImage(new Uri(imagePath, UriKind.Relative));
-            Debug.WriteLine("Megegyezenek: " + ("/Assets/RoadTiles/roadEW.jpg" == imagePath));
+            //Debug.WriteLine("Megegyezenek: " + ("/Assets/RoadTiles/roadEW.jpg" == imagePath));
             StreamResourceInfo info = Application.GetResourceStream(new Uri(imagePath, UriKind.Relative));
-            Debug.WriteLine("Létezik a path: " + info != null);
+            //Debug.WriteLine("Létezik a path: " + info != null);
         }
 
     }

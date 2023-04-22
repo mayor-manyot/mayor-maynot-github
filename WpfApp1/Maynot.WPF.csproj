@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\RoadTiles\roadES.jpg" />
     <None Remove="Assets\RoadTiles\roadEW.jpg" />
     <None Remove="Assets\RoadTiles\roadEWS.jpg" />
     <None Remove="Assets\RoadTiles\roadNE.jpg" />
@@ -21,6 +22,7 @@
     <None Remove="Assets\RoadTiles\roadPLAZA.jpg" />
     <None Remove="Assets\RoadTiles\roadSE.jpg" />
     <None Remove="Assets\RoadTiles\roadSW.jpg" />
+    <None Remove="Assets\RoadTiles\roadWS.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +31,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Assets\RoadTiles\roadES.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\RoadTiles\roadEW.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -59,10 +64,7 @@
     <Content Include="Assets\RoadTiles\roadPLAZA.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\RoadTiles\roadSE.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\RoadTiles\roadSW.jpg">
+    <Content Include="Assets\RoadTiles\roadWS.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
