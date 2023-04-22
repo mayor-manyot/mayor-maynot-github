@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.ExceptionServices;
+using System.Windows.Input;
 using System.Windows.Markup.Localizer;
 using MaynotPersistence;
 
@@ -15,6 +17,7 @@ namespace MaynotModel
         public event EventHandler<MaynotEventArg>? ExitGame;
         public event EventHandler<MaynotEventArg>? TilePlaced;
         public event EventHandler<MaynotEventArg>? GeneralInfoAsked;
+        public event EventHandler<MaynotEventArg>? catastropheHappened;
 
         public float Money { get => _state.money; set => _state.money = value; }
         public DateTime Time { get => _state.time; set => _state.time = value; }
@@ -339,7 +342,59 @@ namespace MaynotModel
 
         private void catastrophe()
         {
+            Random happens = new Random();
+            int chance = happens.Next(0, 100);
+            if (chance == 0)
+            {
+                int x;
+                int y;
+                x = happens.Next(0, 30);
+                y = happens.Next(0, 30);
+                _state.gameBoard[x, y] = new Empty();
+                int xdif;
+                xdif = 30 - x;
+                int ydif;
+                ydif = 30 - y;
+                int xflag = 0;
+                for (int i = 0; i < xdif;  ++i)
+                {
+                    xflag++;
+                    _state.gameBoard[x-i, y] = new Empty();
+                    if (xflag == 5)
+                    {
+                        break;
+                    }
+                }
+                if (xflag < xdif)
+                {
+                    xflag = xdif;
+                }
 
+                int yflag = 0;
+                for (int i = 0; i < ydif; ++i)
+                {
+                    yflag++;
+                    _state.gameBoard[x, y - i] = new Empty();
+                    if (yflag == 5)
+                    {
+                        break;
+                    }
+                }
+                if (yflag < ydif)
+                {
+                    yflag = ydif;
+                }
+                for (int j = -yflag; j < yflag; ++j)
+                {
+                    for (int i = -xflag; i < xflag; ++i)
+                    {
+                        _state.gameBoard[x + i, y + j] = new Empty();
+                    }
+                }
+                
+
+                catastropheHappened?.Invoke(this, new MaynotEventArg(x, y));
+            }
         }
 
 
