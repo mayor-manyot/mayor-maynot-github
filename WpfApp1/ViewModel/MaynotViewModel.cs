@@ -163,12 +163,16 @@ namespace Maynot.WPF.ViewModel
         private void UpdateTable()
         {
             int numOfRoads = 0;
-            for (int i = 0; i < Fields.Count; i++)
+            for (int i = 0; i < Fields.Count; i++) // Előszőr friss állapotra hozzuk a mi Fields-ünket a Model tábla alapján
             {
                 MaynotTile tile = Fields[i];
                 MaynotTile modelbolTile = GetTileAtCoordinatesFromModel(tile.X, tile.Y);
                 Fields[i] = modelbolTile;
-                if (Fields[i] is Road road)
+                
+            }
+            foreach (MaynotTile tile in Fields) // Aztán frissítjük a Road sprite-okat
+            {
+                if (tile is Road road)
                 {
                     //Debug.WriteLine("A Fieldsben talalt ut koodinatai: " + road.X + " " + road.Y);
                     bool north = false, east = false, south = false, west = false;
@@ -178,7 +182,7 @@ namespace Maynot.WPF.ViewModel
                     {
                         west = true;
                     }
-                    if (road.Y < (fieldSize-1) && GetFieldAtCoordinates(road.X, road.Y + 1) is not Empty)
+                    if (road.Y < (fieldSize - 1) && GetFieldAtCoordinates(road.X, road.Y + 1) is not Empty)
                     {
                         east = true;
                     }
@@ -190,22 +194,13 @@ namespace Maynot.WPF.ViewModel
                     {
                         south = true;
                     }
-                    
-                    /*
-                    if (road.X > 0 && Fields[(road.Y * fieldSize) + road.X - 1] is Road) west = true;
-                    if (road.Y < fieldSize - 1 && Fields[(road.X * fieldSize) + road.Y + 1] is Road) east = true;
-                    if (road.X > 0 && Fields[((road.X - 1) * fieldSize) + road.Y] is Road) north = true;
-                    if (road.X < fieldSize - 1 && Fields[((road.X + 1) * fieldSize) + road.Y] is Road) south = true;
-                    */
                     road.SetRoadSprite(north, east, south, west);
                     numOfRoads++;
                 }
             }
-            Debug.WriteLine("Number of Roads: " + numOfRoads);
+            //Debug.WriteLine("Number of Roads: " + numOfRoads);
             OnPropertyChanged(nameof(Money));
             OnPropertyChanged(nameof(Fields));
-            Debug.WriteLine(Fields.Count);
-            Debug.WriteLine(Fields[0].GetType());
         }
 
         private void PlaceTile(MaynotTile tile)
