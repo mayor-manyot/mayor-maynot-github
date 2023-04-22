@@ -217,7 +217,6 @@ namespace MaynotModel
 
         public bool placeRoad(int x, int y)
         {
-            
             Road r = new Road();
             _state.money = _state.money - Road.buildCost;
             _state.expense = _state.expense + Road.maintenanceFee;

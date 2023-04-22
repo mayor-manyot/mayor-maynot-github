@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace Maynot.WPF.ViewModel
 {
@@ -12,9 +13,19 @@ namespace Maynot.WPF.ViewModel
     {
         private bool _canBeDemolished;
         private string _name;
+        public string? SpriteImagePath { get; set; }
+
         private SolidColorBrush _background;
+        private BitmapImage _spriteImage;
         public bool CanBeDemolished { get; private set; }
-        public Image? SpriteImage { get; set; }
+        public BitmapImage? SpriteImage {
+            get { return _spriteImage; }
+            set
+            {
+                _spriteImage = value;
+                OnPropertyChanged(nameof(SpriteImage));
+            }
+        }
         public virtual string DisplayName { get; } // statikusan felülírja az összes gyerekosztáj
         public string Name {
             get { return _name; }

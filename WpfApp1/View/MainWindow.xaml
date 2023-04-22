@@ -54,7 +54,7 @@
                                             <RowDefinition Height="Auto" />
                                             <RowDefinition Height="*" />
                                         </Grid.RowDefinitions>
-                                        <Button Grid.Row="0" Width="100" Height="100">Image</Button>
+                                        <Image Grid.Row="0" Width="100" Height="100"></Image>
                                         <Label Grid.Row="1" FontWeight="Bold" Padding="0" Content="{Binding DisplayName}" />
                                         <TextBlock Grid.Row="2" FontSize="10">Ár:</TextBlock>
                                     </Grid>
@@ -71,38 +71,44 @@
                     <Button x:Name="forward" Margin="3" Content=">>" Height="30" Width="28" Command="{Binding SpeedUpGameCommand}"/>
                 </StackPanel>
             </Grid>
-
-
-            <!-- | tábla rács-->
-            <ItemsControl Grid.Column="1" ItemsSource="{Binding Fields}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <!--a gombokat egy rácsba fűzzük fel-->
-                        <UniformGrid FlowDirection="LeftToRight"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
+            <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
+                <Viewbox x:Name="Viewbox" Stretch="Uniform">
+                    <!-- | tábla rács-->
+                    <ItemsControl Grid.Column="1" ItemsSource="{Binding Fields}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <!--a gombokat egy rácsba fűzzük fel-->
+                                <UniformGrid FlowDirection="LeftToRight"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
                 
 
-                    <ItemsControl.ItemTemplate>
-                        <!--az elemek gombok lesznek-->
-                        <DataTemplate>
-                            <Button Background="{Binding Background}" Command="{Binding ClickCommand}" CommandParameter="{Binding}" Content="{Binding Name}" FontSize="12" FontWeight="Bold">
-                                <!-- gomb háttérszíne -->
-                                <Button.Style>
+                            <ItemsControl.ItemTemplate>
+                                <!--az elemek gombok lesznek-->
+                            <DataTemplate>
+                                <Button Background="{Binding Background}" Command="{Binding ClickCommand}" CommandParameter="{Binding}"  FontSize="12" FontWeight="Bold">
+                                            <!-- gomb háttérszíne -->
+                                            <Button.Style>
 
-                                    <Style TargetType="Button">
-                                        <Style.Triggers>
+                                                <Style TargetType="Button">
+                                                    <Style.Triggers>
 
-                                    </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
+                                                </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
 
-                            </Button>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-            </ItemsControl>
+                                    <Image Source="{Binding SpriteImage}" Stretch="Uniform" />
+                            
+                            
+                                </Button>
+                            
+                            </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Viewbox>
+            </ScrollViewer>
 
-            </Grid>
+        </Grid>
 
 
         <StatusBar Grid.Row="2">
