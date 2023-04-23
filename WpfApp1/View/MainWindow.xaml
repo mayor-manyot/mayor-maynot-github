@@ -45,16 +45,17 @@
                     <ItemsControl ItemsSource="{Binding LetehetoElemek}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Button Background="Transparent" BorderThickness="0"
+                                <Button Background="Transparent" BorderBrush="Black" BorderThickness="1"
                                 Command="{Binding Path=DataContext.RadioButtonCheckedCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                 CommandParameter="{Binding}">
-                                    <Grid Background="{Binding Background}">
+                                    <!-- <Grid Background="{Binding Background}"> -->
+                                    <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto" />
                                             <RowDefinition Height="Auto" />
                                             <RowDefinition Height="*" />
                                         </Grid.RowDefinitions>
-                                        <Image Grid.Row="0" Width="100" Height="100"></Image>
+                                        <Image Source="{Binding SpriteImage}" Grid.Row="0" Width="100" Height="100"></Image>
                                         <Label Grid.Row="1" FontWeight="Bold" Padding="0" Content="{Binding DisplayName}" />
                                         <TextBlock Grid.Row="2" FontSize="10">Ár:</TextBlock>
                                     </Grid>
@@ -72,7 +73,7 @@
                 </StackPanel>
             </Grid>
             <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
-                <Viewbox x:Name="Viewbox" Stretch="Uniform">
+                <Viewbox x:Name="Viewbox" Stretch="UniformToFill">
                     <!-- | tábla rács-->
                     <ItemsControl Grid.Column="1" ItemsSource="{Binding Fields}">
                         <ItemsControl.ItemsPanel>
@@ -86,7 +87,7 @@
                             <ItemsControl.ItemTemplate>
                                 <!--az elemek gombok lesznek-->
                             <DataTemplate>
-                                <Button Background="{Binding Background}" Command="{Binding ClickCommand}" CommandParameter="{Binding}"  FontSize="12" FontWeight="Bold">
+                                <Button Padding="0" Width="50" Height="50" Background="{Binding Background}" Command="{Binding ClickCommand}" CommandParameter="{Binding}"  FontSize="12" FontWeight="Bold">
                                             <!-- gomb háttérszíne -->
                                             <Button.Style>
 
@@ -96,8 +97,11 @@
                                                 </Style.Triggers>
                                                 </Style>
                                             </Button.Style>
-
-                                    <Image Source="{Binding SpriteImage}" Stretch="Uniform" />
+                                    <Grid>
+                                        <Image Margin="0" Source="/Assets/RoadTiles/roadPLAZA.jpg" Stretch="UniformToFill" />
+                                        <Image Margin="0" Source="{Binding SpriteImage}" Stretch="UniformToFill" />
+                                    </Grid>
+                                    
                             
                             
                                 </Button>

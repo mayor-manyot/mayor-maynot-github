@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace Maynot.WPF.ViewModel
 {
@@ -10,6 +11,9 @@ namespace Maynot.WPF.ViewModel
     {
         public override string DisplayName { get; } = "Lakó Zóna";
         public ResidentialZone() : this(100, 0) { }
-        public ResidentialZone(int capacity, int currentPopulation) : base(capacity, currentPopulation) { }
+        public ResidentialZone(int capacity, int currentPopulation) : base(capacity, currentPopulation) 
+        {
+            SpriteImage = new BitmapImage(new Uri("/Assets/residentalZone.png", UriKind.Relative));
+        }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace Maynot.WPF.ViewModel
 {
@@ -20,6 +21,7 @@ namespace Maynot.WPF.ViewModel
         {
             Age = age;
             BuildCost = buildCost;
+            SpriteImage = new BitmapImage(new Uri("/Assets/forest.png", UriKind.Relative));
         }
     }
 }
