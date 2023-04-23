@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\forest.png" />
+    <None Remove="Assets\industrialZone.png" />
+    <None Remove="Assets\policeStation.png" />
+    <None Remove="Assets\residentalZone.png" />
     <None Remove="Assets\RoadTiles\roadES.jpg" />
     <None Remove="Assets\RoadTiles\roadEW.jpg" />
     <None Remove="Assets\RoadTiles\roadEWS.jpg" />
@@ -23,6 +27,10 @@
     <None Remove="Assets\RoadTiles\roadSE.jpg" />
     <None Remove="Assets\RoadTiles\roadSW.jpg" />
     <None Remove="Assets\RoadTiles\roadWS.jpg" />
+    <None Remove="Assets\school.png" />
+    <None Remove="Assets\serviceZone.png" />
+    <None Remove="Assets\stadium.png" />
+    <None Remove="Assets\university.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,6 +39,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Assets\forest.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\residentalZone.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\school.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\serviceZone.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\policeStation.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\RoadTiles\roadES.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -65,6 +88,18 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\RoadTiles\roadWS.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\stadium.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\university.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\industrialZone.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -26,7 +26,7 @@ namespace Maynot.WPF.ViewModel
         {
             BuildCost = buildCost;
             Name = "Út";
-            //SpriteImage = new BitmapImage(new Uri("pack://application:,,,/Assets/RoadTiles/roadEW.jpg", UriKind.Absolute));
+            SpriteImage = new BitmapImage(new Uri("/Assets/RoadTiles/roadEW.jpg", UriKind.Relative));
 
         }
 
