@@ -21,6 +21,7 @@ namespace Maynot.WPF.ViewModel
         private MaynotGameModel _model;
         public ObservableCollection<MaynotTile> Fields { get; set; }
         public float Money { get { return _model.Money; } }
+        public String Date { get; set; }
 
         private object? _selectedItem;
         public object? SelectedItem
@@ -67,7 +68,7 @@ namespace Maynot.WPF.ViewModel
         public MaynotViewModel(MaynotGameModel model)
         {
             _model = model;
-
+            _model.DayElapsed += new EventHandler<TimeElapsedEventArgs>(Day_Elapsed); 
             
 
             // parancsok kezelése
@@ -101,6 +102,12 @@ namespace Maynot.WPF.ViewModel
 
         }
 
+        private void Day_Elapsed(object sender, TimeElapsedEventArgs e)
+        {
+            Date = e.newDate.ToString("yyyy MMMM dd");
+            OnPropertyChanged(nameof(Date));
+            Debug.WriteLine($"new Day: {Date}");
+        }
         private void OnResumeGame()
         {
             _model.resumeTime();
