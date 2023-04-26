@@ -196,7 +196,6 @@ namespace MaynotModel
                 _state.gameBoard[x, y] = t;
                 if (t is ResidentialZone)
                 {
-
                     (Tile, int, int) adding = (t, x, y);
                     _state.homes.Add(((Zone, int, int))adding);
                 }else if(t is IndustrialZone)
@@ -338,7 +337,6 @@ namespace MaynotModel
                 return false;
             }
         }
-
 
         private void catastrophe()
         {
