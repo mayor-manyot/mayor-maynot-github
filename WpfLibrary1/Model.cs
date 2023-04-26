@@ -17,6 +17,7 @@ namespace MaynotModel
         public event EventHandler<MaynotEventArg>? ExitGame;
         public event EventHandler<MaynotEventArg>? TilePlaced;
         public event EventHandler<MaynotEventArg>? GeneralInfoAsked;
+        public event EventHandler<TimeElapsedEventArgs>? DayElapsed;
         public event EventHandler<MaynotEventArg>? catastropheHappened;
 
         public float Money { get => _state.money; set => _state.money = value; }
@@ -49,80 +50,93 @@ namespace MaynotModel
             Debug.WriteLine("New game");
         }
 
+        private void OnTimeElapsed()
+        {
+            DayElapsed?.Invoke(this, new TimeElapsedEventArgs(_state.time));
+        }
+
         private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
-            _state.time.AddDays(1);
-            _state.weakTracker++;
-            if (_state.yearTracker != _state.time.Year)
+            _state.time = _state.time.AddDays(1); // eltelik egy nap
+            // naponta történõ eseményeknek nem kell ellenõrzés, a tick naponta van
+            movingIn();
+
+            if ((int)_state.time.DayOfWeek == 1) // Hétfõ lett, eltelt egy új hét
             {
-                _state.yearTracker = _state.time.Month;
+                // minden hetente elõforduló esemény meghívása itt
+            }
+
+            if (_state.time.Day == 1) // minden hó elsején
+            {
+                // havonta meghívandó események metódusai
+            }
+
+            if (_state.time.Month == 1 && _state.time.Day == 1) // minden év eslõ napja
+            {
                 _state.money = _state.money - _state.expense;
                 _state.money = _state.money + _state.income;
             }
-            movingIn();
+
+            OnTimeElapsed(); // új nap dátuma elküldése ViewModelnek a kinézetre
         }
 
         private void movingIn()
         {
-            if (_state.weakTracker % 7 == 0)
+            Random r = new Random();
+            int num = r.Next(1, 25);
+            if (_state.homes.Count == 0 || _state.workPlaces.Count == 0) { }
+            else
             {
-                Random r = new Random();
-                int num = r.Next(1, 25);
-                if (_state.homes.Count == 0 || _state.workPlaces.Count == 0) { }
-                else
+                for (int i = 0; i < num; ++i)
                 {
-                    for (int i = 0; i < num; ++i)
+                    //Kikommenteltem warning miatt
+                    //Zone home;
+                    int n = r.Next(0, 99);
+                    if (n < 18)
                     {
-                        //Kikommenteltem warning miatt
-                        //Zone home;
-                        int n = r.Next(0, 99);
-                        if (n < 18)
+                        int k = 0;
+                        for (int j = 0;j < _state.homes.Count; ++j) 
                         {
-                            int k = 0;
-                            for (int j = 0;j < _state.homes.Count; ++j) 
+                            if (_state.homes[j].Item1.Capacity < _state.homes[k].Item1.Capacity)
                             {
-                                if (_state.homes[j].Item1.Capacity < _state.homes[k].Item1.Capacity)
-                                {
-                                    k = j;
-                                }
+                                k = j;
                             }
-                            Person p = new Person(50, n, _state.homes[k].Item1, null, Level.ELEMENTARY);
-                            _state.citizens.Add(p);
+                        }
+                        Person p = new Person(50, n, _state.homes[k].Item1, null, Level.ELEMENTARY);
+                        _state.citizens.Add(p);
+                    }
+                    else
+                    {
+                        int k = 0;
+                        for (int j = 0; j < _state.homes.Count; ++j)
+                        {
+                            if (_state.homes[j].Item1.Capacity < _state.homes[k].Item1.Capacity)
+                            {
+                                k = j;
+                            }
+                        }
+                        for (int j = 0; j < _state.workPlaces.Count; ++j)
+                        {
+                            if (_state.workPlaces[j].Item1.Capacity < _state.workPlaces[k].Item1.Capacity)
+                            {
+                                k = j;
+                            }
+                        }
+                        int ch = r.Next(1,3);
+                        Person p;
+                        if (ch == 2) 
+                        {
+                            p = new Person(50, n, _state.workPlaces[k].Item1, null, Level.INTERMEDIATE);
                         }
                         else
                         {
-                            int k = 0;
-                            for (int j = 0; j < _state.homes.Count; ++j)
-                            {
-                                if (_state.homes[j].Item1.Capacity < _state.homes[k].Item1.Capacity)
-                                {
-                                    k = j;
-                                }
-                            }
-                            for (int j = 0; j < _state.workPlaces.Count; ++j)
-                            {
-                                if (_state.workPlaces[j].Item1.Capacity < _state.workPlaces[k].Item1.Capacity)
-                                {
-                                    k = j;
-                                }
-                            }
-                            int ch = r.Next(1,3);
-                            Person p;
-                            if (ch == 2) 
-                            {
-                                p = new Person(50, n, _state.workPlaces[k].Item1, null, Level.INTERMEDIATE);
-                            }
-                            else
-                            {
-                                p = new Person(50, n, _state.workPlaces[k].Item1, null, Level.SUPERLATIVE);
-                            }
-                            _state.citizens.Add(p);
-
+                            p = new Person(50, n, _state.workPlaces[k].Item1, null, Level.SUPERLATIVE);
                         }
+                        _state.citizens.Add(p);
 
                     }
                 }
-            }
+            } 
         }
 
         public void stopTime()
