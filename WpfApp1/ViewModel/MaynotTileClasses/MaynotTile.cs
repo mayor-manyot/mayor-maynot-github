@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -13,11 +14,20 @@ namespace Maynot.WPF.ViewModel
     {
         private bool _canBeDemolished;
         private string _name;
+        private Visibility isFlameVisible = Visibility.Hidden;
         public string? SpriteImagePath { get; set; }
 
         private SolidColorBrush _background;
         private BitmapImage _spriteImage;
         public bool CanBeDemolished { get; private set; }
+        public Visibility IsFlameVisible {
+            get { return isFlameVisible; }
+            set
+            {
+                isFlameVisible = value;
+                OnPropertyChanged(nameof(IsFlameVisible));
+            }
+        }
         public BitmapImage? SpriteImage {
             get { return _spriteImage; }
             set

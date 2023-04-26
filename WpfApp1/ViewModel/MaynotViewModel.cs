@@ -99,7 +99,7 @@ namespace Maynot.WPF.ViewModel
                 new University(),
                 new Forest()
             };
-
+            //DebugTriggerCatastropheHappened(6,6);
         }
 
         private void Day_Elapsed(object sender, TimeElapsedEventArgs e)
@@ -300,6 +300,47 @@ namespace Maynot.WPF.ViewModel
         {
             int sorHossz = (int)Math.Sqrt(Fields.Count);
             Fields[x * sorHossz + y] = tile;
+        }
+
+        private async void DebugTriggerCatastropheHappened(int x, int y)
+        {
+            await Task.Delay(12000); // 12 seconds delay
+            //_model.catastrophe();
+            CatastropheHappened(x, y); //Direktbe Viewmodel fgv.-t is hívhatunk a Debughoz
+        }
+
+        public async void CatastropheHappened(int x, int y)
+        {
+            int radius = 5;
+            List<MaynotTile> affectedTiles = new List<MaynotTile>();
+
+            for (int i = x - radius; i <= x + radius; i++)
+            {
+                for (int j = y - radius; j <= y + radius; j++)
+                {
+                    if (i >= 0 && j >= 0 && i < _model.GameBoardSize && j < _model.GameBoardSize)
+                    {
+                        MaynotTile tile = GetFieldAtCoordinates(i, j);
+                        if (tile != null)
+                        {
+                            affectedTiles.Add(tile);
+                            tile.IsFlameVisible = Visibility.Visible;
+                        }
+                    }
+                }
+            }
+
+            OnPropertyChanged(nameof(Fields));
+
+            await Task.Delay(3300); // Várunk aztán eltüntetjü a Flame overlayt
+
+            foreach (MaynotTile tile in affectedTiles)
+            {
+                tile.IsFlameVisible = Visibility.Hidden;
+            }
+
+            OnPropertyChanged(nameof(Fields));
+            UpdateTable();
         }
 
         #region Properties
