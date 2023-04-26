@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Runtime.ExceptionServices;
-using System.Windows.Input;
-using System.Windows.Markup.Localizer;
 using MaynotPersistence;
 
 namespace MaynotModel
@@ -23,6 +20,7 @@ namespace MaynotModel
         public DateTime Time { get => _state.time; set => _state.time = value; }
         public int GameSpeed { get => _state.gameSpeed; set => _state.gameSpeed = value; }
         public Tile[,] GameBoard { get => _state.gameBoard; set => _state.gameBoard = value; }
+        public int GameBoardSize { get => _state.size; }
         public List<Person> Citizens { get => _state.citizens; set => _state.citizens = value; }
 
         public MaynotGameModel()
@@ -45,6 +43,8 @@ namespace MaynotModel
                     _state.gameBoard[i, j] = new Empty();
                 }
             }
+            _state.gameBoard[14, 0] = new Road();
+
             _state.timer.Elapsed += Timer_Elapsed;            
             Debug.WriteLine("New game");
         }
@@ -81,7 +81,8 @@ namespace MaynotModel
                             int k = 0;
                             for (int j = 0;j < _state.homes.Count; ++j) 
                             {
-                                if (_state.homes[j].Item1.Capacity < _state.homes[k].Item1.Capacity)
+                                if (_state.homes[j].Item1.Capacity < _state.homes[k].Item1.Capacity
+                                    && _state.isPath(GameBoardSize / 2 - 1, 0, _state.homes[k].Item2, _state.homes[k].Item3))
                                 {
                                     k = j;
                                 }
@@ -392,10 +393,8 @@ namespace MaynotModel
                 }
                 
 
-                catastropheHappened?.Invoke(this, new MaynotEventArg(x, y));
+                //catastropheHappened?.Invoke(this, new MaynotEventArg(x, y));
             }
-        }
-
-
+        }  
     }
 }
