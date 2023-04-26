@@ -238,6 +238,10 @@ namespace MaynotPersistence
             return ReachableBuildingsFromCell;
         }
 
+        /// <summary>
+        /// Eldönti hogy egy utat le lehet-e bontani.
+        /// </summary>
+        /// <returns>Igaz, ha le lehet bontani az utat, egyébként hamis.</returns>
         public bool canDestroyRoad(int i, int j)
         {
             if (getReachableBuildingsIntercept(i, j).Count == 0 || !isPath(14, 0, i, j))
