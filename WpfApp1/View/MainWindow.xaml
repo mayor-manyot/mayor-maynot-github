@@ -141,6 +141,12 @@
             <StatusBarItem>
                 <TextBlock Text="{Binding Money}" />
             </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock Text="   Dátum: " />
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock Text="{Binding Date}" />
+            </StatusBarItem>
         </StatusBar>
     </Grid>
 </Window>
