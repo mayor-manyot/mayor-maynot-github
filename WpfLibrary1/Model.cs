@@ -410,7 +410,7 @@ namespace MaynotModel
                 }
                 
 
-                //catastropheHappened?.Invoke(this, new MaynotEventArg(x, y));
+                catastropheHappened?.Invoke(this, new MaynotEventArg(x, y));
             }
         }  
     }

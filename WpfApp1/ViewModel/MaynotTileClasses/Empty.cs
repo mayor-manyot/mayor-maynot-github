@@ -11,6 +11,7 @@ namespace Maynot.WPF.ViewModel
 {
     public class Empty : MaynotTile
     {
+        public static BitmapImage EmptyDefaultSprite = new BitmapImage(new Uri("/Assets/RoadTiles/roadPLAZA.jpg", UriKind.Relative));
         public override string DisplayName { get; } = "Üres";
         public override SolidColorBrush Background { get; } = new SolidColorBrush(Colors.LightBlue);
         public Empty()

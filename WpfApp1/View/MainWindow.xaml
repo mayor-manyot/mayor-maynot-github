@@ -100,6 +100,7 @@
                                     <Grid>
                                         <Image Margin="0" Source="/Assets/RoadTiles/roadPLAZA.jpg" Stretch="UniformToFill" />
                                         <Image Margin="0" Source="{Binding SpriteImage}" Stretch="UniformToFill" />
+                                        <Image Margin="0" Source="/Assets/flame.png" Stretch="UniformToFill" Visibility="{Binding IsFlameVisible}"/>
                                     </Grid>
                                     
                             

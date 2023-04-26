@@ -32,6 +32,7 @@ namespace Maynot
         private void App_Startup(object sender, StartupEventArgs e)
         {
             _model = new MaynotGameModel();
+            _model.catastropheHappened += new EventHandler<MaynotEventArg>(Model_CatastropheHappened);
             _model.newGame();
 
             //ViewModel példányosítás előszőr
@@ -51,6 +52,13 @@ namespace Maynot
             // Show the MainWindow
             _view.Show();
         }
+
+        #region Model event handlers
+        private void Model_CatastropheHappened(object? sender, MaynotEventArg e)
+        {
+            _viewModel.CatastropheHappened(e.X, e.Y);
+        }
+        #endregion
 
         #region ViewModel event handlers
 
