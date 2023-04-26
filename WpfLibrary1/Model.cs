@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Runtime.ExceptionServices;
-using System.Windows.Input;
-using System.Windows.Markup.Localizer;
 using MaynotPersistence;
 
 namespace MaynotModel
@@ -24,6 +21,7 @@ namespace MaynotModel
         public DateTime Time { get => _state.time; set => _state.time = value; }
         public int GameSpeed { get => _state.gameSpeed; set => _state.gameSpeed = value; }
         public Tile[,] GameBoard { get => _state.gameBoard; set => _state.gameBoard = value; }
+        public int GameBoardSize { get => _state.size; }
         public List<Person> Citizens { get => _state.citizens; set => _state.citizens = value; }
 
         public MaynotGameModel()
@@ -46,6 +44,8 @@ namespace MaynotModel
                     _state.gameBoard[i, j] = new Empty();
                 }
             }
+            _state.gameBoard[14, 0] = new Road();
+
             _state.timer.Elapsed += Timer_Elapsed;            
             Debug.WriteLine("New game");
         }
@@ -209,7 +209,6 @@ namespace MaynotModel
                 _state.gameBoard[x, y] = t;
                 if (t is ResidentialZone)
                 {
-
                     (Tile, int, int) adding = (t, x, y);
                     _state.homes.Add(((Zone, int, int))adding);
                 }else if(t is IndustrialZone)
@@ -340,6 +339,12 @@ namespace MaynotModel
             return "";
         }
 
+        public void destroyRoad(int x, int y)
+        {
+            if (_state.gameBoard[x, y] is Road && _state.canDestroyRoad(x, y))
+                _state.gameBoard[x, y] = new Empty();
+        }
+
         public bool destroyTile(Tile t)
         {
             if (t is Tile)
@@ -351,7 +356,6 @@ namespace MaynotModel
                 return false;
             }
         }
-
 
         private void catastrophe()
         {
@@ -406,10 +410,8 @@ namespace MaynotModel
                 }
                 
 
-                catastropheHappened?.Invoke(this, new MaynotEventArg(x, y));
+                //catastropheHappened?.Invoke(this, new MaynotEventArg(x, y));
             }
-        }
-
-
+        }  
     }
 }
