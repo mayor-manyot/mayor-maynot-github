@@ -74,7 +74,7 @@ namespace MaynotModel
             if (_state.time.Month == 1 && _state.time.Day == 1) // minden év eslõ napja
             {
                 _state.money = _state.money - _state.expense;
-                _state.money = _state.money + _state.income;
+                taxCollection();
             }
 
             OnTimeElapsed(); // új nap dátuma elküldése ViewModelnek a kinézetre
@@ -95,7 +95,7 @@ namespace MaynotModel
                     if (n < 18)
                     {
                         int k = 0;
-                        for (int j = 0;j < _state.homes.Count; ++j) 
+                        for (int j = 0; j < _state.homes.Count; ++j)
                         {
                             if (_state.homes[j].Item1.Capacity < _state.homes[k].Item1.Capacity)
                             {
@@ -122,9 +122,9 @@ namespace MaynotModel
                                 k = j;
                             }
                         }
-                        int ch = r.Next(1,3);
+                        int ch = r.Next(1, 3);
                         Person p;
-                        if (ch == 2) 
+                        if (ch == 2)
                         {
                             p = new Person(50, n, _state.workPlaces[k].Item1, null, Level.INTERMEDIATE);
                         }
@@ -136,7 +136,7 @@ namespace MaynotModel
 
                     }
                 }
-            } 
+            }
         }
 
         public void stopTime()
@@ -211,15 +211,16 @@ namespace MaynotModel
                 {
                     (Tile, int, int) adding = (t, x, y);
                     _state.homes.Add(((Zone, int, int))adding);
-                }else if(t is IndustrialZone)
+                }
+                else if (t is IndustrialZone)
                 {
                     (Tile, int, int) adding = (t, x, y);
-                    _state.homes.Add(((Zone, int, int))adding);
+                    _state.workPlaces.Add(((Zone, int, int))adding);
                 }
                 else if (t is ServiceZone)
                 {
                     (Tile, int, int) adding = (t, x, y);
-                    _state.homes.Add(((Zone, int, int))adding);
+                    _state.workPlaces.Add(((Zone, int, int))adding);
                 }
                 return true;
             }
@@ -227,7 +228,7 @@ namespace MaynotModel
             {
                 return false;
             }
-            
+
 
         }
 
@@ -323,6 +324,7 @@ namespace MaynotModel
         public bool placeIndustrialZone(int x, int y)
         {
             //Mennyi legyen a capacity?
+            Debug.WriteLine("Placing industrial in Model");
             IndustrialZone i = new IndustrialZone(100);
             return placeTile(i, x, y);
         }
@@ -330,6 +332,7 @@ namespace MaynotModel
         public bool placeServiceZone(int x, int y)
         {
             //Mennyi legyen a capacity?
+            Debug.WriteLine("Placing service in Model");
             ServiceZone s = new ServiceZone(100);
             return placeTile(s, x, y);
         }
@@ -413,5 +416,22 @@ namespace MaynotModel
                 //catastropheHappened?.Invoke(this, new MaynotEventArg(x, y));
             }
         }  
+
+        public void setResidentalTax(int tax)
+        {
+            _state._residentalTax += tax;
+        }
+        public void setServiceTax(int tax)
+        {
+            _state._serviceTax += tax;
+        }
+        public void setIndustrialTax(int tax)
+        {
+            _state._industrialTax += tax;
+        }
+        private void taxCollection()
+        {
+            _state.money += _state.calculateIncome();
+        }
     }
 }

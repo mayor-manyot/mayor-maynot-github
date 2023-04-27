@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Linq;
 
 namespace MaynotPersistence
 {
@@ -17,19 +17,24 @@ namespace MaynotPersistence
         public int prevGameSpeed;
         public int yearTracker;
         public int weakTracker;
+        public bool guaranteedPopulation = true;
 
-        public float income;
         public float expense;
         public float money;
 
         public List<Person> citizens;
         public List<(Zone, int, int)> homes;
         public List<(Zone, int, int)> workPlaces;
-        public List<(Zone, int, int)> serviceZones;
 
-        public decimal _residentalTax;
-        public decimal _industrialTax;
-        public decimal _serviceTax;
+        public float _residentalTax;
+        public float _industrialTax;
+        public float _serviceTax;
+        public double _averageSatisfaction;
+
+        //Csak random adtam neki értékeket
+        public const float _TaxMultElemLvl = 1.0F;
+        public const float _TaxMultInterlLvl = 1.6F;
+        public const float _TaxMulSuperLvl = 2.3F;
 
         public MaynotGameState(int boardSize)
         {
@@ -42,9 +47,8 @@ namespace MaynotPersistence
             size = boardSize;
 
             citizens = new List<Person> ();
-            homes = new List<(Zone, int, int)> ();
-            workPlaces = new List<(Zone, int, int)> ();
-            serviceZones = new List<(Zone, int, int)> ();
+            homes = new List<(Zone, int, int)>();
+            workPlaces = new List<(Zone, int, int)>();
 
             setVisitedEmpty();
         }
@@ -145,6 +149,28 @@ namespace MaynotPersistence
 
             return false;
         }
+
+        /// <summary>
+        /// Eldönti hogy egy utat le lehet-e bontani.
+        /// </summary>
+        /// <returns>Igaz, ha le lehet bontani az utat, egyébként hamis.</returns>
+        public bool canDestroyRoad(int i, int j)
+        {
+            if (getReachableBuildingsIntercept(i, j).Count == 0 || !isPath(14, 0, i, j))
+                return true;
+
+            return false;
+        }
+
+        /// <summary>
+        /// Megnézi, hogy van-e út a két pont között.
+        /// </summary>
+        /// <returns>Igaz, ha van út a két pont között, egyébként hamis.</returns>
+        public bool isPath(int i, int j, int x, int y)
+        {
+            setVisitedEmpty();
+            return path(i, j, x, y);
+        }
         public List<Tuple<int, int>> reachableBuildings(int i, int j, int x, int y)
         {
             List<Tuple<int, int>> reachableBuildingsList = new List<Tuple<int, int>>();
@@ -197,16 +223,6 @@ namespace MaynotPersistence
         }
 
         /// <summary>
-        /// Megnézi, hogy van-e út a két pont között.
-        /// </summary>
-        /// <returns>Igaz, ha van út a két pont között, egyébként hamis.</returns>
-        public bool isPath(int i, int j, int x, int y)
-        {
-            setVisitedEmpty();
-            return path(i, j, x, y);
-        }
-
-        /// <summary>
         /// Kilistázza az összes elérhető épületet a celláról.
         /// </summary>
         /// <returns>Épületek listája.</returns>
@@ -238,16 +254,90 @@ namespace MaynotPersistence
             return ReachableBuildingsFromCell;
         }
 
-        /// <summary>
-        /// Eldönti hogy egy utat le lehet-e bontani.
-        /// </summary>
-        /// <returns>Igaz, ha le lehet bontani az utat, egyébként hamis.</returns>
-        public bool canDestroyRoad(int i, int j)
+        public float calculateAverageSatisfaction()
         {
-            if (getReachableBuildingsIntercept(i, j).Count == 0 || !isPath(14, 0, i, j))
-                return true;
+            float averageSatisfaction = 0;
+            foreach(Person p in citizens)
+            {
+                averageSatisfaction += p.Satisfaction;
+            }
 
-            return false;
+            return averageSatisfaction / citizens.Count;
+        }
+        public float calculateResidentalTax()
+        {
+            float residentalTax = 0;
+            foreach(var zone in homes)
+            {
+                foreach(Person p in zone.Item1.People)
+                {
+                    residentalTax += _residentalTax;
+                    //TODO: befizetett adó tárolása személyeknél a nyugdíj miatt
+                }
+            }
+
+            return residentalTax;
+        }
+        public float calculateWorkTax()
+        {
+            float workTax = 0;
+            foreach (var zone in workPlaces)
+            {
+                foreach (Person p in zone.Item1.People)
+                {
+                    if (p.Education == Level.ELEMENTARY)
+                    {
+                        if(zone.Item1 is ServiceZone)
+                        {
+                            workTax += _serviceTax * _TaxMultElemLvl;
+                            //TODO: befizetett adó tárolása személyeknél a nyugdíj miatt
+                        }
+                        else if(zone.Item1 is IndustrialZone)
+                        {
+                            workTax += _industrialTax * _TaxMultElemLvl;
+                            //TODO: befizetett adó tárolása személyeknél a nyugdíj miatt
+                        }
+                    }
+
+                    if (p.Education == Level.INTERMEDIATE)
+                    {
+                        if (zone.Item1 is ServiceZone)
+                        {
+                            workTax += _serviceTax * _TaxMultInterlLvl;
+                            //TODO: befizetett adó tárolása személyeknél a nyugdíj miatt
+                        }
+                        else if (zone.Item1 is IndustrialZone)
+                        {
+                            workTax += _industrialTax * _TaxMultInterlLvl;
+                            //TODO: befizetett adó tárolása személyeknél a nyugdíj miatt
+                        }
+                    }
+
+                    if (p.Education == Level.SUPERLATIVE)
+                    {
+                        if (zone.Item1 is ServiceZone)
+                        {
+                            workTax += _serviceTax * _TaxMulSuperLvl;
+                            //TODO: befizetett adó tárolása személyeknél a nyugdíj miatt
+                        }
+                        else if (zone.Item1 is IndustrialZone)
+                        {
+                            workTax += _industrialTax * _TaxMulSuperLvl;
+                            //TODO: befizetett adó tárolása személyeknél a nyugdíj miatt
+                        }
+                    }
+                }
+            }
+
+            return workTax;
+        }
+        public float calculateIncome()
+        {
+            float income = 0;
+            income += calculateResidentalTax();
+            income += calculateWorkTax();
+
+            return income;
         }
     }
 }
