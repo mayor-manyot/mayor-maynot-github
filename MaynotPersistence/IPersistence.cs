@@ -5,7 +5,7 @@ namespace MaynotPersistence
 {
     public interface IPersistence
     {
-        void SaveAsync(String path, MaynotGameState state);
-        MaynotGameState LoadAsync(String path);
+        Task SaveAsync(String path, MaynotGameState state);
+        Task<MaynotGameState> LoadAsync(String path);
     }
 }

@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using MaynotPersistence;
 
 namespace MaynotModel
 {
     public class MaynotGameModel
     {
+        private IPersistence _dataAccess;
         private MaynotGameState _state;
         
         public event EventHandler<MaynotEventArg>? SaveGame;
@@ -24,8 +26,9 @@ namespace MaynotModel
         public int GameBoardSize { get => _state.size; }
         public List<Person> Citizens { get => _state.citizens; set => _state.citizens = value; }
 
-        public MaynotGameModel()
+        public MaynotGameModel(IPersistence dataAccess)
         {
+            _dataAccess = dataAccess;
             _state = new MaynotGameState(0);
         }
 
@@ -432,6 +435,22 @@ namespace MaynotModel
         private void taxCollection()
         {
             _state.money += _state.calculateIncome();
+        }
+
+        public async Task SaveGameAsync(String path)
+        {
+            if (_dataAccess == null)
+                throw new InvalidOperationException("No data access is provided.");
+
+            await _dataAccess.SaveAsync(path, _state);
+        }
+
+        public async Task LoadGameAsync(String path)
+        {
+            if (_dataAccess == null)
+                throw new InvalidOperationException("No data access is provided.");
+
+            _state = await _dataAccess.LoadAsync(path);
         }
     }
 }

@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using MaynotModel;
+using MaynotPersistence;
 
 namespace Maynot
 {
@@ -31,7 +32,7 @@ namespace Maynot
 
         private void App_Startup(object sender, StartupEventArgs e)
         {
-            _model = new MaynotGameModel();
+            _model = new MaynotGameModel(new FilePersistence());
             _model.catastropheHappened += new EventHandler<MaynotEventArg>(Model_CatastropheHappened);
             _model.newGame();
 
@@ -73,7 +74,7 @@ namespace Maynot
         /// <summary>
         /// Játék betöltésének eseménykezelője.
         /// </summary>
-        private void ViewModel_LoadGame(object? sender, System.EventArgs e)
+        private async void ViewModel_LoadGame(object? sender, System.EventArgs e)
         {
             try
             {
@@ -83,7 +84,7 @@ namespace Maynot
                 if (openFileDialog.ShowDialog() == true)
                 {
                     // játék betöltése
-                    //await _model.LoadGameAsync(openFileDialog.FileName);
+                    await _model.LoadGameAsync(openFileDialog.FileName);
 
                 }
             }
@@ -97,7 +98,7 @@ namespace Maynot
         /// <summary>
         /// Játék mentésének eseménykezelője.
         /// </summary>
-        private void ViewModel_SaveGame(object? sender, EventArgs e)
+        private async void ViewModel_SaveGame(object? sender, EventArgs e)
         {
 
             try
@@ -110,7 +111,7 @@ namespace Maynot
                     try
                     {
                         // játéktábla mentése
-                        //await _model.SaveGameAsync(saveFileDialog.FileName);
+                        await _model.SaveGameAsync(saveFileDialog.FileName);
                     }
                     catch (Exception)
                     {

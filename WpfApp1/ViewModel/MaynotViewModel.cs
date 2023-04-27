@@ -324,7 +324,7 @@ namespace Maynot.WPF.ViewModel
                         if (tile != null)
                         {
                             affectedTiles.Add(tile);
-                            tile.IsFlameVisible = Visibility.Visible;
+                            //tile.IsFlameVisible = Visibility.Visible;
                         }
                     }
                 }
@@ -336,7 +336,7 @@ namespace Maynot.WPF.ViewModel
 
             foreach (MaynotTile tile in affectedTiles)
             {
-                tile.IsFlameVisible = Visibility.Hidden;
+                //tile.IsFlameVisible = Visibility.Hidden;
             }
 
             OnPropertyChanged(nameof(Fields));
