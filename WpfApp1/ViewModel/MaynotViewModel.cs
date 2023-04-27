@@ -70,6 +70,7 @@ namespace Maynot.WPF.ViewModel
             PauseGameCommand = new DelegateCommand(param => OnPauseGameCommand());
             ResumeGameCommand = new DelegateCommand(param => OnResumeGame());
             ClearCurrentlySelectedTileCommand = new DelegateCommand(param => OnClearCurrentlySelectedTile());
+            OpenHelpPopupCommand = new DelegateCommand(param => OnOpenHelpPopupCommand());
 
             Fields = new ObservableCollection<MaynotTile>();
             FullyRefreshTable();
@@ -135,6 +136,12 @@ namespace Maynot.WPF.ViewModel
         private void OnClearCurrentlySelectedTile()
         {
             SelectedTile = null;
+        }
+
+        //TODO
+        private void OnOpenHelpPopupCommand()
+        {
+            throw new NotImplementedException("Nincs még Help Popup!");
         }
 
 
@@ -368,7 +375,8 @@ namespace Maynot.WPF.ViewModel
 
         public DelegateCommand ResumeGameCommand { get; private set; }
         public DelegateCommand ClearCurrentlySelectedTileCommand { get; private set; }
-        
+        public DelegateCommand OpenHelpPopupCommand { get; private set; }
+
 
 
         #endregion

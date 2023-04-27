@@ -67,17 +67,21 @@
                 </ScrollViewer>
 
                 <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="6">
-                    <Button x:Name="slow" Margin="3" Content="&lt;&lt;" Height="30" Width="28" Command="{Binding SlowerGameCommand}" />
-                    <Button x:Name="play" Margin="3" Content="|>" Height="30" Width="28" Command="{Binding ResumeGameCommand}"/>
-                    <Button x:Name="pause" Margin="3" Content="||" Height="30" Width="28" Command="{Binding PauseGameCommand}"/>
-                    <Button x:Name="forward" Margin="3" Content=">>" Height="30" Width="28" Command="{Binding SpeedUpGameCommand}"/>
+                    <Button x:Name="slow" Margin="3" Content="&lt;&lt;" Height="28" Width="28" Command="{Binding SlowerGameCommand}" />
+                    <Button x:Name="play" Margin="3" Content="|>" Height="28" Width="28" Command="{Binding ResumeGameCommand}"/>
+                    <Button x:Name="pause" Margin="3" Content="||" Height="28" Width="28" Command="{Binding PauseGameCommand}"/>
+                    <Button x:Name="forward" Margin="3" Content=">>" Height="28" Width="28" Command="{Binding SpeedUpGameCommand}"/>
                 </StackPanel>
                 <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="6" HorizontalAlignment="Center">
-                    <Button Margin="3" Height="30" Width="28" Command="{Binding ClearCurrentlySelectedTileCommand}">
+                    <Button Margin="3" Height="28" Width="28" Command="{Binding ClearCurrentlySelectedTileCommand}">
                         <Image Margin="0" Source="/Assets/mouseCursor.png" Stretch="UniformToFill" />
                     </Button>
-                    <Button Margin="3" Content="|>" Height="30" Width="28" Command="{Binding ResumeGameCommand}"/>
-                    <Button Margin="3" Content="||" Height="30" Width="28" Command="{Binding PauseGameCommand}"/>
+                    <Button Margin="3" Height="28" Width="28" Command="{Binding ClearCurrentlySelectedTileCommand}">
+                        <Image Margin="0" Source="/Assets/questionMark.png" Stretch="UniformToFill" />
+                    </Button>
+                    <Button Margin="3" Height="28" Width="28" Command="{Binding OpenHelpPopupCommand}">
+                        <Image Margin="0" Source="/Assets/questionMark.png" Stretch="UniformToFill" />
+                    </Button>
                 </StackPanel>
             </Grid>
             <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
