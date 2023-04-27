@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\buttonFastForward.png" />
+    <None Remove="Assets\buttonPause.png" />
+    <None Remove="Assets\buttonPlay.png" />
+    <None Remove="Assets\buttonRewind.png" />
     <None Remove="Assets\flame.png" />
     <None Remove="Assets\forest.png" />
     <None Remove="Assets\industrialZone.png" />
@@ -33,6 +37,7 @@
     <None Remove="Assets\school.png" />
     <None Remove="Assets\serviceZone.png" />
     <None Remove="Assets\stadium.png" />
+    <None Remove="Assets\trashCan.png" />
     <None Remove="Assets\university.png" />
   </ItemGroup>
 
@@ -42,6 +47,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Assets\buttonFastForward.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\buttonPause.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\buttonPlay.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\buttonRewind.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\flame.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -103,6 +120,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\stadium.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\trashCan.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\university.png">
