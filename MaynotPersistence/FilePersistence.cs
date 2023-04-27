@@ -7,7 +7,7 @@ namespace MaynotPersistence
 {
     public class FilePersistence : IPersistence
     {
-        public void SaveAsync(String path, MaynotGameState state)
+        public async Task SaveAsync(String path, MaynotGameState state)
         {
             try
             {
@@ -22,7 +22,7 @@ namespace MaynotPersistence
             }
         }
 
-        public MaynotGameState LoadAsync(String path)
+        public async Task<MaynotGameState> LoadAsync(String path)
         {
             try
             {
