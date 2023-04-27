@@ -12,6 +12,7 @@
     <None Remove="Assets\flame.png" />
     <None Remove="Assets\forest.png" />
     <None Remove="Assets\industrialZone.png" />
+    <None Remove="Assets\mouseCursor.png" />
     <None Remove="Assets\policeStation.png" />
     <None Remove="Assets\residentalZone.png" />
     <None Remove="Assets\RoadTiles\roadES.jpg" />
@@ -44,6 +45,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\forest.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\mouseCursor.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\residentalZone.png">

@@ -23,22 +23,11 @@ namespace Maynot.WPF.ViewModel
         public float Money { get { return _model.Money; } }
         public String Date { get; set; }
 
-        private object? _selectedItem;
-        public object? SelectedItem
-        {
-            get { return _selectedItem; }
-            set
-            {
-                _selectedItem = value;
-                OnPropertyChanged(nameof(SelectedItem));
-            }
-        }
 
-        private int _selectedItemIndex;
+        private MaynotTile? _selectedTile;
 
-        private MaynotTile _selectedTile;
-
-        public MaynotTile SelectedTile
+        //Null hogyha éppen nincs semmi kiválasztva
+        public MaynotTile? SelectedTile
         {
             get { return _selectedTile; }
             set
@@ -80,6 +69,7 @@ namespace Maynot.WPF.ViewModel
             SpeedUpGameCommand = new DelegateCommand(param => OnSpeedUpGameCommand());
             PauseGameCommand = new DelegateCommand(param => OnPauseGameCommand());
             ResumeGameCommand = new DelegateCommand(param => OnResumeGame());
+            ClearCurrentlySelectedTileCommand = new DelegateCommand(param => OnClearCurrentlySelectedTile());
 
             Fields = new ObservableCollection<MaynotTile>();
             FullyRefreshTable();
@@ -140,6 +130,11 @@ namespace Maynot.WPF.ViewModel
             {
                 throw new ArgumentException("Olyan elemen jött be 'OnRadioButtonChecked' esemény amely nem MaynotTile típusú!");
             }
+        }
+
+        private void OnClearCurrentlySelectedTile()
+        {
+            SelectedTile = null;
         }
 
 
@@ -372,6 +367,8 @@ namespace Maynot.WPF.ViewModel
         public DelegateCommand PauseGameCommand { get; private set; }
 
         public DelegateCommand ResumeGameCommand { get; private set; }
+        public DelegateCommand ClearCurrentlySelectedTileCommand { get; private set; }
+        
 
 
         #endregion
