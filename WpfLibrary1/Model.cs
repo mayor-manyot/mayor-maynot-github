@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using MaynotPersistence;
 
@@ -39,6 +40,8 @@ namespace MaynotModel
             _state.gameSpeed = 1;
             _state.yearTracker = 1;
             _state.weakTracker = 0;
+            _state.startX = GameBoardSize / 2 - 1;
+            _state.startY = 0;
             //azt van használva a lehelyezésnél
             for (int i = 0; i < 30; i++)
             {
@@ -47,7 +50,7 @@ namespace MaynotModel
                     _state.gameBoard[i, j] = new Empty();
                 }
             }
-            _state.gameBoard[14, 0] = new Road();
+            _state.gameBoard[_state.startX, _state.startY] = new Road();
 
             _state.timer.Elapsed += Timer_Elapsed;            
             Debug.WriteLine("New game");
@@ -58,14 +61,14 @@ namespace MaynotModel
             DayElapsed?.Invoke(this, new TimeElapsedEventArgs(_state.time));
         }
 
-        private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
+        private async void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
             _state.time = _state.time.AddDays(1); // eltelik egy nap
             // naponta történõ eseményeknek nem kell ellenõrzés, a tick naponta van
-            movingIn();
 
             if ((int)_state.time.DayOfWeek == 1) // Hétfõ lett, eltelt egy új hét
             {
+                await Task.Run(() => movingIn());
                 // minden hetente elõforduló esemény meghívása itt
             }
 
@@ -83,61 +86,50 @@ namespace MaynotModel
             OnTimeElapsed(); // új nap dátuma elküldése ViewModelnek a kinézetre
         }
 
-        private void movingIn()
+        private async Task movingIn()
         {
             Random r = new Random();
-            int num = r.Next(1, 25);
-            if (_state.homes.Count == 0 || _state.workPlaces.Count == 0) { }
-            else
+            int newCitizens = r.Next(0, 25);
+            for(int i=0; i<newCitizens; i++)
             {
-                for (int i = 0; i < num; ++i)
-                {
-                    //Kikommenteltem warning miatt
-                    //Zone home;
-                    int n = r.Next(0, 99);
-                    if (n < 18)
-                    {
-                        int k = 0;
-                        for (int j = 0; j < _state.homes.Count; ++j)
-                        {
-                            if (_state.homes[j].Item1.Capacity < _state.homes[k].Item1.Capacity)
-                            {
-                                k = j;
-                            }
-                        }
-                        Person p = new Person(50, n, _state.homes[k].Item1, null, Level.ELEMENTARY);
-                        _state.citizens.Add(p);
-                    }
-                    else
-                    {
-                        int k = 0;
-                        for (int j = 0; j < _state.homes.Count; ++j)
-                        {
-                            if (_state.homes[j].Item1.Capacity < _state.homes[k].Item1.Capacity)
-                            {
-                                k = j;
-                            }
-                        }
-                        for (int j = 0; j < _state.workPlaces.Count; ++j)
-                        {
-                            if (_state.workPlaces[j].Item1.Capacity < _state.workPlaces[k].Item1.Capacity)
-                            {
-                                k = j;
-                            }
-                        }
-                        int ch = r.Next(1, 3);
-                        Person p;
-                        if (ch == 2)
-                        {
-                            p = new Person(50, n, _state.workPlaces[k].Item1, null, Level.INTERMEDIATE);
-                        }
-                        else
-                        {
-                            p = new Person(50, n, _state.workPlaces[k].Item1, null, Level.SUPERLATIVE);
-                        }
-                        _state.citizens.Add(p);
+                Person? p = null;
+                int age = r.Next(18, 65);
+                int satisfaction = r.Next(30, 100);
+                int entryValue = r.Next(satisfaction, 100);
+                (int, int) t = _state.getFreeResidentalZone();
+                (int, int) w = _state.getFreeWorkZone(t.Item1, t.Item2);
 
+                if (t.Item1 != -1 && t.Item2 != -1 && w.Item1 != -1 && w.Item2 != -1)
+                {
+                    p = new Person(satisfaction, age, t, w, Level.ELEMENTARY);
+                }
+
+                if(p != null && _state.guaranteedPopulation)
+                {
+                    _state.citizens.Add(p);
+                    Zone? residentalZone = GameBoard[t.Item1, t.Item2] as Zone;
+                    Zone? workZone = GameBoard[w.Item1, w.Item2] as Zone;
+                    if (residentalZone != null && workZone != null)
+                    {
+                        residentalZone.PeopleIndexes.Add(_state.citizens.Count);
+                        workZone.PeopleIndexes.Add(_state.citizens.Count);
                     }
+                }
+                else if(p != null && _state.calculateZoneAttractiveness(p) < entryValue)
+                {
+                    _state.citizens.Add(p);
+                    Zone? residentalZone = GameBoard[t.Item1, t.Item2] as Zone;
+                    Zone? workZone = GameBoard[w.Item1, w.Item2] as Zone;
+                    if (residentalZone != null && workZone != null)
+                    {
+                        residentalZone.PeopleIndexes.Add(_state.citizens.Count);
+                        workZone.PeopleIndexes.Add(_state.citizens.Count);
+                    }
+                }
+                
+                if(_state.citizens.Count < 500)
+                {
+                    _state.guaranteedPopulation = false;
                 }
             }
         }
@@ -212,18 +204,15 @@ namespace MaynotModel
                 _state.gameBoard[x, y] = t;
                 if (t is ResidentialZone)
                 {
-                    (Tile, int, int) adding = (t, x, y);
-                    _state.homes.Add(((Zone, int, int))adding);
+                    _state.residentalZones.Add((x, y));
                 }
                 else if (t is IndustrialZone)
                 {
-                    (Tile, int, int) adding = (t, x, y);
-                    _state.workPlaces.Add(((Zone, int, int))adding);
+                    _state.industrialZones.Add((x, y));
                 }
                 else if (t is ServiceZone)
                 {
-                    (Tile, int, int) adding = (t, x, y);
-                    _state.workPlaces.Add(((Zone, int, int))adding);
+                    _state.serviceZones.Add((x, y));
                 }
                 return true;
             }
