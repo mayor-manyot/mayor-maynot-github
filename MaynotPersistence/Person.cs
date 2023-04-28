@@ -10,13 +10,13 @@ namespace MaynotPersistence
     {
         public int Satisfaction { get; set; }
         public int Age { get; set; }
-        public Tile Residency { get; set; }
-        public Tile? WorkPlace { get; set; }
+        public (int, int) Residency { get; set; }
+        public (int, int)? WorkPlace { get; set; }
         public Level Education { get; set; }
         public Person(int satisfaction,
             int age,
-            Tile residency,
-            Tile? workPlace,
+            (int, int) residency,
+            (int, int)? workPlace,
             Level education)
         {
             Satisfaction = satisfaction;

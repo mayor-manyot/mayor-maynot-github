@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 
 namespace MaynotPersistence
 {
@@ -13,6 +14,8 @@ namespace MaynotPersistence
         public bool[,] visited;
 
         public int size;
+        public int startX;
+        public int startY;
         public int gameSpeed;
         public int prevGameSpeed;
         public int yearTracker;
@@ -23,8 +26,10 @@ namespace MaynotPersistence
         public float money;
 
         public List<Person> citizens;
-        public List<(Zone, int, int)> homes;
-        public List<(Zone, int, int)> workPlaces;
+        //Csak a koordinátákat tartalmazza
+        public List<(int, int)> residentalZones;
+        public List<(int, int)> serviceZones;
+        public List<(int, int)> industrialZones;
 
         public float _residentalTax;
         public float _industrialTax;
@@ -32,9 +37,9 @@ namespace MaynotPersistence
         public double _averageSatisfaction;
 
         //Csak random adtam neki értékeket
-        public const float _TaxMultElemLvl = 1.0F;
-        public const float _TaxMultInterlLvl = 1.6F;
-        public const float _TaxMulSuperLvl = 2.3F;
+        private const float _TaxMultElemLvl = 1.0F;
+        private const float _TaxMultInterlLvl = 1.6F;
+        private const float _TaxMulSuperLvl = 2.3F;
 
         public MaynotGameState(int boardSize)
         {
@@ -47,8 +52,9 @@ namespace MaynotPersistence
             size = boardSize;
 
             citizens = new List<Person> ();
-            homes = new List<(Zone, int, int)>();
-            workPlaces = new List<(Zone, int, int)>();
+            residentalZones = new List<(int, int)>();
+            serviceZones = new List<(int, int)>();
+            industrialZones = new List<(int, int)>();
 
             setVisitedEmpty();
         }
@@ -84,7 +90,7 @@ namespace MaynotPersistence
 
             return false;
         }
-        public bool path(int i, int j, int x, int y)
+        public int distance(int i, int j, int x, int y)
         {
             if (isValid(i, j) && isValid(x, y) && !visited[i, j])
             {
@@ -92,62 +98,62 @@ namespace MaynotPersistence
 
                 if (isValid(i - 1, j) && i - 1 == x && j == y)
                 {
-                    return true;
+                    return 1;
                 }
                 else
                 {
                     if (isRoad(i - 1, j))
                     {
-                        bool up = path(i - 1, j, x, y);
-                        if (up)
-                            return true;
+                        int up = distance(i - 1, j, x, y);
+                        if (up > 0)
+                            return up + 1;
                     }
                 }
 
                 if (isValid(i, j - 1) && i == x && j - 1 == y)
                 {
-                    return true;
+                    return 1;
                 }
                 else
                 {
                     if (isRoad(i, j - 1))
                     {
-                        bool left = path(i, j - 1, x, y);
-                        if (left)
-                            return true;
+                        int left = distance(i, j - 1, x, y);
+                        if (left > 0)
+                            return left + 1;
                     }
                 }
 
                 if (isValid(i + 1, j) && i + 1 == x && j == y)
                 {
-                    return true;
+                    return 1;
                 }
                 else
                 {
                     if (isRoad(i + 1, j))
                     {
-                        bool down = path(i + 1, j, x, y);
-                        if (down)
-                            return true;
+                        int down = distance(i + 1, j, x, y);
+                        if (down > 0)
+                            return down + 1;
                     }
                 }
 
                 if (isValid(i, j + 1) && i == x && j + 1 == y)
                 {
-                    return true;
+                    return 1;
                 }
                 else
                 {
                     if (isRoad(i, j + 1))
                     {
-                        bool right = path(i, j + 1, x, y);
-                        if (right)
-                            return true;
+                        int right = distance(i, j + 1, x, y);
+                        if (right > 0)
+                            return right + 1;
                     }
                 }
             }
 
-            return false;
+            return 0;
         }
 
         /// <summary>
@@ -156,7 +162,7 @@ namespace MaynotPersistence
         /// <returns>Igaz, ha le lehet bontani az utat, egyébként hamis.</returns>
         public bool canDestroyRoad(int i, int j)
         {
-            if (getReachableBuildingsIntercept(i, j).Count == 0 || !isPath(14, 0, i, j))
+            if (getReachableBuildingsIntercept(i, j).Count == 0 || isDistance(14, 0, i, j) > 0)
                 return true;
 
             return false;
@@ -166,10 +172,10 @@ namespace MaynotPersistence
         /// Megnézi, hogy van-e út a két pont között.
         /// </summary>
         /// <returns>Igaz, ha van út a két pont között, egyébként hamis.</returns>
-        public bool isPath(int i, int j, int x, int y)
+        public int isDistance(int i, int j, int x, int y)
         {
             setVisitedEmpty();
-            return path(i, j, x, y);
+            return distance(i, j, x, y);
         }
         public List<Tuple<int, int>> reachableBuildings(int i, int j, int x, int y)
         {
@@ -267,77 +273,217 @@ namespace MaynotPersistence
         public float calculateResidentalTax()
         {
             float residentalTax = 0;
-            foreach(var zone in homes)
+            foreach ((int x, int y) in residentalZones)
             {
-                foreach(Person p in zone.Item1.People)
+                Zone? z = gameBoard[x, y] as Zone;
+                if (z != null)
                 {
-                    residentalTax += _residentalTax;
-                    //TODO: befizetett adó tárolása személyeknél a nyugdíj miatt
+                    foreach (Person p in z.GetPeoples(citizens))
+                    {
+                        residentalTax += _residentalTax;
+                        //TODO: befizetett adó tárolása személyeknél a nyugdíj miatt
+                    }
                 }
             }
 
             return residentalTax;
         }
-        public float calculateWorkTax()
+        public float calculateServiceTax()
         {
-            float workTax = 0;
-            foreach (var zone in workPlaces)
+            float serviceTax = 0;
+            foreach ((int x, int y) in serviceZones)
             {
-                foreach (Person p in zone.Item1.People)
+                Zone? z = gameBoard[x, y] as Zone;
+                if (z != null)
                 {
-                    if (p.Education == Level.ELEMENTARY)
+                    foreach (Person p in z.GetPeoples(citizens))
                     {
-                        if(zone.Item1 is ServiceZone)
+                        if (p.Education == Level.ELEMENTARY)
                         {
-                            workTax += _serviceTax * _TaxMultElemLvl;
+                            serviceTax += _serviceTax * _TaxMultElemLvl;
                             //TODO: befizetett adó tárolása személyeknél a nyugdíj miatt
                         }
-                        else if(zone.Item1 is IndustrialZone)
-                        {
-                            workTax += _industrialTax * _TaxMultElemLvl;
-                            //TODO: befizetett adó tárolása személyeknél a nyugdíj miatt
-                        }
-                    }
 
-                    if (p.Education == Level.INTERMEDIATE)
-                    {
-                        if (zone.Item1 is ServiceZone)
+                        if (p.Education == Level.INTERMEDIATE)
                         {
-                            workTax += _serviceTax * _TaxMultInterlLvl;
+                            serviceTax += _serviceTax * _TaxMultInterlLvl;
                             //TODO: befizetett adó tárolása személyeknél a nyugdíj miatt
                         }
-                        else if (zone.Item1 is IndustrialZone)
-                        {
-                            workTax += _industrialTax * _TaxMultInterlLvl;
-                            //TODO: befizetett adó tárolása személyeknél a nyugdíj miatt
-                        }
-                    }
 
-                    if (p.Education == Level.SUPERLATIVE)
-                    {
-                        if (zone.Item1 is ServiceZone)
+                        if (p.Education == Level.SUPERLATIVE)
                         {
-                            workTax += _serviceTax * _TaxMulSuperLvl;
-                            //TODO: befizetett adó tárolása személyeknél a nyugdíj miatt
-                        }
-                        else if (zone.Item1 is IndustrialZone)
-                        {
-                            workTax += _industrialTax * _TaxMulSuperLvl;
+                            serviceTax += _serviceTax * _TaxMulSuperLvl;
                             //TODO: befizetett adó tárolása személyeknél a nyugdíj miatt
                         }
                     }
                 }
             }
 
-            return workTax;
+            return serviceTax;
+        }
+        public float calculateIndustrialTax()
+        {
+            float industrialTax = 0;
+            foreach ((int x, int y) in industrialZones)
+            {
+                Zone? z = gameBoard[x, y] as Zone;
+                if (z != null)
+                {
+                    foreach (Person p in z.GetPeoples(citizens))
+                    {
+                        if (p.Education == Level.ELEMENTARY)
+                        {
+                            industrialTax += _industrialTax * _TaxMultElemLvl;
+                            //TODO: befizetett adó tárolása személyeknél a nyugdíj miatt
+                        }
+
+                        if (p.Education == Level.INTERMEDIATE)
+                        {
+                            industrialTax += _industrialTax * _TaxMultInterlLvl;
+                            //TODO: befizetett adó tárolása személyeknél a nyugdíj miatt
+                        }
+
+                        if (p.Education == Level.SUPERLATIVE)
+                        {
+                            industrialTax += _industrialTax * _TaxMulSuperLvl;
+                            //TODO: befizetett adó tárolása személyeknél a nyugdíj miatt
+                        }
+                    }
+                }
+            }
+
+            return industrialTax;
         }
         public float calculateIncome()
         {
             float income = 0;
             income += calculateResidentalTax();
-            income += calculateWorkTax();
+            income += calculateServiceTax();
+            income += calculateIndustrialTax();
 
             return income;
+        }
+        public double RatioIndustrialZonesFullness()
+        {
+            int counterOccupied = 0;
+            int counterAll = 0;
+            foreach ((int x, int y) in industrialZones)
+            {
+                if (gameBoard[x, y] is Zone z)
+                {
+                    counterOccupied += z.PeopleIndexes.Count;
+                    counterAll += z.Capacity;
+                }
+            }
+
+            if (counterAll != 0)
+            {
+                return (double)counterOccupied / counterAll;
+            }
+
+            return 0;
+        }
+        public double RatioServiceZonesFullness()
+        {
+            int counterOccupied = 0;
+            int counterAll = 0;
+            foreach ((int x, int y) in serviceZones)
+            {
+                if (gameBoard[x, y] is Zone z)
+                {
+                    counterOccupied += z.PeopleIndexes.Count;
+                    counterAll += z.Capacity;
+                }
+            }
+
+            if (counterAll != 0)
+            {
+                return (double)counterOccupied / counterAll;
+            }
+
+            return 0;
+        }
+        public (int x, int y) getFreeResidentalZone()
+        {
+            Random r = new Random();
+            List<(int x, int y)> freeResidentialZones = new List<(int x, int y)>();
+            foreach ((int x, int y) in residentalZones)
+            {
+                if (gameBoard[x, y] is Zone z && z.Capacity > z.PeopleIndexes.Count && isDistance(x, y, startX, startY) > 0)
+                {
+                    freeResidentialZones.Add((x, y));
+                }
+            }
+
+            if (freeResidentialZones.Count > 0)
+            {
+                int randomIndex = r.Next(0, freeResidentialZones.Count);
+                return freeResidentialZones[randomIndex];
+            }
+
+            return (-1, -1);
+        }
+        public (int x, int y) getFreeServiceZone(int i, int j)
+        {
+            Random r = new Random();
+            List<(int x, int y, int d)> freeServiceZones = new List<(int x, int y, int d)>();
+            foreach ((int x, int y) in serviceZones)
+            {
+                if (gameBoard[x, y] is Zone z && z.Capacity > z.PeopleIndexes.Count && isDistance(x, y, i, j) > 0)
+                {
+                    freeServiceZones.Add((x, y, isDistance(x, y, i, j)));
+                }
+            }
+
+            if (freeServiceZones.Count > 0)
+            {
+                freeServiceZones.Sort((a, b) => a.d.CompareTo(b.d));
+                return (freeServiceZones[0].x, freeServiceZones[0].y);
+            }
+
+            return (-1, -1);
+        }
+        public (int x, int y) getFreeIndustrialZone(int i, int j)
+        {
+            Random r = new Random();
+            List<(int x, int y, int d)> freeIndustrialZones = new List<(int x, int y, int d)>();
+            foreach ((int x, int y) in industrialZones)
+            {
+                if (gameBoard[x, y] is Zone z && z.Capacity > z.PeopleIndexes.Count && isDistance(x, y, i, j) > 0)
+                {
+                    freeIndustrialZones.Add((x, y, isDistance(x, y, i, j)));
+                }
+            }
+            
+            if (freeIndustrialZones.Count > 0)
+            {
+                freeIndustrialZones.Sort((a, b) => a.d.CompareTo(b.d));
+                return (freeIndustrialZones[0].x, freeIndustrialZones[0].y);
+            }
+
+            return (-1, -1);
+        }
+        public (int x, int y) getFreeWorkZone(int i, int j)
+        {
+            (int x, int y) workPlace;
+            if (RatioServiceZonesFullness() < 1 && RatioIndustrialZonesFullness() == 1)
+            {
+                workPlace = getFreeServiceZone(i, j);
+            }
+            else if (RatioServiceZonesFullness() == 1 && RatioIndustrialZonesFullness() < 1)
+            {
+                workPlace = getFreeIndustrialZone(i, j);
+            }
+            else if (RatioServiceZonesFullness() < RatioIndustrialZonesFullness())
+            {
+                workPlace = getFreeServiceZone(i, j);
+            }
+            else
+            {
+                workPlace = getFreeIndustrialZone(i, j);
+            }
+
+            return workPlace;
         }
     }
 }
