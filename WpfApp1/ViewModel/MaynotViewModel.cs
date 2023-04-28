@@ -23,22 +23,11 @@ namespace Maynot.WPF.ViewModel
         public float Money { get { return _model.Money; } }
         public String Date { get; set; }
 
-        private object? _selectedItem;
-        public object? SelectedItem
-        {
-            get { return _selectedItem; }
-            set
-            {
-                _selectedItem = value;
-                OnPropertyChanged(nameof(SelectedItem));
-            }
-        }
 
-        private int _selectedItemIndex;
+        private MaynotTile? _selectedTile;
 
-        private MaynotTile _selectedTile;
-
-        public MaynotTile SelectedTile
+        //Null hogyha éppen nincs semmi kiválasztva
+        public MaynotTile? SelectedTile
         {
             get { return _selectedTile; }
             set
@@ -80,6 +69,9 @@ namespace Maynot.WPF.ViewModel
             SpeedUpGameCommand = new DelegateCommand(param => OnSpeedUpGameCommand());
             PauseGameCommand = new DelegateCommand(param => OnPauseGameCommand());
             ResumeGameCommand = new DelegateCommand(param => OnResumeGame());
+            ClearCurrentlySelectedTileCommand = new DelegateCommand(param => OnClearCurrentlySelectedTile());
+            OpenHelpPopupCommand = new DelegateCommand(param => OnOpenHelpPopupCommand());
+            SelectBulldozerCommand = new DelegateCommand(param => OnSelectBulldozerCommand());
 
             Fields = new ObservableCollection<MaynotTile>();
             FullyRefreshTable();
@@ -142,6 +134,21 @@ namespace Maynot.WPF.ViewModel
             }
         }
 
+        private void OnClearCurrentlySelectedTile()
+        {
+            SelectedTile = new Bulldozer();
+        }
+
+        //TODO
+        private void OnOpenHelpPopupCommand()
+        {
+            throw new NotImplementedException("Nincs még Help Popup!");
+        }
+
+        private void OnSelectBulldozerCommand()
+        {
+            SelectedTile = new Bulldozer(); 
+        }
 
         private void OnPlaceItem(object? selectedItem)
         {
@@ -256,7 +263,11 @@ namespace Maynot.WPF.ViewModel
             {
                 _model.placeForest(tile.X, tile.Y);
             }
-
+            else if (SelectedTile is Bulldozer)
+            {
+                _model.destroyRoad(tile.X, tile.Y);
+                //_model.DestroyTile(tile.x, tile.Y);
+            }
             MaynotTile modelbolTile = GetTileAtCoordinatesFromModel(tile.X, tile.Y);
 
             int fieldMeret = (int) (Math.Sqrt(Fields.Count));
@@ -372,6 +383,11 @@ namespace Maynot.WPF.ViewModel
         public DelegateCommand PauseGameCommand { get; private set; }
 
         public DelegateCommand ResumeGameCommand { get; private set; }
+        public DelegateCommand ClearCurrentlySelectedTileCommand { get; private set; }
+        public DelegateCommand OpenHelpPopupCommand { get; private set; }
+        public DelegateCommand SelectBulldozerCommand { get; private set; }
+        
+
 
 
         #endregion

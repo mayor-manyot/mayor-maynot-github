@@ -38,6 +38,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0" Text="Letehető elemek" FontWeight="Bold" Padding="3"/>
@@ -66,10 +67,49 @@
                 </ScrollViewer>
 
                 <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="6">
-                    <Button x:Name="slow" Margin="3" Content="&lt;&lt;" Height="30" Width="28" Command="{Binding SlowerGameCommand}" />
-                    <Button x:Name="play" Margin="3" Content="|>" Height="30" Width="28" Command="{Binding ResumeGameCommand}"/>
-                    <Button x:Name="pause" Margin="3" Content="||" Height="30" Width="28" Command="{Binding PauseGameCommand}"/>
-                    <Button x:Name="forward" Margin="3" Content=">>" Height="30" Width="28" Command="{Binding SpeedUpGameCommand}"/>
+                    <StackPanel.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="BorderThickness" Value="0"></Setter>
+                        </Style>
+                    </StackPanel.Resources>
+                    <Button x:Name="slow" Margin="3" Height="28" Width="28" Command="{Binding SlowerGameCommand}">
+                        <Image Margin="0" Source="/Assets/buttonRewind.png" Stretch="UniformToFill" />
+                    </Button>
+                    <Button x:Name="play" Margin="3" Height="28" Width="28" Command="{Binding ResumeGameCommand}">
+                        <Image Margin="0" Source="/Assets/buttonPlay.png" Stretch="UniformToFill" />
+                    </Button>
+                    <Button x:Name="pause" Margin="3" Height="28" Width="28" Command="{Binding PauseGameCommand}">
+                        <Image Margin="0" Source="/Assets/buttonPause.png" Stretch="UniformToFill" />
+                    </Button>
+                    <Button x:Name="forward" Margin="3" Height="28" Width="28" Command="{Binding SpeedUpGameCommand}">
+                        <Image Margin="0" Source="/Assets/buttonFastForward.png" Stretch="UniformToFill" />
+                    </Button>
+                </StackPanel>
+                <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="6" HorizontalAlignment="Center">
+                    <StackPanel.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="LightGray" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="5">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </StackPanel.Resources>
+                    <Button Margin="3" Height="35" Width="35" Command="{Binding ClearCurrentlySelectedTileCommand}">
+                        <Image Margin="0" Source="/Assets/mouseCursor.png" Stretch="UniformToFill" />
+                    </Button>
+                    <Button Margin="3" Height="35" Width="35" Command="{Binding SelectBulldozerCommand}">
+                        <Image Margin="0" Source="/Assets/trashCan.png" Stretch="UniformToFill" />
+                    </Button>
+                    <Button Margin="3" Height="35" Width="35" Command="{Binding OpenHelpPopupCommand}">
+                        <Image Margin="0" Source="/Assets/questionMark.png" Stretch="UniformToFill" />
+                    </Button>
                 </StackPanel>
             </Grid>
             <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
