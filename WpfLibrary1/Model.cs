@@ -85,31 +85,20 @@ namespace MaynotModel
 
         private void movingIn()
         {
-            Random r = new Random();
-            int num = r.Next(1, 25);
-            if (_state.homes.Count == 0 || _state.workPlaces.Count == 0) { }
-            else
+            if (_state.weakTracker % 7 == 0)
             {
-                for (int i = 0; i < num; ++i)
+                Random r = new Random();
+                int num = r.Next(1, 25);
+                if (_state.homes.Count == 0 || _state.workPlaces.Count == 0) { }
+                else
                 {
-                    //Kikommenteltem warning miatt
-                    //Zone home;
-                    int n = r.Next(0, 99);
-                    if (n < 18)
+                    for (int i = 0; i < num; ++i)
                     {
-                        int k = 0;
-                        for (int j = 0; j < _state.homes.Count; ++j)
-                        {
-                            if (_state.homes[j].Item1.Capacity < _state.homes[k].Item1.Capacity)
-                            {
-                                k = j;
-                            }
-                        }
-                        Person p = new Person(50, n, _state.homes[k].Item1, null, Level.ELEMENTARY);
-                        _state.citizens.Add(p);
-                    }
-                    else
-                    {
+                        //Kikommenteltem warning miatt
+                        //Zone home;
+                        int n = r.Next(18, 60);
+
+
                         int k = 0;
                         for (int j = 0; j < _state.homes.Count; ++j)
                         {
@@ -125,17 +114,20 @@ namespace MaynotModel
                                 k = j;
                             }
                         }
-                        int ch = r.Next(1, 3);
+                        int ch = r.Next(1, 4);
                         Person p;
-                        if (ch == 2)
+                        switch (ch)
                         {
-                            p = new Person(50, n, _state.workPlaces[k].Item1, null, Level.INTERMEDIATE);
+                            case 1:
+                                p = new Person(50, n, _state.workPlaces[k].Item1, null, Level.INTERMEDIATE);
+                                break;
+                            case 2:
+                                p = new Person(50, n, _state.workPlaces[k].Item1, null, Level.SUPERLATIVE);
+                                break;
+                            case 3:
+                                p = new Person(50, n, _state.workPlaces[k].Item1, null, Level.ELEMENTARY);
+                                break;
                         }
-                        else
-                        {
-                            p = new Person(50, n, _state.workPlaces[k].Item1, null, Level.SUPERLATIVE);
-                        }
-                        _state.citizens.Add(p);
 
                     }
                 }
