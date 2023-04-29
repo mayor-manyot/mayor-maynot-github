@@ -18,8 +18,16 @@ namespace MaynotModel
         public event EventHandler<MaynotEventArg>? GeneralInfoAsked;
         public event EventHandler<TimeElapsedEventArgs>? DayElapsed;
         public event EventHandler<MaynotEventArg>? catastropheHappened;
+        public event EventHandler<EventArgs>? GameSpeedChanged;
+        public event EventHandler<EventArgs>? UpdatePopulation;
 
         public float Money { get => _state.money; set => _state.money = value; }
+        public float Speed { get { return _state.gameSpeed; }  }
+        public int Population { get { return _state.citizens.Count; } }
+        public int ResidentalTax { get { return _state._residentalTax; } }
+        public int ServiceTax { get { return _state._serviceTax; } }
+        public int IndustrialTax { get { return _state._industrialTax; } }
+        public double AverageSatisfaction { get { return _state._averageSatisfaction; } }
         public DateTime Time { get => _state.time; set => _state.time = value; }
         public int GameSpeed { get => _state.gameSpeed; set => _state.gameSpeed = value; }
         public Tile[,] GameBoard { get => _state.gameBoard; set => _state.gameBoard = value; }
@@ -39,6 +47,9 @@ namespace MaynotModel
             _state.gameSpeed = 1;
             _state.yearTracker = 1;
             _state.weakTracker = 0;
+            _state._residentalTax = 69;
+            _state._serviceTax = 4;
+            _state._industrialTax = 95;
             //azt van használva a lehelyezésnél
             for (int i = 0; i < 30; i++)
             {
@@ -49,13 +60,15 @@ namespace MaynotModel
             }
             _state.gameBoard[14, 0] = new Road();
 
-            _state.timer.Elapsed += Timer_Elapsed;            
+            _state.timer.Elapsed += Timer_Elapsed;
+            _state.timer.Start();
             Debug.WriteLine("New game");
         }
 
         private void OnTimeElapsed()
         {
             DayElapsed?.Invoke(this, new TimeElapsedEventArgs(_state.time));
+            UpdatePopulation?.Invoke(this, new EventArgs());
         }
 
         private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
@@ -136,15 +149,19 @@ namespace MaynotModel
 
         public void stopTime()
         {
+            if (_state.gameSpeed == 0) return;
             _state.timer.Stop();
             _state.prevGameSpeed = _state.gameSpeed;
             _state.gameSpeed = 0;
+            GameSpeedChanged?.Invoke(this, new EventArgs());
         }
 
         public void resumeTime()
         {
+            if (_state.gameSpeed != 0) return;
             _state.timer.Start();
             _state.gameSpeed = _state.prevGameSpeed;
+            GameSpeedChanged?.Invoke(this, new EventArgs());
         }
 
         public void slowTime()
@@ -168,6 +185,7 @@ namespace MaynotModel
                     _state.timer.Stop();                   
                     break;
             }
+            GameSpeedChanged?.Invoke(this, new EventArgs());
             Debug.WriteLine("Gamespeed: " + GameSpeed);
         }
 
@@ -194,6 +212,7 @@ namespace MaynotModel
                     _state.timer.Start();
                     break;
             }
+            GameSpeedChanged?.Invoke(this, new EventArgs());
             Debug.WriteLine("Gamespeed: " + GameSpeed);
         }
 
@@ -415,15 +434,21 @@ namespace MaynotModel
 
         public void setResidentalTax(int tax)
         {
-            _state._residentalTax += tax;
+            if (tax > 0 && tax < 100) _state._residentalTax = tax;
+            if ((_state._residentalTax == 0 && tax == 1) || (_state._residentalTax == 1 && tax == 0))  _state._residentalTax = tax; 
+            if ((_state._residentalTax == 100 && tax == 99) || (_state._residentalTax == 99 && tax == 100))  _state._residentalTax = tax; 
         }
         public void setServiceTax(int tax)
         {
-            _state._serviceTax += tax;
+            if (tax > 0 && tax < 100) _state._serviceTax = tax;
+            if ((_state._serviceTax == 0 && tax == 1) || (_state._serviceTax == 1 && tax == 0)) _state._serviceTax = tax;
+            if ((_state._serviceTax == 100 && tax == 99) || (_state._serviceTax == 99 && tax == 100)) _state._serviceTax = tax;
         }
         public void setIndustrialTax(int tax)
         {
-            _state._industrialTax += tax;
+            if (tax > 0 && tax < 100) _state._industrialTax = tax;
+            if ((_state._industrialTax == 0 && tax == 1) || (_state._industrialTax == 1 && tax == 0)) _state._industrialTax = tax;
+            if ((_state._industrialTax == 100 && tax == 99) || (_state._industrialTax == 99 && tax == 100)) _state._industrialTax = tax;
         }
         private void taxCollection()
         {

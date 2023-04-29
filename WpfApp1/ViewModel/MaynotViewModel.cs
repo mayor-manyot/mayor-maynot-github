@@ -21,8 +21,13 @@ namespace Maynot.WPF.ViewModel
         private MaynotGameModel _model;
         public ObservableCollection<MaynotTile> Fields { get; set; }
         public float Money { get { return _model.Money; } }
+        public float ResidentalTax { get { return _model.ResidentalTax; } }
+        public float ServiceTax { get { return _model.ServiceTax; } }
+        public float IndustrialTax { get { return _model.IndustrialTax; } }
         public String Date { get; set; }
-
+        public float Speed { get { return _model.Speed; } }
+        public int Population { get { return _model.Population; } }
+        public float Satisfaction { get { return _model.Population; } }
 
         private MaynotTile? _selectedTile;
 
@@ -57,8 +62,9 @@ namespace Maynot.WPF.ViewModel
         public MaynotViewModel(MaynotGameModel model)
         {
             _model = model;
-            _model.DayElapsed += new EventHandler<TimeElapsedEventArgs>(Day_Elapsed); 
-            
+            _model.DayElapsed += new EventHandler<TimeElapsedEventArgs>(Day_Elapsed);
+            _model.GameSpeedChanged += new EventHandler<EventArgs>(Speed_Changed);
+            _model.UpdatePopulation += new EventHandler<EventArgs>(Population_Changed);
 
             // parancsok kezelése
             NewGameCommand = new DelegateCommand(param => OnNewGame());
@@ -69,6 +75,12 @@ namespace Maynot.WPF.ViewModel
             SpeedUpGameCommand = new DelegateCommand(param => OnSpeedUpGameCommand());
             PauseGameCommand = new DelegateCommand(param => OnPauseGameCommand());
             ResumeGameCommand = new DelegateCommand(param => OnResumeGame());
+            ResidentalTaxNumericUpCommand = new DelegateCommand(param => OnResidentalTaxNumericUp());
+            ResidentalTaxNumericDownCommand = new DelegateCommand(param => OnResidentalTaxNumericDown());
+            ServiceTaxNumericUpCommand = new DelegateCommand(param => OnServiceTaxNumericUp());
+            ServiceTaxNumericDownCommand = new DelegateCommand(param => OnServiceTaxNumericDown());
+            IndustrialTaxNumericUpCommand = new DelegateCommand(param => OnIndustrialTaxNumericUp());
+            IndustrialTaxNumericDownCommand = new DelegateCommand(param => OnIndustrialTaxNumericDown());
             ClearCurrentlySelectedTileCommand = new DelegateCommand(param => OnClearCurrentlySelectedTile());
             OpenHelpPopupCommand = new DelegateCommand(param => OnOpenHelpPopupCommand());
             SelectBulldozerCommand = new DelegateCommand(param => OnSelectBulldozerCommand());
@@ -94,11 +106,51 @@ namespace Maynot.WPF.ViewModel
             //DebugTriggerCatastropheHappened(6,6);
         }
 
+        private void Speed_Changed(object sender, EventArgs e)
+        {
+            OnPropertyChanged(nameof(Speed));
+        }
+        private void Population_Changed(object sender, EventArgs e)
+        {
+            OnPropertyChanged(nameof(Population));
+        }
         private void Day_Elapsed(object sender, TimeElapsedEventArgs e)
         {
             Date = e.newDate.ToString("yyyy MMMM dd");
             OnPropertyChanged(nameof(Date));
-            Debug.WriteLine($"new Day: {Date}");
+            OnPropertyChanged(nameof(Money));
+            OnPropertyChanged(nameof(Satisfaction));
+            Debug.WriteLine($"new Day: {Date}, New Budget: {Money}");
+        }
+        private void OnResidentalTaxNumericUp()
+        {
+            _model.setResidentalTax(_model.ResidentalTax+1);
+            OnPropertyChanged(nameof(ResidentalTax));
+        }
+        private void OnResidentalTaxNumericDown()
+        {
+            _model.setResidentalTax(_model.ResidentalTax - 1);
+            OnPropertyChanged(nameof(ResidentalTax));
+        }
+        private void OnIndustrialTaxNumericUp()
+        {
+            _model.setIndustrialTax(_model.IndustrialTax + 1);
+            OnPropertyChanged(nameof(IndustrialTax));
+        }
+        private void OnIndustrialTaxNumericDown()
+        {
+            _model.setIndustrialTax(_model.IndustrialTax - 1);
+            OnPropertyChanged(nameof(IndustrialTax));
+        }
+        private void OnServiceTaxNumericUp()
+        {
+            _model.setServiceTax(_model.ServiceTax + 1);
+            OnPropertyChanged(nameof(ServiceTax));
+        }
+        private void OnServiceTaxNumericDown()
+        {
+            _model.setServiceTax(_model.ServiceTax - 1);
+            OnPropertyChanged(nameof(ServiceTax));
         }
         private void OnResumeGame()
         {
@@ -383,6 +435,12 @@ namespace Maynot.WPF.ViewModel
         public DelegateCommand PauseGameCommand { get; private set; }
 
         public DelegateCommand ResumeGameCommand { get; private set; }
+        public DelegateCommand ResidentalTaxNumericUpCommand { get; private set; }
+        public DelegateCommand ResidentalTaxNumericDownCommand { get; private set; }
+        public DelegateCommand ServiceTaxNumericUpCommand { get; private set; }
+        public DelegateCommand ServiceTaxNumericDownCommand { get; private set; }
+        public DelegateCommand IndustrialTaxNumericUpCommand { get; private set; }
+        public DelegateCommand IndustrialTaxNumericDownCommand { get; private set; }
         public DelegateCommand ClearCurrentlySelectedTileCommand { get; private set; }
         public DelegateCommand OpenHelpPopupCommand { get; private set; }
         public DelegateCommand SelectBulldozerCommand { get; private set; }
