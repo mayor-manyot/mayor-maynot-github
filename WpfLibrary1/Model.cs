@@ -374,11 +374,12 @@ namespace MaynotModel
                 for (int i = 0; i < xdif;  ++i)
                 {
                     xflag++;
-                    _state.gameBoard[x-i, y] = new Empty();
+                    
                     if (xflag == 5)
                     {
                         break;
                     }
+                    _state.gameBoard[x - i, y] = new Empty();
                 }
                 if (xflag < xdif)
                 {
@@ -388,12 +389,12 @@ namespace MaynotModel
                 int yflag = 0;
                 for (int i = 0; i < ydif; ++i)
                 {
-                    yflag++;
-                    _state.gameBoard[x, y - i] = new Empty();
+                    yflag++;                 
                     if (yflag == 5)
                     {
                         break;
                     }
+                    _state.gameBoard[x, y - i] = new Empty();
                 }
                 if (yflag < ydif)
                 {
