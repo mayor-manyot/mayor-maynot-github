@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Maynot.WPF.View"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="700">
+        Title="MainWindow" Height="600" Width="850" MinWidth="750" MinHeight="400">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -30,6 +30,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="150"/>
             </Grid.ColumnDefinitions>
 
             <!--építő panel | -->
@@ -152,6 +153,66 @@
                     </ItemsControl>
                 </Viewbox>
             </ScrollViewer>
+            
+            <!--jobb panel-->
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <!--adók-->
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <StackPanel>
+                    <TextBlock Grid.Row="0" Text="Adók" FontWeight="Bold" Padding="3"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0" x:Name="ResNumericDown" HorizontalAlignment="Right" Margin="3" FontWeight="Bold" Content="-" Height="20" Width="25" Command="{Binding ResidentalTaxNumericDownCommand}"/>
+                        <TextBlock Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="11">Lakó:</TextBlock>
+                        <TextBlock Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" Text="{Binding ResidentalTax}"></TextBlock>
+                        <TextBlock Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Left">%</TextBlock>
+                        <Button Grid.Column="4" x:Name="ResNumericUp" HorizontalAlignment="Left" Margin="3" FontWeight="Bold" Content="+" Height="20" Width="25" Command="{Binding ResidentalTaxNumericUpCommand}" />
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0" x:Name="SerNumericDown" HorizontalAlignment="Right" Margin="3" FontWeight="Bold" Content="-" Height="20" Width="25" Command="{Binding ServiceTaxNumericDownCommand}"/>
+                        <TextBlock Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="11">Szolgáltató:</TextBlock>
+                        <TextBlock Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" Text="{Binding ServiceTax}"></TextBlock>
+                        <TextBlock Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Left">%</TextBlock>
+                        <Button Grid.Column="4" x:Name="SerNumericUp" HorizontalAlignment="Left" Margin="3" FontWeight="Bold" Content="+" Height="20" Width="25" Command="{Binding ServiceTaxNumericUpCommand}" />
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0" x:Name="IndNumericDown" HorizontalAlignment="Right" Margin="3" FontWeight="Bold" Content="-" Height="20" Width="25" Command="{Binding IndustrialTaxNumericDownCommand}"/>
+                        <TextBlock Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="11">Ipar:</TextBlock>
+                        <TextBlock Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" Text="{Binding IndustrialTax}"></TextBlock>
+                        <TextBlock Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Left">%</TextBlock>
+                        <Button Grid.Column="4" x:Name="IndNumericUp" HorizontalAlignment="Left" Margin="3" FontWeight="Bold" Content="+" Height="20" Width="25" Command="{Binding IndustrialTaxNumericUpCommand}" />
+                    </Grid>
+                    <Separator></Separator>
+                </StackPanel>
+                <TextBlock Grid.Row="1"/>
+            </Grid>
 
         </Grid>
 
@@ -162,8 +223,16 @@
                 <TextBlock Text="   Játék sebessége: " />
             </StatusBarItem>
             <StatusBarItem>
-                <TextBlock Text="{Binding Speed}" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock FontWeight="Bold" Grid.Column="0" Text="{Binding Speed}" />
+                    <TextBlock FontWeight="Bold" Grid.Column="1" Text="x" />
+                </Grid>
             </StatusBarItem>
+            <!--TextBlock Text="x" /-->
             <StatusBarItem>
                 <TextBlock Text="   Népesség: " />
             </StatusBarItem>
@@ -177,7 +246,7 @@
                 <TextBlock Text="{Binding Satisfaction}" />
             </StatusBarItem>
             <StatusBarItem>
-                <TextBlock Text="   Város büzsdéje: " />
+                <TextBlock Text="   Város büzsdéje:" />
             </StatusBarItem>
             <StatusBarItem>
                 <TextBlock Text="{Binding Money}" />
