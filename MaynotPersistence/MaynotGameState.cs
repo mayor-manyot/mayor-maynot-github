@@ -22,6 +22,7 @@ namespace MaynotPersistence
         public int weakTracker;
         public bool guaranteedPopulation = false;
 
+        public float income;
         public float expense;
         public float money;
 
@@ -31,9 +32,9 @@ namespace MaynotPersistence
         public List<(int, int)> serviceZones;
         public List<(int, int)> industrialZones;
 
-        public float _residentalTax;
-        public float _industrialTax;
-        public float _serviceTax;
+        public int _residentalTax;
+        public int _industrialTax;
+        public int _serviceTax;
         public double _averageSatisfaction;
 
         //Csak random adtam neki értékeket
