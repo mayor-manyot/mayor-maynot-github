@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -78,6 +79,7 @@ namespace MaynotModel
         {
             _state.time = _state.time.AddDays(1); // eltelik egy nap
             // naponta történõ eseményeknek nem kell ellenõrzés, a tick naponta van
+            buildingEffects();
 
             if ((int)_state.time.DayOfWeek == 1) // Hétfõ lett, eltelt egy új hét
             {
@@ -467,5 +469,257 @@ namespace MaynotModel
 
             _state = await _dataAccess.LoadAsync(path);
         }
+
+        public void buildingEffects()
+        {
+            industrailZoneEffects();
+            policeEffect();
+            stadiumEffect();
+            forestEffect();
+        }
+
+        private List<Tile> getArea(int size, int x, int y)
+        {
+            List<Tile> tiels = new List<Tile>();
+            int xflagP = 0;
+            int xflagM = 0;
+
+            if (30 - x < 5)
+            {
+                for (int k = 5; k < 30 - x; ++k)
+                {
+                    tiels.Add(_state.gameBoard[x + k, y]);
+                    ++xflagP;
+                }
+            }
+            else
+            {
+                for (int k = 5; k < 5; ++k)
+                {
+                    tiels.Add(_state.gameBoard[x + k, y]);
+                }
+                xflagP = 5;
+            }
+            if (x - 5 < 0)
+            {
+                for (int k = 5; k < x; ++k)
+                {
+                    tiels.Add(_state.gameBoard[x - k, y]);
+                    ++xflagM;
+                }
+            }
+            else
+            {
+                for (int k = 5; k < 5; ++k)
+                {
+                    tiels.Add(_state.gameBoard[x - k, y]);
+                }
+                xflagM = 5;
+            }
+
+            int yflagP = 0;
+            int yflagM = 0;
+            if (30 - y < 5)
+            {
+                for (int k = 5; k < 30 - y; ++k)
+                {
+                    tiels.Add(_state.gameBoard[x, y + k]);
+                    ++yflagP;
+                }
+            }
+            else
+            {
+                for (int k = 5; k < 5; ++k)
+                {
+                    tiels.Add(_state.gameBoard[x, y + k]);
+                }
+                yflagP = 5;
+            }
+            if (y - 5 < 0)
+            {
+                for (int k = 5; k < y; ++k)
+                {
+                    tiels.Add(_state.gameBoard[x, y - k]);
+                    ++yflagM;
+                }
+            }
+            else
+            {
+                for (int k = 5; k < 5; ++k)
+                {
+                    tiels.Add(_state.gameBoard[x, y - k]);
+                }
+                yflagM = 5;
+            }
+
+            //1:
+            for (int k = 0; k < xflagP; ++k)
+            {
+                for (int l = 0; l < yflagP; ++l)
+                {
+                    tiels.Add(_state.gameBoard[x, y]);
+                }
+            }
+
+            //4:
+            for (int k = 0; k < xflagP; ++k)
+            {
+                for (int l = 0; l < yflagM; ++l)
+                {
+                    tiels.Add(_state.gameBoard[x, y]);
+                }
+            }
+
+            //2:
+            for (int k = 0; k < xflagM; ++k)
+            {
+                for (int l = 0; l < yflagP; ++l)
+                {
+                    tiels.Add(_state.gameBoard[x, y]);
+                }
+            }
+
+            //3:
+            for (int k = 0; k < xflagM; ++k)
+            {
+                for (int l = 0; l < yflagM; ++l)
+                {
+                    tiels.Add(_state.gameBoard[x, y]);
+                }
+            }
+
+            return tiels;
+        }
+
+        private void industrailZoneEffects()
+        {
+            List<Tile> tiels = new List<Tile>();
+            for (int i = 0; i < _state.industrialZones.Count; ++i)
+            {
+                
+                List<ResidentialZone> rez = new List<ResidentialZone>();
+                int x = _state.industrialZones[i].Item1;
+                int y = _state.industrialZones[i].Item2;
+                tiels = getArea(5, x, y);
+                for (int j = 0; j < tiels.Count; ++j)
+                {
+                    if (tiels[j] is MaynotPersistence.ResidentialZone)
+                    {
+                        rez.Add((ResidentialZone)tiels[j]);
+                    }
+                }
+                for (int j = 0; j < rez.Count; ++j)
+                {
+                    for (int k = 0; k < rez[i].GetPeoples(_state.citizens).Count; ++k)
+                    {
+
+                        rez[j].GetPeoples(_state.citizens)[k].Satisfaction = rez[j].GetPeoples(_state.citizens)[k].Satisfaction - 5;
+                        
+                    }
+                }
+            }
+        }
+
+        private void policeEffect()
+        {
+            List<Tile> tiels = new List<Tile>();
+            for (int i = 0; i < _state.size; ++i)
+            {
+                for (int k = 0; k < _state.size; ++k)
+                {
+                    if (_state.gameBoard[i, k] is PoliceStation)
+                    {
+                        List<ResidentialZone> rez = new List<ResidentialZone>();
+                        int x = i;
+                        int y = k;
+                        tiels = getArea(5, x, y);
+                        for (int j = 0; j < tiels.Count; ++j)
+                        {
+                            if (tiels[j] is MaynotPersistence.ResidentialZone)
+                            {
+                                rez.Add((ResidentialZone)tiels[j]);
+                            }
+                        }
+                        for (int j = 0; j < rez.Count; ++j)
+                        {
+                            for (int l = 0; l < rez[i].GetPeoples(_state.citizens).Count; ++l)
+                            {
+                                //rez[i].People[j].Satisfaction = rez[i].People[j].Satisfaction + 5;
+                                rez[j].GetPeoples(_state.citizens)[k].Satisfaction = rez[j].GetPeoples(_state.citizens)[k].Satisfaction + 5;
+                            }
+                        }
+                    }
+                }             
+            }
+        }
+
+        private void stadiumEffect()
+        {
+            List<Tile> tiels = new List<Tile>();
+            for (int i = 0; i < _state.size; ++i)
+            {
+                for (int k = 0; k < _state.size; ++k)
+                {
+                    if (_state.gameBoard[i, k] is Stadium)
+                    {
+                        List<ResidentialZone> rez = new List<ResidentialZone>();
+                        int x = i;
+                        int y = k;
+                        tiels = getArea(5, x, y);
+                        for (int j = 0; j < tiels.Count; ++j)
+                        {
+                            if (tiels[j] is MaynotPersistence.ResidentialZone)
+                            {
+                                rez.Add((ResidentialZone)tiels[j]);
+                            }
+                        }
+                        for (int j = 0; j < rez.Count; ++j)
+                        {
+                            for (int l = 0; l < rez[i].GetPeoples(_state.citizens).Count; ++l)
+                            {
+                                //rez[i].People[j].Satisfaction = rez[i].People[j].Satisfaction + 5;
+                                rez[j].GetPeoples(_state.citizens)[k].Satisfaction = rez[j].GetPeoples(_state.citizens)[k].Satisfaction + 5;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        private void forestEffect()
+        {
+            List<Tile> tiels = new List<Tile>();
+            for (int i = 0; i < _state.size; ++i)
+            {
+                for (int k = 0; k < _state.size; ++k)
+                {
+                    if (_state.gameBoard[i, k] is Forest)
+                    {
+                        List<ResidentialZone> rez = new List<ResidentialZone>();
+                        int x = i;
+                        int y = k;
+                        tiels = getArea(5, x, y);
+                        for (int j = 0; j < tiels.Count; ++j)
+                        {
+                            if (tiels[j] is MaynotPersistence.ResidentialZone)
+                            {
+                                rez.Add((ResidentialZone)tiels[j]);
+                            }
+                        }
+                        for (int j = 0; j < rez.Count; ++j)
+                        {
+                            for (int l = 0; l < rez[i].GetPeoples(_state.citizens).Count; ++l)
+                            {
+                                //rez[i].People[j].Satisfaction = rez[i].People[j].Satisfaction + 5;
+                                rez[j].GetPeoples(_state.citizens)[k].Satisfaction = rez[j].GetPeoples(_state.citizens)[k].Satisfaction + 5;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
     }
 }
