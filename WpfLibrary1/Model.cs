@@ -594,90 +594,95 @@ namespace MaynotModel
         private void industrailZoneEffects()
         {
             List<Tile> tiels = new List<Tile>();
-            for (int i = 0; i < _state.workPlaces.Count; ++i)
+            for (int i = 0; i < _state.industrialZones.Count; ++i)
             {
-                if (_state.workPlaces[i].Item1 is IndustrialZone)
+                
+                List<ResidentialZone> rez = new List<ResidentialZone>();
+                int x = _state.industrialZones[i].Item1;
+                int y = _state.industrialZones[i].Item2;
+                tiels = getArea(5, x, y);
+                for (int j = 0; j < tiels.Count; ++j)
                 {
-                    List<ResidentialZone> rez = new List<ResidentialZone>();
-                    int x = _state.workPlaces[i].Item2;
-                    int y = _state.workPlaces[i].Item3;
-                    tiels = getArea(5, x, y);
-                    for (int j = 0; j < tiels.Count; ++j)
+                    if (tiels[j] is MaynotPersistence.ResidentialZone)
                     {
-                        if (tiels[j] is MaynotPersistence.ResidentialZone)
-                        {
-                            rez.Add((ResidentialZone)tiels[j]);
-                        }
-                    }
-                    for (int j = 0; j < rez.Count; ++j)
-                    {
-                        for (int k = 0; k < rez[i].People.Count; ++k)
-                        {
-                            rez[i].People[j].Satisfaction = rez[i].People[j].Satisfaction - 5;
-                        }
+                        rez.Add((ResidentialZone)tiels[j]);
                     }
                 }
-                
+                for (int j = 0; j < rez.Count; ++j)
+                {
+                    for (int k = 0; k < rez[i].GetPeoples(_state.citizens).Count; ++k)
+                    {
+
+                        rez[j].GetPeoples(_state.citizens)[k].Satisfaction = rez[j].GetPeoples(_state.citizens)[k].Satisfaction - 5;
+                        
+                    }
+                }
             }
         }
 
         private void policeEffect()
         {
             List<Tile> tiels = new List<Tile>();
-            for (int i = 0; i < _state.workPlaces.Count; ++i)
+            for (int i = 0; i < _state.size; ++i)
             {
-                if (_state.workPlaces[i].Item1 is PoliceStation)
+                for (int k = 0; k < _state.size; ++k)
                 {
-                    List<ResidentialZone> rez = new List<ResidentialZone>();
-                    int x = _state.workPlaces[i].Item2;
-                    int y = _state.workPlaces[i].Item3;
-                    tiels = getArea(5, x, y);
-                    for (int j = 0; j < tiels.Count; ++j)
+                    if (_state.gameBoard[i, k] is PoliceStation)
                     {
-                        if (tiels[j] is MaynotPersistence.ResidentialZone)
+                        List<ResidentialZone> rez = new List<ResidentialZone>();
+                        int x = i;
+                        int y = k;
+                        tiels = getArea(5, x, y);
+                        for (int j = 0; j < tiels.Count; ++j)
                         {
-                            rez.Add((ResidentialZone)tiels[j]);
+                            if (tiels[j] is MaynotPersistence.ResidentialZone)
+                            {
+                                rez.Add((ResidentialZone)tiels[j]);
+                            }
+                        }
+                        for (int j = 0; j < rez.Count; ++j)
+                        {
+                            for (int l = 0; l < rez[i].GetPeoples(_state.citizens).Count; ++l)
+                            {
+                                //rez[i].People[j].Satisfaction = rez[i].People[j].Satisfaction + 5;
+                                rez[j].GetPeoples(_state.citizens)[k].Satisfaction = rez[j].GetPeoples(_state.citizens)[k].Satisfaction + 5;
+                            }
                         }
                     }
-                    for (int j = 0; j < rez.Count; ++j)
-                    {
-                        for (int k = 0; k < rez[i].People.Count; ++k)
-                        {
-                            rez[i].People[j].Satisfaction = rez[i].People[j].Satisfaction + 5;
-                        }
-                    }
-                }
-
+                }             
             }
         }
 
         private void stadiumEffect()
         {
             List<Tile> tiels = new List<Tile>();
-            for (int i = 0; i < _state.workPlaces.Count; ++i)
+            for (int i = 0; i < _state.size; ++i)
             {
-                if (_state.workPlaces[i].Item1 is Stadium)
+                for (int k = 0; k < _state.size; ++k)
                 {
-                    List<Zone> rez = new List<Zone>();
-                    int x = _state.workPlaces[i].Item2;
-                    int y = _state.workPlaces[i].Item3;
-                    tiels = getArea(5, x, y);
-                    for (int j = 0; j < tiels.Count; ++j)
+                    if (_state.gameBoard[i, k] is Stadium)
                     {
-                        if (tiels[j] is Zone)
+                        List<ResidentialZone> rez = new List<ResidentialZone>();
+                        int x = i;
+                        int y = k;
+                        tiels = getArea(5, x, y);
+                        for (int j = 0; j < tiels.Count; ++j)
                         {
-                            rez.Add((Zone)tiels[j]);
+                            if (tiels[j] is MaynotPersistence.ResidentialZone)
+                            {
+                                rez.Add((ResidentialZone)tiels[j]);
+                            }
                         }
-                    }
-                    for (int j = 0; j < rez.Count; ++j)
-                    {
-                        for (int k = 0; k < rez[i].People.Count; ++k)
+                        for (int j = 0; j < rez.Count; ++j)
                         {
-                            rez[i].People[j].Satisfaction = rez[i].People[j].Satisfaction - 5;
+                            for (int l = 0; l < rez[i].GetPeoples(_state.citizens).Count; ++l)
+                            {
+                                //rez[i].People[j].Satisfaction = rez[i].People[j].Satisfaction + 5;
+                                rez[j].GetPeoples(_state.citizens)[k].Satisfaction = rez[j].GetPeoples(_state.citizens)[k].Satisfaction + 5;
+                            }
                         }
                     }
                 }
-
             }
         }
 
@@ -685,30 +690,33 @@ namespace MaynotModel
         private void forestEffect()
         {
             List<Tile> tiels = new List<Tile>();
-            for (int i = 0; i < _state.workPlaces.Count; ++i)
+            for (int i = 0; i < _state.size; ++i)
             {
-                if (_state.workPlaces[i].Item1 is Forest)
+                for (int k = 0; k < _state.size; ++k)
                 {
-                    List<ResidentialZone> rez = new List<ResidentialZone>();
-                    int x = _state.workPlaces[i].Item2;
-                    int y = _state.workPlaces[i].Item3;
-                    tiels = getArea(3, x, y);
-                    for (int j = 0; j < tiels.Count; ++j)
+                    if (_state.gameBoard[i, k] is Forest)
                     {
-                        if (tiels[j] is ResidentialZone)
+                        List<ResidentialZone> rez = new List<ResidentialZone>();
+                        int x = i;
+                        int y = k;
+                        tiels = getArea(5, x, y);
+                        for (int j = 0; j < tiels.Count; ++j)
                         {
-                            rez.Add((ResidentialZone)tiels[j]);
+                            if (tiels[j] is MaynotPersistence.ResidentialZone)
+                            {
+                                rez.Add((ResidentialZone)tiels[j]);
+                            }
                         }
-                    }
-                    for (int j = 0; j < rez.Count; ++j)
-                    {
-                        for (int k = 0; k < rez[i].People.Count; ++k)
+                        for (int j = 0; j < rez.Count; ++j)
                         {
-                            rez[i].People[j].Satisfaction = rez[i].People[j].Satisfaction - 5;
+                            for (int l = 0; l < rez[i].GetPeoples(_state.citizens).Count; ++l)
+                            {
+                                //rez[i].People[j].Satisfaction = rez[i].People[j].Satisfaction + 5;
+                                rez[j].GetPeoples(_state.citizens)[k].Satisfaction = rez[j].GetPeoples(_state.citizens)[k].Satisfaction + 5;
+                            }
                         }
                     }
                 }
-
             }
         }
 
