@@ -488,60 +488,36 @@ namespace MaynotPersistence
         }
         public int findClosestIndustrialZone(int i, int j)
         {
+            int value = 0;
             int circleSize = 4;
-            List<(int, int)> iZones = new List<(int, int)> ();
+            (int, int)[] direction = { (-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1), (0, -1), (-1, -1) };
 
-            for (int k = i - circleSize; k <= i + circleSize; k++)
+            int l = 0;
+            int x = i;
+            int y = j;
+            while (l < circleSize && !(gameBoard[x, y] is IndustrialZone))
             {
-                for (int l = j - circleSize; l <= j + circleSize; l++)
+                int k = 0;
+                while (k < direction.Length && !(gameBoard[x, y] is IndustrialZone))
                 {
-                    if (isValid(k, l) && gameBoard[k, l] is IndustrialZone)
-                    {
-                        iZones.Add((k, l));
-                    }
+                    x = i + direction[k].Item1 * l;
+                    y = j + direction[k].Item2 * l;
+                    k++;
                 }
+                l++;
             }
 
-            int minDistance = 0;
-            if(iZones.Count > 0)
+            if (gameBoard[x, y] is IndustrialZone)
             {
-                minDistance = (int)Math.Sqrt((iZones[0].Item1 - i) * (iZones[0].Item1 - i) + (iZones[0].Item2 - j) * (iZones[0].Item2 - j));
-                foreach ((int, int) Coord in iZones)
-                {
-                    int distance = (int)Math.Sqrt((Coord.Item1 - i) * (Coord.Item1 - i) + (Coord.Item2 - j) * (Coord.Item2 - j));
-                    if (distance < minDistance)
-                    {
-                        minDistance = distance;
-                    }
-                }
+                value = l;
             }
 
-            return minDistance;
-        }
-
-        public int countForests(int i, int j)
-        {
-            int circleSize = 3;
-            int counter = 0;
-
-            for (int k = i - circleSize; k <= i + circleSize; k++)
-            {
-                for (int l = j - circleSize; l <= j + circleSize; l++)
-                {
-                    if (isValid(k, l) && gameBoard[k, l] is Forest)
-                    {
-                        counter++;
-                    }
-                }
-            }
-
-            return counter;
+            return value;
         }
         public int calculateZoneAttractiveness(Person p)
         {
             int attractiveness = 100;
             attractiveness -= (int)calculateAverageSatisfaction();
-            attractiveness -= 2 * countForests(p.Residency.Item1, p.Residency.Item2);
             attractiveness += isDistance(p.Residency.Item1, p.Residency.Item2, p.WorkPlace.Item1, p.WorkPlace.Item2);
             attractiveness += (int)Math.Pow(4, findClosestIndustrialZone(p.Residency.Item1, p.Residency.Item2));
             return attractiveness;
