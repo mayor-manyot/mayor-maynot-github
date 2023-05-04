@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
+	  <GenerateErrorForMissingTargetingPacks>false</GenerateErrorForMissingTargetingPacks>
     <Nullable>enable</Nullable>
 
     <IsPackable>false</IsPackable>
