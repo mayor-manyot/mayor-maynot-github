@@ -367,10 +367,53 @@ namespace MaynotModel
                 _state.gameBoard[x, y] = new Empty();
         }
 
-        public bool destroyTile(Tile t)
+        public bool destroyTile(int x, int y)
         {
-            if (t is Tile)
+            Tile t = _state.gameBoard[x, y];
+            if (t is Road && x != _state.startX &&y != _state.startY)
             {
+                destroyRoad(x, y);
+                _state.expense -= Road.maintenanceFee;
+                _state.money += Road.buildCost / 2;
+                t = new Empty();
+                return true;
+            }
+            else if(t is Zone)
+            {
+                Zone z = (Zone)t;
+                if (z.GetPeoples(_state.citizens).Count == 0)
+                {
+                    t = new Empty();
+                    return true;
+                }
+                return false;
+            }
+            else if(t is PoliceStation)
+            {
+                _state.expense -= PoliceStation.maintenanceFee;
+                _state.money += PoliceStation.buildCost / 2;
+                t = new Empty();
+                return true;
+            }
+            else if (t is Stadium)
+            {
+                _state.expense -= Stadium.maintenanceFee;
+                _state.money += Stadium.buildCost / 2;
+                t = new Empty();
+                return true;
+            }
+            else if (t is University)
+            {
+                _state.expense -= University.maintenanceFee;
+                _state.money += University.buildCost / 2;
+                t = new Empty();
+                return true;
+            }
+            else if (t is School)
+            {
+                _state.expense -= School.maintenanceFee;
+                _state.money += School.buildCost / 2;
+                t = new Empty();
                 return true;
             }
             else
