@@ -162,8 +162,8 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <StackPanel>
-                    <TextBlock Grid.Row="0" Text="Adók" FontWeight="Bold" Padding="3"/>
+                <StackPanel Grid.Row="0">
+                    <TextBlock Text="Adók" FontWeight="Bold" Padding="3"/>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -211,7 +211,57 @@
                     </Grid>
                     <Separator></Separator>
                 </StackPanel>
-                <TextBlock Grid.Row="1"/>
+                
+                <!--tile info-->
+                <StackPanel Grid.Row="1">
+                    <TextBlock Text="Kijelölt zóna információi" FontWeight="Bold" Padding="3"/>
+                    <Grid Margin="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="11">Kapacitás:</TextBlock>
+                        <TextBlock Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" Text="{Binding InspectedZoneCapacity}"></TextBlock>
+                    </Grid>
+                    <Grid Margin="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="11">Telítettség:</TextBlock>
+                        <TextBlock Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" Text="{Binding InspectedZoneFullness}"></TextBlock>
+                    </Grid>
+                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="11" Margin="8,8,0,0">Emberek elégedettsége:</TextBlock>
+
+                    <ScrollViewer MinHeight="100" MaxHeight="100" Margin="8,5">
+                        <ItemsControl ItemsSource="{Binding SatisfactionsInInspectedZone}">
+
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Satisfaction}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+
+                        </ItemsControl>
+                    </ScrollViewer>
+                    <Grid Margin="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="11">Fejlettségi szint:</TextBlock>
+                        <TextBlock Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" Text="{Binding InspectedZoneLevel}"></TextBlock>
+                    </Grid>
+                    <!--TODO: style a gombnak-->
+                    <Button Content="Fejlesztés" Margin="3" Width="80" HorizontalAlignment="Right" Command="{Binding UpgradeInspectedZoneCommand}"/>
+                    <Separator></Separator>
+                </StackPanel>
             </Grid>
 
         </Grid>
