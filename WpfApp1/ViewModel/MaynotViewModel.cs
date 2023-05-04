@@ -403,7 +403,7 @@ namespace Maynot.WPF.ViewModel
             }
 
             OnPropertyChanged(nameof(Fields));
-            UpdateTable();
+            Application.Current.Dispatcher.Invoke(() => UpdateTable());
         }
 
         #region Properties
