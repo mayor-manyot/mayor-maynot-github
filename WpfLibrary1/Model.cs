@@ -63,6 +63,7 @@ namespace MaynotModel
                 }
             }
             _state.gameBoard[_state.startX, _state.startY] = new Road();
+            forestGenerator();
 
             _state.timer.Elapsed += Timer_Elapsed;
             _state.timer.Start();
@@ -80,6 +81,7 @@ namespace MaynotModel
             _state.time = _state.time.AddDays(1); // eltelik egy nap
             // naponta történõ eseményeknek nem kell ellenõrzés, a tick naponta van
             buildingEffects();
+            growForests();
 
             if ((int)_state.time.DayOfWeek == 1) // Hétfõ lett, eltelt egy új hét
             {
@@ -257,7 +259,9 @@ namespace MaynotModel
 
         public bool placeForest(int x, int y)
         {
-            Forest f = new Forest(_state.time);
+            Forest f = new Forest(_state.time, false);
+            _state.money -= Forest.BuildCost;
+            _state.expense += Forest.MaintenanceFee;
             return placeTile(f, x, y);
         }
 
@@ -734,6 +738,63 @@ namespace MaynotModel
             }
         }
 
+        private void growForests()
+        {
+            for (int i = 0; i < _state.size; ++i)
+            {
+                for (int k = 0; k < _state.size; ++k)
+                {
+                    if (_state.gameBoard[i, k] is Forest)
+                    {
+                        Forest? f = _state.gameBoard[i, k] as Forest;
+                        if (f != null && (f.PlantingDate - Time).TotalDays % 365 == 0 && f.Age < 10)
+                        {
+                            f.Age++;
+                            if(f.Age == 10 && !f.Generated)
+                            {
+                                _state.expense -= Forest.MaintenanceFee;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        private void forestGenerator()
+        {
+            Random _r = new Random();
+            int counter = _r.Next(5);
+            for (int i = 0; i < counter; i++)
+            {
+                int x;
+                int y;
+                do
+                {
+                    x = _r.Next(GameBoardSize);
+                    y = _r.Next(GameBoardSize);
+                } while (GameBoard[x, y] is not Empty);
 
+                GameBoard[x, y] = new Forest(Time, true);
+                int area = _r.Next(1, 10);
+                for (int k = x - area; k <= x + area; k++)
+                {
+                    for (int l = y - area; l <= y + area; l++)
+                    {
+                        if (_state.isValid(k, l) && GameBoard[k, l] is Empty)
+                        {
+                            int ap = _r.Next(area);
+                            double distance = Math.Sqrt((x - k) * (x - k) + (y - l) * (y - l));
+                            if (distance < area / 2)
+                            {
+                                GameBoard[k, l] = new Forest(Time, true);
+                            }
+                            else if(distance < ap)
+                            {
+                                GameBoard[k, l] = new Forest(Time, true);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
