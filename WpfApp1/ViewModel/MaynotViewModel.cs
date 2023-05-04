@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,6 +21,10 @@ namespace Maynot.WPF.ViewModel
     {
         private MaynotGameModel _model;
         public ObservableCollection<MaynotTile> Fields { get; set; }
+        public ObservableCollection<Person> SatisfactionsInInspectedZone { get; set; }
+        public String InspectedZoneCapacity { get; set; }
+        public String InspectedZoneFullness { get; set; }
+        public String InspectedZoneLevel { get; set; }
         public float Money { get { return _model.Money; } }
         public float ResidentalTax { get { return _model.ResidentalTax; } }
         public float ServiceTax { get { return _model.ServiceTax; } }
@@ -65,6 +70,7 @@ namespace Maynot.WPF.ViewModel
             _model.DayElapsed += new EventHandler<TimeElapsedEventArgs>(Day_Elapsed);
             _model.GameSpeedChanged += new EventHandler<EventArgs>(Speed_Changed);
             _model.UpdatePopulation += new EventHandler<EventArgs>(Population_Changed);
+            _model.InspectedTileChanged += new EventHandler<InspectedTileChangedEventArgs>(InspectedTile_Changed);
 
             // parancsok kezelése
             NewGameCommand = new DelegateCommand(param => OnNewGame());
@@ -84,8 +90,10 @@ namespace Maynot.WPF.ViewModel
             ClearCurrentlySelectedTileCommand = new DelegateCommand(param => OnClearCurrentlySelectedTile());
             OpenHelpPopupCommand = new DelegateCommand(param => OnOpenHelpPopupCommand());
             SelectBulldozerCommand = new DelegateCommand(param => OnSelectBulldozerCommand());
+            UpgradeInspectedZoneCommand = new DelegateCommand(param => OnUpgradeInspectedZone());
 
             Fields = new ObservableCollection<MaynotTile>();
+            SatisfactionsInInspectedZone = new ObservableCollection<Person>();
             FullyRefreshTable();
 
             RadioButtonCheckedCommand = new DelegateCommand(OnRadioButtonChecked);
@@ -110,9 +118,45 @@ namespace Maynot.WPF.ViewModel
         {
             OnPropertyChanged(nameof(Speed));
         }
+        private void InspectedTile_Changed(object sender, InspectedTileChangedEventArgs e)
+        {
+            App.Current.Dispatcher.Invoke((Action)delegate
+            {
+                SatisfactionsInInspectedZone.Clear();
+            });
+            if (e._tile is MaynotPersistence.Zone zone)
+            {
+                InspectedZoneCapacity = zone.Capacity.ToString();
+                InspectedZoneFullness = zone.PeopleIndexes.Count().ToString();
+                InspectedZoneLevel = ((int)zone.Level).ToString();
+                foreach (var person in zone.GetPeoples(_model.Citizens))
+                {
+                    App.Current.Dispatcher.Invoke((Action)delegate
+                    {
+                        SatisfactionsInInspectedZone.Add(new Person
+                        {
+                            Satisfaction = person.Satisfaction
+                        });
+                    });
+                    
+                }
+            }
+            else
+            {
+                InspectedZoneCapacity = InspectedZoneFullness = InspectedZoneLevel = String.Empty;
+                App.Current.Dispatcher.Invoke((Action)delegate
+                {
+                    SatisfactionsInInspectedZone.Clear();
+                });
+            }
+            OnPropertyChanged(nameof(InspectedZoneCapacity));
+            OnPropertyChanged(nameof(InspectedZoneFullness));
+            OnPropertyChanged(nameof(InspectedZoneLevel));
+        }
         private void Population_Changed(object sender, EventArgs e)
         {
             OnPropertyChanged(nameof(Population));
+            Debug.WriteLine($"Population Changed: {Population}");
         }
         private void Day_Elapsed(object sender, TimeElapsedEventArgs e)
         {
@@ -124,8 +168,12 @@ namespace Maynot.WPF.ViewModel
         }
         private void OnResidentalTaxNumericUp()
         {
-            _model.setResidentalTax(_model.ResidentalTax+1);
+            _model.setResidentalTax(_model.ResidentalTax + 1);
             OnPropertyChanged(nameof(ResidentalTax));
+        }
+        private void OnUpgradeInspectedZone()
+        {
+            _model.UpgradeInspectedZone();
         }
         private void OnResidentalTaxNumericDown()
         {
@@ -188,7 +236,7 @@ namespace Maynot.WPF.ViewModel
 
         private void OnClearCurrentlySelectedTile()
         {
-            SelectedTile = new Bulldozer();
+            SelectedTile = null;
         }
 
         //TODO
@@ -320,8 +368,11 @@ namespace Maynot.WPF.ViewModel
                 _model.destroyRoad(tile.X, tile.Y);
                 //_model.DestroyTile(tile.x, tile.Y);
             }
+            else if (SelectedTile is null)
+            {
+                _model.InspectZone(tile.X, tile.Y);
+            }
             MaynotTile modelbolTile = GetTileAtCoordinatesFromModel(tile.X, tile.Y);
-
             int fieldMeret = (int) (Math.Sqrt(Fields.Count));
             //Fields[tile.X * fieldMeret + tile.Y] = modelbolTile; // Itt nagyon gagyin felülírjuk a Fields listában lévő MaynotTile-t a mi tile-unkra
             //OnPropertyChanged(nameof(Fields));
@@ -444,7 +495,8 @@ namespace Maynot.WPF.ViewModel
         public DelegateCommand ClearCurrentlySelectedTileCommand { get; private set; }
         public DelegateCommand OpenHelpPopupCommand { get; private set; }
         public DelegateCommand SelectBulldozerCommand { get; private set; }
-        
+        public DelegateCommand UpgradeInspectedZoneCommand { get; private set; }
+
 
 
 
