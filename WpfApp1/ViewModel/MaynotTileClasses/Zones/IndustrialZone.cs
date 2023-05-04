@@ -13,7 +13,7 @@ namespace Maynot.WPF.ViewModel
         public IndustrialZone() : this(100, 0) { }
         public IndustrialZone(int capacity, int currentPopulation) : base(capacity, currentPopulation) 
         {
-            SpriteImage = new BitmapImage(new Uri("/Assets/industrialZone.png", UriKind.Relative));
+            SpriteImage = new BitmapImage(new Uri("/Assets/industrialZoneLevel0.png", UriKind.Relative));
         }
     }
 }
