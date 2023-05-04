@@ -13,7 +13,7 @@ namespace Maynot.WPF.ViewModel
         public ServiceZone() : this(100, 0) { }
         public ServiceZone(int capacity, int currentPopulation) : base(capacity, currentPopulation) 
         {
-            SpriteImage = new BitmapImage(new Uri("/Assets/serviceZone.png", UriKind.Relative));
+            SpriteImage = new BitmapImage(new Uri("/Assets/serviceZoneLevel0.png", UriKind.Relative));
         }
     }
 }
