@@ -85,11 +85,13 @@ namespace MaynotModel
             {
                 await Task.Run(() => movingIn());
                 // minden hetente elõforduló esemény meghívása itt
+                
             }
 
             if (_state.time.Day == 1) // minden hó elsején
             {
                 // havonta meghívandó események metódusai
+                catastrophe();
             }
 
             if (_state.time.Month == 1 && _state.time.Day == 1) // minden év eslõ napja
@@ -384,6 +386,18 @@ namespace MaynotModel
                 x = happens.Next(0, 30);
                 y = happens.Next(0, 30);
                 _state.gameBoard[x, y] = new Empty();
+                List<Tile> tiles = new List<Tile>();
+                tiles = getArea(5,x,x);
+
+               // _state.gameBoard[x + 1, y] = new PoliceStation();
+
+                for (int i = 0; i < tiles.Count; ++i)
+                {
+                    tiles[i] = new Empty();
+                }
+               // _state.gameBoard[x + 1, y] = new Stadium();
+
+               /* _state.gameBoard[x, y] = new Empty();
                 int xdif;
                 xdif = 30 - x;
                 int ydif;
@@ -425,7 +439,7 @@ namespace MaynotModel
                         _state.gameBoard[x + i, y + j] = new Empty();
                     }
                 }
-                
+                */
 
                 catastropheHappened?.Invoke(this, new MaynotEventArg(x, y));
             }
@@ -613,7 +627,7 @@ namespace MaynotModel
                     for (int k = 0; k < rez[i].GetPeoples(_state.citizens).Count; ++k)
                     {
 
-                        rez[j].GetPeoples(_state.citizens)[k].Satisfaction = rez[j].GetPeoples(_state.citizens)[k].Satisfaction - 5;
+                        rez[j].GetPeoples(_state.citizens)[k].Satisfaction -= 5;
                         
                     }
                 }
@@ -645,7 +659,7 @@ namespace MaynotModel
                             for (int l = 0; l < rez[i].GetPeoples(_state.citizens).Count; ++l)
                             {
                                 //rez[i].People[j].Satisfaction = rez[i].People[j].Satisfaction + 5;
-                                rez[j].GetPeoples(_state.citizens)[k].Satisfaction = rez[j].GetPeoples(_state.citizens)[k].Satisfaction + 5;
+                                rez[j].GetPeoples(_state.citizens)[k].Satisfaction += 5;
                             }
                         }
                     }
@@ -678,7 +692,7 @@ namespace MaynotModel
                             for (int l = 0; l < rez[i].GetPeoples(_state.citizens).Count; ++l)
                             {
                                 //rez[i].People[j].Satisfaction = rez[i].People[j].Satisfaction + 5;
-                                rez[j].GetPeoples(_state.citizens)[k].Satisfaction = rez[j].GetPeoples(_state.citizens)[k].Satisfaction + 5;
+                                rez[j].GetPeoples(_state.citizens)[k].Satisfaction += 5;
                             }
                         }
                     }
@@ -712,7 +726,7 @@ namespace MaynotModel
                             for (int l = 0; l < rez[i].GetPeoples(_state.citizens).Count; ++l)
                             {
                                 //rez[i].People[j].Satisfaction = rez[i].People[j].Satisfaction + 5;
-                                rez[j].GetPeoples(_state.citizens)[k].Satisfaction = rez[j].GetPeoples(_state.citizens)[k].Satisfaction + 5;
+                                rez[j].GetPeoples(_state.citizens)[k].Satisfaction += 5;
                             }
                         }
                     }
