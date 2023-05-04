@@ -394,7 +394,7 @@ namespace MaynotModel
                 List<Tile> tiles = new List<Tile>();
                 //tiles = getArea(5,x,y);
 
-                _state.gameBoard[x + 1, y] = new PoliceStation();
+                //_state.gameBoard[x + 1, y] = new PoliceStation();
 
                 int xflagP = 0;
                 int xflagM = 0;
@@ -502,13 +502,7 @@ namespace MaynotModel
                     }
                 }
 
-
-                /* tiles[0].
-                 for (int i = 0; i < tiles.Count; ++i)
-                 {
-                     tiles[i] = new Empty();
-                 }*/
-                _state.gameBoard[x + 1, y] = new Stadium();
+               // _state.gameBoard[x + 1, y] = new Stadium();
 
 
 
@@ -727,7 +721,7 @@ namespace MaynotModel
                         }
                         for (int j = 0; j < rez.Count; ++j)
                         {
-                            for (int l = 0; l < rez[i].GetPeoples(_state.citizens).Count; ++l)
+                            for (int l = 0; l < rez[j].GetPeoples(_state.citizens).Count; ++l)
                             {
                                 //rez[i].People[j].Satisfaction = rez[i].People[j].Satisfaction + 5;
                                 rez[j].GetPeoples(_state.citizens)[k].Satisfaction += 5;
@@ -760,7 +754,7 @@ namespace MaynotModel
                         }
                         for (int j = 0; j < rez.Count; ++j)
                         {
-                            for (int l = 0; l < rez[i].GetPeoples(_state.citizens).Count; ++l)
+                            for (int l = 0; l < rez[j].GetPeoples(_state.citizens).Count; ++l)
                             {
                                 //rez[i].People[j].Satisfaction = rez[i].People[j].Satisfaction + 5;
                                 rez[j].GetPeoples(_state.citizens)[k].Satisfaction += 5;
@@ -794,7 +788,7 @@ namespace MaynotModel
                         }
                         for (int j = 0; j < rez.Count; ++j)
                         {
-                            for (int l = 0; l < rez[i].GetPeoples(_state.citizens).Count; ++l)
+                            for (int l = 0; l < rez[j].GetPeoples(_state.citizens).Count; ++l)
                             {
                                 //rez[i].People[j].Satisfaction = rez[i].People[j].Satisfaction + 5;
                                 rez[j].GetPeoples(_state.citizens)[k].Satisfaction += 5;
