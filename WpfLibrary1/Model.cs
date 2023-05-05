@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using MaynotPersistence;
@@ -103,6 +104,7 @@ namespace MaynotModel
             {
                 _state.money = _state.money - _state.expense;
                 taxCollection();
+                managingPension();
             }
 
             OnTimeElapsed(); // új nap dátuma elküldése ViewModelnek a kinézetre
@@ -152,9 +154,32 @@ namespace MaynotModel
                 if(_state.citizens.Count < 500)
                 {
                     _state.guaranteedPopulation = false;
+                  
                 }
             }
         }
+
+        public void managingPension()
+        {
+            int currAge = 0;
+            for (int i = 0; i < Citizens.Count; ++i)
+            {
+                currAge = Citizens[i].Age;
+                if (20 > 60 - currAge && 60 - currAge > 0)
+                {
+                    Citizens[i].Taxes[60 - currAge] = _state._residentalTax;
+
+                }
+            }
+            for (int i = 0; i < Citizens.Count; ++i)
+            {
+                if (Citizens[i].Age > 60)
+                {
+                    _state.money = _state.money - Citizens[i].Taxes.Average();
+                }
+            }
+        }
+
 
         public void stopTime()
         {
