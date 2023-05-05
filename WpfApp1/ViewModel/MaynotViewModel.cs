@@ -27,7 +27,7 @@ namespace Maynot.WPF.ViewModel
         public String Date { get; set; }
         public float Speed { get { return _model.Speed; } }
         public int Population { get { return _model.Population; } }
-        public float Satisfaction { get { return _model.Population; } }
+        public double Satisfaction { get { return _model.AverageSatisfaction; } }
 
         private MaynotTile? _selectedTile;
 
