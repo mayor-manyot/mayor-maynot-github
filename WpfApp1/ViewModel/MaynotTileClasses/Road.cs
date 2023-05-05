@@ -20,6 +20,7 @@ namespace Maynot.WPF.ViewModel
         public Int32 BuildCost { get { return _buildCost; } set { _buildCost = value; } }
 
         public override string DisplayName { get; } = "Út";
+        public override int PriceToBuild { get; } = MaynotPersistence.Road.buildCost;
         public override SolidColorBrush Background { get; } = new SolidColorBrush(Colors.SlateGray);
         public Road() : this(5000) { }
         public Road(int buildCost)

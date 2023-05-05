@@ -37,6 +37,7 @@ namespace Maynot.WPF.ViewModel
             }
         }
         public virtual string DisplayName { get; } // statikusan felülírja az összes gyerekosztáj
+        public virtual int PriceToBuild { get; } = 0;
         public string Name {
             get { return _name; }
             set

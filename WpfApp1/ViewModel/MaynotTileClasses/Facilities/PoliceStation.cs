@@ -12,8 +12,9 @@ namespace Maynot.WPF.ViewModel
     {
         public override string DisplayName { get; } = "Rendőrség";
         public override SolidColorBrush Background { get; } = new SolidColorBrush(Colors.Blue);
-        public PoliceStation() : this(100, 0, 5000) { }
-        public PoliceStation(int capacity, int currentPopulation, int buildCost) : base(capacity, currentPopulation, buildCost) 
+        public override int PriceToBuild { get; } = MaynotPersistence.PoliceStation.buildCost;
+        public PoliceStation() : this(100, 0) { }
+        public PoliceStation(int capacity, int currentPopulation) : base(capacity, currentPopulation, 100) 
         {
             SpriteImage = new BitmapImage(new Uri("/Assets/policeStation.png", UriKind.Relative));
         }

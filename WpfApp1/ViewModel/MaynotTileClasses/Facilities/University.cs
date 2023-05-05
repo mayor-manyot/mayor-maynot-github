@@ -12,6 +12,7 @@ namespace Maynot.WPF.ViewModel
     {
         public override string DisplayName { get; } = "Egyetem";
         public override SolidColorBrush Background { get; } = new SolidColorBrush(Colors.Purple);
+        public override int PriceToBuild { get; } = MaynotPersistence.University.buildCost;
         public University() : this(100, 0, 5000) { }
         public University(int capacity, int currentPopulation, int buildCost) : base(capacity, currentPopulation, buildCost)
         {

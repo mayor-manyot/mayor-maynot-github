@@ -16,6 +16,7 @@ namespace Maynot.WPF.ViewModel
         public Int32 BuildCost { get { return _buildCost; } set { _buildCost = value; } }
         public override string DisplayName { get; } = "Erdő";
         public override SolidColorBrush Background { get; } = new SolidColorBrush(Colors.ForestGreen);
+        public override int PriceToBuild { get; } = MaynotPersistence.Forest.BuildCost;
         public Forest() : this(0, 5000) { }
         public Forest(int age, int buildCost)
         {

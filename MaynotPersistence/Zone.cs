@@ -45,7 +45,7 @@ namespace MaynotPersistence
             List<Person> zoneCitizens = new List<Person>();
             foreach (int index in PeopleIndexes)
             {
-                Debug.WriteLine(citizens[index].Satisfaction);
+                //Debug.WriteLine(citizens[index].Satisfaction);
                 zoneCitizens.Add(citizens[index]);
             }
             return zoneCitizens;
