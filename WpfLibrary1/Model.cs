@@ -429,8 +429,7 @@ namespace MaynotModel
         {
             Random happens = new Random();
             int chance = happens.Next(0, 100);
-            if (chance != 
-                0)
+            if (chance == 0)
             {
                 int x;
                 int y;
