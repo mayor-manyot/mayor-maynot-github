@@ -21,6 +21,7 @@ namespace Maynot.WPF.ViewModel
     class MaynotViewModel : ViewModelBase
     {
         private MaynotGameModel _model;
+        private bool currentlyAnimating = false;
         public ObservableCollection<MaynotTile> Fields { get; set; }
         public ObservableCollection<Person> SatisfactionsInInspectedZone { get; set; }
         public String InspectedZoneCapacity { get; set; }
@@ -283,6 +284,10 @@ namespace Maynot.WPF.ViewModel
 
         private void UpdateTableLocal()
         {
+            if (currentlyAnimating) // Éppen animálja a robbanást (katasztrofa)
+            {
+                return;
+            }
             int numOfRoads = 0;
             for (int i = 0; i < Fields.Count; i++) // Előszőr friss állapotra hozzuk a mi Fields-ünket a Model tábla alapján
             {
@@ -472,9 +477,9 @@ namespace Maynot.WPF.ViewModel
             }
 
             OnPropertyChanged(nameof(Fields));
-
+            currentlyAnimating = true;
             await Task.Delay(3300); // Várunk aztán eltüntetjü a Flame overlayt
-
+            currentlyAnimating = false;
             foreach (MaynotTile tile in affectedTiles)
             {
                 tile.IsFlameVisible = Visibility.Hidden;
