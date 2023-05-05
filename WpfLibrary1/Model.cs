@@ -86,6 +86,8 @@ namespace MaynotModel
             buildingEffects();
             growForests();
             OnInspectedTileChanged();
+            CalculateAverageSatisfaction();
+
 
             if ((int)_state.time.DayOfWeek == 1) // Hétfõ lett, eltelt egy új hét
             {
@@ -180,6 +182,23 @@ namespace MaynotModel
             }
         }
 
+        private void CalculateAverageSatisfaction()
+        {
+            int sum = 0;
+            for (int i = 0; i < _state.citizens.Count; ++i)
+            {
+                sum += _state.citizens[i].Satisfaction;
+            }
+            if (_state.citizens.Count != 0)
+            {
+                _state._averageSatisfaction = sum / _state.citizens.Count;
+            }
+            else
+            {
+                _state._averageSatisfaction = 0;
+            }
+
+        }
 
         public void stopTime()
         {
