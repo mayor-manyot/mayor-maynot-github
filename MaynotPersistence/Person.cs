@@ -13,12 +13,15 @@ namespace MaynotPersistence
         public (int, int) Residency { get; set; }
         public (int, int) WorkPlace { get; set; }
         public Level Education { get; set; }
+        public float[] Taxes { get; set; }
+
         public Person(int satisfaction,
             int age,
             (int, int) residency,
             (int, int) workPlace,
             Level education)
         {
+            Taxes = new float[20];
             Satisfaction = satisfaction;
             Age = age;
             Residency = residency;
