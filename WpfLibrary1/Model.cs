@@ -443,59 +443,119 @@ namespace MaynotModel
                 y = happens.Next(0, 30);
                 _state.gameBoard[x, y] = new Empty();
                 List<Tile> tiles = new List<Tile>();
-                tiles = getArea(5,x,x);
+                //tiles = getArea(5,x,y);
 
-               // _state.gameBoard[x + 1, y] = new PoliceStation();
+                //_state.gameBoard[x + 1, y] = new PoliceStation();
 
-                for (int i = 0; i < tiles.Count; ++i)
+                int xflagP = 0;
+                int xflagM = 0;
+                if (30 - x < 5)
                 {
-                    tiles[i] = new Empty();
+                    for (int k = 0; k < 30 - x; ++k)
+                    {
+                        _state.gameBoard[x + k, y] = new Empty();
+                        ++xflagP;
+                    }
                 }
+                else
+                {
+                    for (int k = 0; k < 5; ++k)
+                    {
+                        _state.gameBoard[x + k, y] = new Empty();
+                    }
+                    xflagP = 5;
+                }
+                if (x - 5 < 0)
+                {
+                    for (int k = 0; k < x; ++k)
+                    {
+                        _state.gameBoard[x - k, y] = new Empty();
+                        ++xflagM;
+                    }
+                }
+                else
+                {
+                    for (int k = 0; k < 5; ++k)
+                    {
+                        _state.gameBoard[x - k, y] = new Empty();
+                    }
+                    xflagM = 5;
+                }
+
+                int yflagP = 0;
+                int yflagM = 0;
+                if (30 - y < 5)
+                {
+                    for (int k = 0; k < 30 - y; ++k)
+                    {
+                        _state.gameBoard[x, y + k] = new Empty();
+                        ++yflagP;
+                    }
+                }
+                else
+                {
+                    for (int k = 0; k < 5; ++k)
+                    {
+                        _state.gameBoard[x, y + k] = new Empty();
+                    }
+                    yflagP = 5;
+                }
+                if (y - 5 < 0)
+                {
+                    for (int k = 0; k < y; ++k)
+                    {
+                        _state.gameBoard[x, y - k] = new Empty();
+                        ++yflagM;
+                    }
+                }
+                else
+                {
+                    for (int k = 0; k < 5; ++k)
+                    {
+                        _state.gameBoard[x, y - k] = new Empty();
+                    }
+                    yflagM = 5;
+                }
+
+                //1:
+                for (int k = 0; k < xflagP; ++k)
+                {
+                    for (int l = 0; l < yflagP; ++l)
+                    {
+                        _state.gameBoard[k, l] = new Empty();
+                    }
+                }
+
+                //4:
+                for (int k = 0; k < xflagP; ++k)
+                {
+                    for (int l = 0; l < yflagM; ++l)
+                    {
+                        _state.gameBoard[k, l] = new Empty();
+                    }
+                }
+
+                //2:
+                for (int k = 0; k < xflagM; ++k)
+                {
+                    for (int l = 0; l < yflagP; ++l)
+                    {
+                        _state.gameBoard[k, l] = new Empty();
+                    }
+                }
+
+                //3:
+                for (int k = 0; k < xflagM; ++k)
+                {
+                    for (int l = 0; l < yflagM; ++l)
+                    {
+                        _state.gameBoard[k, l] = new Empty();
+                    }
+                }
+
                // _state.gameBoard[x + 1, y] = new Stadium();
 
-               /* _state.gameBoard[x, y] = new Empty();
-                int xdif;
-                xdif = 30 - x;
-                int ydif;
-                ydif = 30 - y;
-                int xflag = 0;
-                for (int i = 0; i < xdif;  ++i)
-                {
-                    xflag++;
-                    
-                    if (xflag == 5)
-                    {
-                        break;
-                    }
-                    _state.gameBoard[x - i, y] = new Empty();
-                }
-                if (xflag < xdif)
-                {
-                    xflag = xdif;
-                }
 
-                int yflag = 0;
-                for (int i = 0; i < ydif; ++i)
-                {
-                    yflag++;                 
-                    if (yflag == 5)
-                    {
-                        break;
-                    }
-                    _state.gameBoard[x, y - i] = new Empty();
-                }
-                if (yflag < ydif)
-                {
-                    yflag = ydif;
-                }
-                for (int j = -yflag; j < yflag; ++j)
-                {
-                    for (int i = -xflag; i < xflag; ++i)
-                    {
-                        _state.gameBoard[x + i, y + j] = new Empty();
-                    }
-                }
-                */
 
                 catastropheHappened?.Invoke(this, new MaynotEventArg(x, y));
             }
@@ -586,7 +646,7 @@ namespace MaynotModel
 
             if (30 - x < 5)
             {
-                for (int k = 5; k < 30 - x; ++k)
+                for (int k = 0; k < 30 - x; ++k)
                 {
                     tiels.Add(_state.gameBoard[x + k, y]);
                     ++xflagP;
@@ -594,7 +654,7 @@ namespace MaynotModel
             }
             else
             {
-                for (int k = 5; k < 5; ++k)
+                for (int k = 0; k < 5; ++k)
                 {
                     tiels.Add(_state.gameBoard[x + k, y]);
                 }
@@ -602,7 +662,7 @@ namespace MaynotModel
             }
             if (x - 5 < 0)
             {
-                for (int k = 5; k < x; ++k)
+                for (int k = 0; k < x; ++k)
                 {
                     tiels.Add(_state.gameBoard[x - k, y]);
                     ++xflagM;
@@ -610,7 +670,7 @@ namespace MaynotModel
             }
             else
             {
-                for (int k = 5; k < 5; ++k)
+                for (int k = 0; k < 5; ++k)
                 {
                     tiels.Add(_state.gameBoard[x - k, y]);
                 }
@@ -621,7 +681,7 @@ namespace MaynotModel
             int yflagM = 0;
             if (30 - y < 5)
             {
-                for (int k = 5; k < 30 - y; ++k)
+                for (int k = 0; k < 30 - y; ++k)
                 {
                     tiels.Add(_state.gameBoard[x, y + k]);
                     ++yflagP;
@@ -629,7 +689,7 @@ namespace MaynotModel
             }
             else
             {
-                for (int k = 5; k < 5; ++k)
+                for (int k = 0; k < 5; ++k)
                 {
                     tiels.Add(_state.gameBoard[x, y + k]);
                 }
@@ -637,7 +697,7 @@ namespace MaynotModel
             }
             if (y - 5 < 0)
             {
-                for (int k = 5; k < y; ++k)
+                for (int k = 0; k < y; ++k)
                 {
                     tiels.Add(_state.gameBoard[x, y - k]);
                     ++yflagM;
@@ -645,7 +705,7 @@ namespace MaynotModel
             }
             else
             {
-                for (int k = 5; k < 5; ++k)
+                for (int k = 0; k < 5; ++k)
                 {
                     tiels.Add(_state.gameBoard[x, y - k]);
                 }
@@ -657,7 +717,7 @@ namespace MaynotModel
             {
                 for (int l = 0; l < yflagP; ++l)
                 {
-                    tiels.Add(_state.gameBoard[x, y]);
+                    tiels.Add(_state.gameBoard[k, l]);
                 }
             }
 
@@ -666,7 +726,7 @@ namespace MaynotModel
             {
                 for (int l = 0; l < yflagM; ++l)
                 {
-                    tiels.Add(_state.gameBoard[x, y]);
+                    tiels.Add(_state.gameBoard[k, l]);
                 }
             }
 
@@ -675,7 +735,7 @@ namespace MaynotModel
             {
                 for (int l = 0; l < yflagP; ++l)
                 {
-                    tiels.Add(_state.gameBoard[x, y]);
+                    tiels.Add(_state.gameBoard[k, l]);
                 }
             }
 
@@ -684,7 +744,7 @@ namespace MaynotModel
             {
                 for (int l = 0; l < yflagM; ++l)
                 {
-                    tiels.Add(_state.gameBoard[x, y]);
+                    tiels.Add(_state.gameBoard[k, l]);
                 }
             }
 
@@ -742,7 +802,7 @@ namespace MaynotModel
                         }
                         for (int j = 0; j < rez.Count; ++j)
                         {
-                            for (int l = 0; l < rez[i].GetPeoples(_state.citizens).Count; ++l)
+                            for (int l = 0; l < rez[j].GetPeoples(_state.citizens).Count; ++l)
                             {
                                 //rez[i].People[j].Satisfaction = rez[i].People[j].Satisfaction + 5;
                                 rez[j].GetPeoples(_state.citizens)[k].Satisfaction += 5;
@@ -775,7 +835,7 @@ namespace MaynotModel
                         }
                         for (int j = 0; j < rez.Count; ++j)
                         {
-                            for (int l = 0; l < rez[i].GetPeoples(_state.citizens).Count; ++l)
+                            for (int l = 0; l < rez[j].GetPeoples(_state.citizens).Count; ++l)
                             {
                                 //rez[i].People[j].Satisfaction = rez[i].People[j].Satisfaction + 5;
                                 rez[j].GetPeoples(_state.citizens)[k].Satisfaction += 5;
@@ -809,7 +869,7 @@ namespace MaynotModel
                         }
                         for (int j = 0; j < rez.Count; ++j)
                         {
-                            for (int l = 0; l < rez[i].GetPeoples(_state.citizens).Count; ++l)
+                            for (int l = 0; l < rez[j].GetPeoples(_state.citizens).Count; ++l)
                             {
                                 //rez[i].People[j].Satisfaction = rez[i].People[j].Satisfaction + 5;
                                 rez[j].GetPeoples(_state.citizens)[k].Satisfaction += 5;
