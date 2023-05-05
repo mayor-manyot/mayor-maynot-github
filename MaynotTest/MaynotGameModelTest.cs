@@ -39,7 +39,7 @@ namespace MaynotTest
 
         }
         [Test]
-        public void NewGamePopulationIsZerotest()
+        public void NewGamePopulationIsZeroTest()
         {
             _model.newGame();
             Assert.AreEqual(0, _model.Population);
