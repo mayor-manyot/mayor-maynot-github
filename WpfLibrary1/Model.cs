@@ -1,4 +1,4 @@
-using System;
+Ôªøusing System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -56,7 +56,7 @@ namespace MaynotModel
             _state._industrialTax = 95;
             _state.startX = GameBoardSize / 2 - 1;
             _state.startY = 0;
-            //azt van haszn·lva a lehelyezÈsnÈl
+            //azt van haszn√°lva a lehelyez√©sn√©l
             for (int i = 0; i < 30; i++)
             {
                 for (int j = 0; j < 30; j++)
@@ -81,31 +81,31 @@ namespace MaynotModel
         private async void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
             _state.time = _state.time.AddDays(1); // eltelik egy nap
-            // naponta tˆrtÈnı esemÈnyeknek nem kell ellenırzÈs, a tick naponta van
+            // naponta t√∂rt√©n√µ esem√©nyeknek nem kell ellen√µrz√©s, a tick naponta van
             buildingEffects();
             growForests();
             OnInspectedTileChanged();
 
-            if ((int)_state.time.DayOfWeek == 1) // HÈtfı lett, eltelt egy ˙j hÈt
+            if ((int)_state.time.DayOfWeek == 1) // H√©tf√µ lett, eltelt egy √∫j h√©t
             {
                 await Task.Run(() => movingIn());
-                // minden hetente elıfordulÛ esemÈny meghÌv·sa itt
+                // minden hetente el√µfordul√≥ esem√©ny megh√≠v√°sa itt
                 
             }
 
-            if (_state.time.Day == 1) // minden hÛ elsejÈn
+            if (_state.time.Day == 1) // minden h√≥ elsej√©n
             {
-                // havonta meghÌvandÛ esemÈnyek metÛdusai
+                // havonta megh√≠vand√≥ esem√©nyek met√≥dusai
                 catastrophe();
             }
 
-            if (_state.time.Month == 1 && _state.time.Day == 1) // minden Èv eslı napja
+            if (_state.time.Month == 1 && _state.time.Day == 1) // minden √©v esl√µ napja
             {
                 _state.money = _state.money - _state.expense;
                 taxCollection();
             }
 
-            OnTimeElapsed(); // ˙j nap d·tuma elk¸ldÈse ViewModelnek a kinÈzetre
+            OnTimeElapsed(); // √∫j nap d√°tuma elk√ºld√©se ViewModelnek a kin√©zetre
         }
 
         private async Task movingIn()
@@ -364,59 +364,65 @@ namespace MaynotModel
             return "";
         }
 
-        public void destroyRoad(int x, int y)
+        private void destroyRoad(int x, int y)
         {
             if (_state.gameBoard[x, y] is Road && _state.canDestroyRoad(x, y))
                 _state.gameBoard[x, y] = new Empty();
         }
 
-        public bool destroyTile(int x, int y)
+        public bool DestroyTile(int x, int y)
         {
-            Tile t = _state.gameBoard[x, y];
-            if (t is Road && x != _state.startX &&y != _state.startY)
+            Tile tile = _state.gameBoard[x, y];
+            if (tile is Road && x != _state.startX &&y != _state.startY)
             {
                 destroyRoad(x, y);
                 _state.expense -= Road.maintenanceFee;
                 _state.money += Road.buildCost / 2;
-                t = new Empty();
+                _state.gameBoard[x, y] = new Empty();
                 return true;
             }
-            else if(t is Zone)
+            else if(tile is Zone zone)
             {
-                Zone z = (Zone)t;
-                if (z.GetPeoples(_state.citizens).Count == 0)
+                if (zone.GetPeoples(_state.citizens).Count == 0)
                 {
-                    t = new Empty();
+                    _state.gameBoard[x, y] = new Empty();
                     return true;
                 }
                 return false;
             }
-            else if(t is PoliceStation)
+            else if(tile is PoliceStation)
             {
                 _state.expense -= PoliceStation.maintenanceFee;
                 _state.money += PoliceStation.buildCost / 2;
-                t = new Empty();
+                _state.gameBoard[x, y] = new Empty();
                 return true;
             }
-            else if (t is Stadium)
+            else if (tile is Stadium)
             {
                 _state.expense -= Stadium.maintenanceFee;
                 _state.money += Stadium.buildCost / 2;
-                t = new Empty();
+                _state.gameBoard[x, y] = new Empty(); //A nagyobb cuccokn√°l ez nem ennyire egyszer≈±
                 return true;
             }
-            else if (t is University)
+            else if (tile is University)
             {
                 _state.expense -= University.maintenanceFee;
                 _state.money += University.buildCost / 2;
-                t = new Empty();
+                _state.gameBoard[x, y] = new Empty();
                 return true;
             }
-            else if (t is School)
+            else if (tile is School)
             {
                 _state.expense -= School.maintenanceFee;
                 _state.money += School.buildCost / 2;
-                t = new Empty();
+                _state.gameBoard[x, y] = new Empty();
+                return true;
+            }
+            else if (tile is Forest)
+            {
+                _state.expense -= Forest.MaintenanceFee;
+                _state.money += Forest.BuildCost / 2;
+                _state.gameBoard[x, y] = new Empty();
                 return true;
             }
             else
@@ -548,6 +554,15 @@ namespace MaynotModel
                 _state.money -= zone.UpgradeCost;
                 OnInspectedTileChanged();
             }
+        }
+
+        public int GetStartRoadX()
+        {
+            return _state.startX;
+        }
+        public int GetStartRoadY()
+        {
+            return _state.startY;
         }
 
         private void OnInspectedTileChanged()

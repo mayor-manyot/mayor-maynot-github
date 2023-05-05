@@ -11,7 +11,7 @@ namespace MaynotPersistence
         /// <summary>
         /// az erdők építési költsége
         /// </summary>
-        public static Int32 BuildCost { get; set; } = 6759;
+        public static Int32 BuildCost { get; set; } = 1000;
         public static Int32 MaintenanceFee { get; set; } = 3759;
         public Int32 Age { get; set; } = 0;
         public DateTime PlantingDate { get; }       

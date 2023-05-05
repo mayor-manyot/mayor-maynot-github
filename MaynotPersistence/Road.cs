@@ -11,7 +11,7 @@ namespace MaynotPersistence
         /// <summary>
         /// utak építési költsége
         /// </summary>
-        public static Int32 buildCost;
+        public static Int32 buildCost = 500;
 
         /// <summary>
         /// utak fentarási költsége

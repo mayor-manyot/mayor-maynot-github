@@ -19,7 +19,7 @@ namespace MaynotPersistence
         /// <summary>
         /// épitési költésg a rendőrségeknek
         /// </summary>
-        public static Int32 buildCost;
+        public static Int32 buildCost = 8000;
 
         /// <summary>
         /// fenntartási költség a rendőrségeknek
@@ -39,7 +39,7 @@ namespace MaynotPersistence
         /// <summary>
         /// épitési költésg a stadionoknak
         /// </summary>
-        public static Int32 buildCost;
+        public static Int32 buildCost = 10000;
 
         /// <summary>
         /// fenntartási költség a stadionoknak
@@ -55,7 +55,7 @@ namespace MaynotPersistence
         /// <summary>
         /// épitési költésg az iskoláknak
         /// </summary>
-        public static Int32 buildCost;
+        public static Int32 buildCost = 6500;
 
         /// <summary>
         /// fenntartási költség az iskoláknak
@@ -76,7 +76,7 @@ namespace MaynotPersistence
         /// <summary>
         /// épitési költésg az egyetemeknek
         /// </summary>
-        public static Int32 buildCost;
+        public static Int32 buildCost = 7500;
 
         /// <summary>
         /// fenntartási költség az egyetemeknek

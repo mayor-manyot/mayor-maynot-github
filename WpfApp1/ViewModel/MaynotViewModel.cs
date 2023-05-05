@@ -14,6 +14,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using MaynotModel;
 using MaynotPersistence;
+using static Maynot.WPF.ViewModel.Zone;
 
 namespace Maynot.WPF.ViewModel
 {
@@ -156,6 +157,7 @@ namespace Maynot.WPF.ViewModel
         private void Population_Changed(object sender, EventArgs e)
         {
             OnPropertyChanged(nameof(Population));
+            UpdateTable();
             Debug.WriteLine($"Population Changed: {Population}");
         }
         private void Day_Elapsed(object sender, TimeElapsedEventArgs e)
@@ -276,13 +278,18 @@ namespace Maynot.WPF.ViewModel
 
         private void UpdateTable()
         {
+            Application.Current.Dispatcher.Invoke(() => UpdateTableLocal());
+        }
+
+        private void UpdateTableLocal()
+        {
             int numOfRoads = 0;
             for (int i = 0; i < Fields.Count; i++) // Előszőr friss állapotra hozzuk a mi Fields-ünket a Model tábla alapján
             {
                 MaynotTile tile = Fields[i];
                 MaynotTile modelbolTile = GetTileAtCoordinatesFromModel(tile.X, tile.Y);
                 Fields[i] = modelbolTile;
-                
+
             }
             foreach (MaynotTile tile in Fields) // Aztán frissítjük a Road sprite-okat
             {
@@ -291,6 +298,11 @@ namespace Maynot.WPF.ViewModel
                     //Debug.WriteLine("A Fieldsben talalt ut koodinatai: " + road.X + " " + road.Y);
                     bool north = false, east = false, south = false, west = false;
                     int fieldSize = (int)Math.Sqrt(Fields.Count);
+
+                    if (road.X == _model.GetStartRoadX() && road.Y == _model.GetStartRoadY()) //Amennyiben pont a kezdő utat nézzük, akkor annak berakunk egy képzeletbeli west-et hogy jól nézzen ki a tiling
+                    {
+                        west = true;
+                    }
 
                     if (road.Y > 0 && GetFieldAtCoordinates(road.X, road.Y - 1) is not Empty)
                     {
@@ -365,8 +377,7 @@ namespace Maynot.WPF.ViewModel
             }
             else if (SelectedTile is Bulldozer)
             {
-                _model.destroyRoad(tile.X, tile.Y);
-                //_model.DestroyTile(tile.x, tile.Y);
+                _model.DestroyTile(tile.X, tile.Y);
             }
             else if (SelectedTile is null)
             {
@@ -383,10 +394,10 @@ namespace Maynot.WPF.ViewModel
         private MaynotTile ModelTileToMaynotTile(Tile tile) //Itt nem fogjuk az újonnan létrehozott instance-nek átadni a pozíciót a táblán
         {
             if (tile is MaynotPersistence.Empty) return new Empty();
-            if (tile is MaynotPersistence.Road) return new Road(30);
-            if (tile is MaynotPersistence.ResidentialZone) return new ResidentialZone();
-            if (tile is MaynotPersistence.IndustrialZone) return new IndustrialZone();
-            if (tile is MaynotPersistence.ServiceZone) return new ServiceZone();
+            if (tile is MaynotPersistence.Road) return new Road();
+            if (tile is MaynotPersistence.ResidentialZone residental) return new ResidentialZone(residental.PeopleIndexes.Count, ModelZoneLevelToView(residental.Level));
+            if (tile is MaynotPersistence.IndustrialZone industrial) return new IndustrialZone(industrial.PeopleIndexes.Count, ModelZoneLevelToView(industrial.Level));
+            if (tile is MaynotPersistence.ServiceZone service) return new ServiceZone(service.PeopleIndexes.Count, ModelZoneLevelToView(service.Level));
             if (tile is MaynotPersistence.Forest) return new Forest(10, 10);
             if (tile is MaynotPersistence.PoliceStation) return new PoliceStation();
             if (tile is MaynotPersistence.Stadium) return new Stadium();
@@ -394,6 +405,22 @@ namespace Maynot.WPF.ViewModel
             if (tile is MaynotPersistence.University) return new University();
             
             return new Road(30);
+        }
+
+        private static ZoneLevelsView ModelZoneLevelToView(MaynotPersistence.ZoneLevel zoneLevel)
+        {
+            switch (zoneLevel)
+            {
+                case ZoneLevel.SMALL:
+                    return ZoneLevelsView.SMALL;
+                case ZoneLevel.MEDIUM:
+                    return ZoneLevelsView.MEDIUM;
+                case ZoneLevel.LARGE:
+                    return ZoneLevelsView.LARGE;
+                default:
+                    return ZoneLevelsView.SMALL;
+                    break;
+            }
         }
 
         private MaynotTile GetTileAtCoordinatesFromModel(int x, int y)
@@ -454,7 +481,7 @@ namespace Maynot.WPF.ViewModel
             }
 
             OnPropertyChanged(nameof(Fields));
-            Application.Current.Dispatcher.Invoke(() => UpdateTable());
+            UpdateTable();
         }
 
         #region Properties

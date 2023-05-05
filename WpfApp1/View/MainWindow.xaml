@@ -59,7 +59,7 @@
                                         </Grid.RowDefinitions>
                                         <Image Source="{Binding SpriteImage}" Grid.Row="0" Width="100" Height="100"></Image>
                                         <Label Grid.Row="1" FontWeight="Bold" Padding="0" Content="{Binding DisplayName}" />
-                                        <TextBlock Grid.Row="2" FontSize="10">Ár:</TextBlock>
+                                        <TextBlock Grid.Row="2" FontSize="10" Text="{Binding PriceToBuild, StringFormat='Ár: {0}'}"></TextBlock>
                                     </Grid>
                                 </Button>
                             </DataTemplate>
