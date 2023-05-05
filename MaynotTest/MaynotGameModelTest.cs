@@ -6,18 +6,6 @@ using System.Text.Json;
 
 namespace MaynotTest
 {
-    public class MockPersistence : IPersistence
-    {
-        public async Task SaveAsync(String path, MaynotGameState state)
-        {
-        }
-
-        public async Task<MaynotGameState> LoadAsync(String path)
-        {
-            return new MaynotGameState(10);
-        }
-    }
-
     [TestFixture]
     public class Tests
     {
