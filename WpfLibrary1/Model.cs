@@ -364,7 +364,7 @@ namespace MaynotModel
             return "";
         }
 
-        private void destroyRoad(int x, int y)
+        public void destroyRoad(int x, int y)
         {
             if (_state.gameBoard[x, y] is Road && _state.canDestroyRoad(x, y))
                 _state.gameBoard[x, y] = new Empty();
