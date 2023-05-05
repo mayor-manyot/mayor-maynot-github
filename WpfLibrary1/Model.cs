@@ -19,6 +19,7 @@ namespace MaynotModel
         public event EventHandler<MaynotEventArg>? TilePlaced;
         public event EventHandler<MaynotEventArg>? GeneralInfoAsked;
         public event EventHandler<TimeElapsedEventArgs>? DayElapsed;
+        public event EventHandler<InspectedTileChangedEventArgs>? InspectedTileChanged;
         public event EventHandler<MaynotEventArg>? catastropheHappened;
         public event EventHandler<EventArgs>? GameSpeedChanged;
         public event EventHandler<EventArgs>? UpdatePopulation;
@@ -29,6 +30,7 @@ namespace MaynotModel
         public int ResidentalTax { get { return _state._residentalTax; } }
         public int ServiceTax { get { return _state._serviceTax; } }
         public int IndustrialTax { get { return _state._industrialTax; } }
+        public Tile InspectedTile { get; set; }
         public double AverageSatisfaction { get { return _state._averageSatisfaction; } }
         public DateTime Time { get => _state.time; set => _state.time = value; }
         public int GameSpeed { get => _state.gameSpeed; set => _state.gameSpeed = value; }
@@ -82,7 +84,7 @@ namespace MaynotModel
             // naponta történõ eseményeknek nem kell ellenõrzés, a tick naponta van
             buildingEffects();
             growForests();
-                
+            OnInspectedTileChanged();
 
             if ((int)_state.time.DayOfWeek == 1) // Hétfõ lett, eltelt egy új hét
             {
@@ -131,8 +133,8 @@ namespace MaynotModel
                     Zone? workZone = GameBoard[w.Item1, w.Item2] as Zone;
                     if (residentalZone != null && workZone != null)
                     {
-                        residentalZone.PeopleIndexes.Add(_state.citizens.Count);
-                        workZone.PeopleIndexes.Add(_state.citizens.Count);
+                        residentalZone.PeopleIndexes.Add(_state.citizens.Count - 1);
+                        workZone.PeopleIndexes.Add(_state.citizens.Count - 1);
                     }
                 }
                 else if(p != null && _state.calculateZoneAttractiveness(p) < entryValue)
@@ -142,8 +144,8 @@ namespace MaynotModel
                     Zone? workZone = GameBoard[w.Item1, w.Item2] as Zone;
                     if (residentalZone != null && workZone != null)
                     {
-                        residentalZone.PeopleIndexes.Add(_state.citizens.Count);
-                        workZone.PeopleIndexes.Add(_state.citizens.Count);
+                        residentalZone.PeopleIndexes.Add(_state.citizens.Count - 1);
+                        workZone.PeopleIndexes.Add(_state.citizens.Count - 1);
                     }
                 }
                 
@@ -368,10 +370,53 @@ namespace MaynotModel
                 _state.gameBoard[x, y] = new Empty();
         }
 
-        public bool destroyTile(Tile t)
+        public bool destroyTile(int x, int y)
         {
-            if (t is Tile)
+            Tile t = _state.gameBoard[x, y];
+            if (t is Road && x != _state.startX &&y != _state.startY)
             {
+                destroyRoad(x, y);
+                _state.expense -= Road.maintenanceFee;
+                _state.money += Road.buildCost / 2;
+                t = new Empty();
+                return true;
+            }
+            else if(t is Zone)
+            {
+                Zone z = (Zone)t;
+                if (z.GetPeoples(_state.citizens).Count == 0)
+                {
+                    t = new Empty();
+                    return true;
+                }
+                return false;
+            }
+            else if(t is PoliceStation)
+            {
+                _state.expense -= PoliceStation.maintenanceFee;
+                _state.money += PoliceStation.buildCost / 2;
+                t = new Empty();
+                return true;
+            }
+            else if (t is Stadium)
+            {
+                _state.expense -= Stadium.maintenanceFee;
+                _state.money += Stadium.buildCost / 2;
+                t = new Empty();
+                return true;
+            }
+            else if (t is University)
+            {
+                _state.expense -= University.maintenanceFee;
+                _state.money += University.buildCost / 2;
+                t = new Empty();
+                return true;
+            }
+            else if (t is School)
+            {
+                _state.expense -= School.maintenanceFee;
+                _state.money += School.buildCost / 2;
+                t = new Empty();
                 return true;
             }
             else
@@ -548,6 +593,27 @@ namespace MaynotModel
                 throw new InvalidOperationException("No data access is provided.");
 
             _state = await _dataAccess.LoadAsync(path);
+        }
+
+        public void InspectZone(int x, int y)
+        {
+            InspectedTile = _state.gameBoard[x,y];
+            OnInspectedTileChanged();
+        }
+
+        public void UpgradeInspectedZone()
+        {
+            if(InspectedTile is Zone zone)
+            {
+                zone.Upgrade();
+                _state.money -= zone.UpgradeCost;
+                OnInspectedTileChanged();
+            }
+        }
+
+        private void OnInspectedTileChanged()
+        {
+            InspectedTileChanged?.Invoke(this, new InspectedTileChangedEventArgs(InspectedTile));
         }
 
         public void buildingEffects()

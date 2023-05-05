@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
+	<EnableWindowsTargeting>true</EnableWindowsTargeting>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <StartupObject>Maynot.App</StartupObject>
@@ -16,10 +17,19 @@
     <None Remove="Assets\flame.png" />
     <None Remove="Assets\forest.png" />
     <None Remove="Assets\industrialZone.png" />
+    <None Remove="Assets\industrialZoneLevel0.png" />
+    <None Remove="Assets\industrialZoneLevel1.png" />
+    <None Remove="Assets\industrialZoneLevel2.png" />
+    <None Remove="Assets\industrialZoneLevel3.png" />
     <None Remove="Assets\mouseCursor.png" />
     <None Remove="Assets\policeStation.png" />
     <None Remove="Assets\questionMark.png" />
     <None Remove="Assets\residentalZone.png" />
+    <None Remove="Assets\residentalZoneLevel0.png" />
+    <None Remove="Assets\residentalZoneLevel1Big.png" />
+    <None Remove="Assets\residentalZoneLevel1Small.png" />
+    <None Remove="Assets\residentalZoneLevel2.png" />
+    <None Remove="Assets\residentalZoneLevel3.png" />
     <None Remove="Assets\RoadTiles\roadES.jpg" />
     <None Remove="Assets\RoadTiles\roadEW.jpg" />
     <None Remove="Assets\RoadTiles\roadEWS.jpg" />
@@ -36,6 +46,10 @@
     <None Remove="Assets\RoadTiles\roadWS.jpg" />
     <None Remove="Assets\school.png" />
     <None Remove="Assets\serviceZone.png" />
+    <None Remove="Assets\serviceZoneLevel0.png" />
+    <None Remove="Assets\serviceZoneLevel1.png" />
+    <None Remove="Assets\serviceZoneLevel2.png" />
+    <None Remove="Assets\serviceZoneLevel3.png" />
     <None Remove="Assets\stadium.png" />
     <None Remove="Assets\trashCan.png" />
     <None Remove="Assets\university.png" />
@@ -65,19 +79,40 @@
     <Content Include="Assets\forest.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\industrialZoneLevel0.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\industrialZoneLevel1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\industrialZoneLevel2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\industrialZoneLevel3.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\mouseCursor.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\questionMark.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\residentalZone.png">
+    <Content Include="Assets\residentalZoneLevel0.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\residentalZoneLevel1Big.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\residentalZoneLevel1Small.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\residentalZoneLevel2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\residentalZoneLevel3.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\school.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\serviceZone.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\policeStation.png">
@@ -119,6 +154,18 @@
     <Content Include="Assets\RoadTiles\roadWS.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\serviceZoneLevel0.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\serviceZoneLevel1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\serviceZoneLevel2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\serviceZoneLevel3.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\stadium.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -126,12 +173,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\university.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Assets\industrialZone.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
