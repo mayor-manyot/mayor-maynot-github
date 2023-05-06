@@ -122,7 +122,7 @@ namespace Maynot.WPF.ViewModel
         }
         private void InspectedTile_Changed(object sender, InspectedTileChangedEventArgs e)
         {
-            App.Current.Dispatcher.Invoke((Action)delegate
+            App.Current?.Dispatcher.Invoke((Action)delegate
             {
                 SatisfactionsInInspectedZone.Clear();
             });
@@ -133,20 +133,20 @@ namespace Maynot.WPF.ViewModel
                 InspectedZoneLevel = ((int)zone.Level).ToString();
                 foreach (var person in zone.GetPeoples(_model.Citizens))
                 {
-                    App.Current.Dispatcher.Invoke((Action)delegate
+                    App.Current?.Dispatcher.Invoke((Action)delegate
                     {
                         SatisfactionsInInspectedZone.Add(new Person
                         {
                             Satisfaction = person.Satisfaction
                         });
                     });
-                    
+
                 }
             }
             else
             {
                 InspectedZoneCapacity = InspectedZoneFullness = InspectedZoneLevel = String.Empty;
-                App.Current.Dispatcher.Invoke((Action)delegate
+                App.Current?.Dispatcher.Invoke((Action)delegate
                 {
                     SatisfactionsInInspectedZone.Clear();
                 });
@@ -167,7 +167,7 @@ namespace Maynot.WPF.ViewModel
             OnPropertyChanged(nameof(Date));
             OnPropertyChanged(nameof(Money));
             OnPropertyChanged(nameof(Satisfaction));
-            Debug.WriteLine($"new Day: {Date}, New Budget: {Money}");
+            //Debug.WriteLine($"new Day: {Date}, New Budget: {Money}");
         }
         private void OnResidentalTaxNumericUp()
         {
@@ -302,7 +302,7 @@ namespace Maynot.WPF.ViewModel
                 {
                     //Debug.WriteLine("A Fieldsben talalt ut koodinatai: " + road.X + " " + road.Y);
                     bool north = false, east = false, south = false, west = false;
-                    int fieldSize = (int)Math.Sqrt(Fields.Count);
+                    int fieldSize = _model.GameBoardSize;
 
                     if (road.X == _model.GetStartRoadX() && road.Y == _model.GetStartRoadY()) //Amennyiben pont a kezdő utat nézzük, akkor annak berakunk egy képzeletbeli west-et hogy jól nézzen ki a tiling
                     {
@@ -336,7 +336,11 @@ namespace Maynot.WPF.ViewModel
 
         private void PlaceTile(MaynotTile tile)
         {
-            Debug.WriteLine("Clicked on: " + tile.X + " " + tile.Y);
+            if (currentlyAnimating) // Éppen a katsztrófát animálja, ekkor nem szabad place-elni
+            {
+                return;
+            }
+            //Debug.WriteLine("Clicked on: " + tile.X + " " + tile.Y);
             //Debug.WriteLine("Selected Tile is: " + SelectedTile.GetType());
             if (SelectedTile is Road)
             {
@@ -389,7 +393,7 @@ namespace Maynot.WPF.ViewModel
                 _model.InspectZone(tile.X, tile.Y);
             }
             MaynotTile modelbolTile = GetTileAtCoordinatesFromModel(tile.X, tile.Y);
-            int fieldMeret = (int) (Math.Sqrt(Fields.Count));
+            //int fieldMeret = (int) (Math.Sqrt(Fields.Count));
             //Fields[tile.X * fieldMeret + tile.Y] = modelbolTile; // Itt nagyon gagyin felülírjuk a Fields listában lévő MaynotTile-t a mi tile-unkra
             //OnPropertyChanged(nameof(Fields));
             UpdateTable();
@@ -439,12 +443,12 @@ namespace Maynot.WPF.ViewModel
 
         public MaynotTile GetFieldAtCoordinates(int x, int y)
         {
-            int sorHossz = (int) Math.Sqrt(Fields.Count);
+            int sorHossz = _model.GameBoardSize;
             return Fields[x * sorHossz + y];
         }
         public void SetFieldAtCoordinates(int x, int y, MaynotTile tile)
         {
-            int sorHossz = (int)Math.Sqrt(Fields.Count);
+            int sorHossz = _model.GameBoardSize;
             Fields[x * sorHossz + y] = tile;
         }
 
@@ -487,6 +491,11 @@ namespace Maynot.WPF.ViewModel
 
             OnPropertyChanged(nameof(Fields));
             UpdateTable();
+        }
+
+        public void GameWasLoaded()
+        {
+            FullyRefreshTable();
         }
 
         #region Properties
