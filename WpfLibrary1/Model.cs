@@ -24,6 +24,7 @@ namespace MaynotModel
         public event EventHandler<MaynotEventArg>? catastropheHappened;
         public event EventHandler<EventArgs>? GameSpeedChanged;
         public event EventHandler<EventArgs>? UpdatePopulation;
+        public event EventHandler<MaynotEventArg>? GameLoaded;
 
         public float Money { get => _state.money; set => _state.money = value; }
         public float Speed { get { return _state.gameSpeed; }  }
@@ -71,11 +72,16 @@ namespace MaynotModel
             _state.timer.Elapsed += Timer_Elapsed;
             _state.timer.Start();
             Debug.WriteLine("New game");
+            OnGameLoaded();
         }
 
         private void OnTimeElapsed()
         {
             DayElapsed?.Invoke(this, new TimeElapsedEventArgs(_state.time));
+        }
+
+        private void OnPopulationUpdated()
+        {
             UpdatePopulation?.Invoke(this, new EventArgs());
         }
 
@@ -114,6 +120,7 @@ namespace MaynotModel
 
         private async Task movingIn()
         {
+            bool anyUpdates = false;
             Random r = new Random();
             int newCitizens = r.Next(0, 25);
             for(int i=0; i<newCitizens; i++)
@@ -133,6 +140,7 @@ namespace MaynotModel
                 if(p != null && _state.guaranteedPopulation)
                 {
                     _state.citizens.Add(p);
+                    anyUpdates = true;
                     Zone? residentalZone = GameBoard[t.Item1, t.Item2] as Zone;
                     Zone? workZone = GameBoard[w.Item1, w.Item2] as Zone;
                     if (residentalZone != null && workZone != null)
@@ -144,6 +152,7 @@ namespace MaynotModel
                 else if(p != null && _state.calculateZoneAttractiveness(p) < entryValue)
                 {
                     _state.citizens.Add(p);
+                    anyUpdates = true;
                     Zone? residentalZone = GameBoard[t.Item1, t.Item2] as Zone;
                     Zone? workZone = GameBoard[w.Item1, w.Item2] as Zone;
                     if (residentalZone != null && workZone != null)
@@ -158,6 +167,10 @@ namespace MaynotModel
                     _state.guaranteedPopulation = false;
                   
                 }
+            }
+            if (anyUpdates) // Csak akkor hívunk eseményt ha valóban változott bármi a populationben
+            {
+                OnPopulationUpdated();
             }
         }
 
@@ -408,10 +421,18 @@ namespace MaynotModel
             return "";
         }
 
-        public void destroyRoad(int x, int y)
+        public bool destroyRoad(int x, int y)
         {
             if (_state.gameBoard[x, y] is Road && _state.canDestroyRoad(x, y))
+            {
                 _state.gameBoard[x, y] = new Empty();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+                
         }
 
         public bool DestroyTile(int x, int y)
@@ -419,11 +440,16 @@ namespace MaynotModel
             Tile tile = _state.gameBoard[x, y];
             if (tile is Road && x != _state.startX &&y != _state.startY)
             {
-                destroyRoad(x, y);
-                _state.expense -= Road.maintenanceFee;
-                _state.money += Road.buildCost / 2;
-                _state.gameBoard[x, y] = new Empty();
-                return true;
+                if (destroyRoad(x,y)) // Le is törli, ha le lehet
+                {
+                    _state.expense -= Road.maintenanceFee;
+                    _state.money += Road.buildCost / 2;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else if(tile is Zone zone)
             {
@@ -672,6 +698,11 @@ namespace MaynotModel
         private void OnInspectedTileChanged()
         {
             InspectedTileChanged?.Invoke(this, new InspectedTileChangedEventArgs(InspectedTile));
+        }
+
+        private void OnGameLoaded()
+        {
+            GameLoaded?.Invoke(this, new MaynotEventArg());
         }
 
         public void buildingEffects()

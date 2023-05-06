@@ -34,6 +34,7 @@ namespace Maynot
         {
             _model = new MaynotGameModel(new FilePersistence());
             _model.catastropheHappened += new EventHandler<MaynotEventArg>(Model_CatastropheHappened);
+            _model.GameLoaded += new EventHandler<MaynotEventArg>(Model_GameLoaded);
             _model.newGame();
 
             //ViewModel példányosítás előszőr
@@ -58,6 +59,10 @@ namespace Maynot
         private void Model_CatastropheHappened(object? sender, MaynotEventArg e)
         {
             _viewModel.CatastropheHappened(e.X, e.Y);
+        }
+        private void Model_GameLoaded(object? sender, MaynotEventArg e)
+        {
+            _viewModel?.GameWasLoaded();
         }
         #endregion
 
